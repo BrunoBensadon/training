@@ -62,7 +62,21 @@ export default tseslint.config(
     rules: { 'no-restricted-globals': 'off', 'no-restricted-syntax': 'off' },
   },
   {
-    files: ['packages/ui/src/service-worker-runtime.ts', 'apps/*/src/sw/**/*.ts'],
-    rules: { 'no-restricted-globals': 'off', 'no-restricted-syntax': 'off' },
+    // The service worker is the one place a fetch is legitimate: it serves
+    // the app's own precached files, and refuses anything cross-origin.
+    // The two placeholders are substituted at build time.
+    files: ['apps/*/src/sw/**/*.js', 'apps/*/src/sw/**/*.ts'],
+    languageOptions: {
+      globals: {
+        ...globals.serviceworker,
+        __PRECACHE__: 'readonly',
+        __CACHE_NAME__: 'readonly',
+      },
+    },
+    rules: {
+      'no-restricted-globals': 'off',
+      'no-restricted-syntax': 'off',
+      'no-undef': 'off',
+    },
   },
 );

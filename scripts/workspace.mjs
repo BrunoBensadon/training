@@ -54,6 +54,7 @@ export function viteBase(toolId, command) {
  */
 export const workspaceAliases = {
   '@training/ui/styles': path.join(repoRoot, 'packages/ui/styles'),
+  '@training/ui/fonts': path.join(repoRoot, 'packages/ui/src/fonts.ts'),
   '@training/ui': path.join(repoRoot, 'packages/ui/src/index.ts'),
   '@training/i18n': path.join(repoRoot, 'packages/i18n/src/index.ts'),
 };

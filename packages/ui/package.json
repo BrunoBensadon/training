@@ -6,6 +6,7 @@
   "description": "Design tokens, type and layout primitives, and shared chrome for the training tools",
   "exports": {
     ".": "./src/index.ts",
+    "./fonts": "./src/fonts.ts",
     "./styles/*": "./styles/*"
   },
   "dependencies": {
