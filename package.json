@@ -21,8 +21,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "check:no-network": "node scripts/check-no-network.mjs",
-    "check": "npm run typecheck && npm run lint && npm run test && npm run build && npm run check:no-network"
+    "check": "npm run typecheck && npm run lint && npm run test && npm run build && npm run test:e2e",
+    "serve": "node scripts/serve-site.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",
