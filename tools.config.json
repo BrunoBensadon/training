@@ -1,0 +1,24 @@
+{
+  "$comment": "Single source of truth for what is deployed and where. Adding a tool means adding an entry here plus an apps/<id>/ workspace. See docs/ADDING-A-TOOL.md.",
+  "siteBase": "/training/",
+  "tools": [
+    {
+      "id": "elc-placement",
+      "workspace": "@training/elc-placement",
+      "dir": "apps/elc-placement",
+      "status": "live",
+      "name": {
+        "en": "Experiential learning cycle — placement",
+        "pt-BR": "Ciclo de aprendizagem vivencial — posicionamento"
+      },
+      "summary": {
+        "en": "A short reflection tool used before the Facilitating Learning session: rank statements, see which part of the learning cycle you leaned towards today.",
+        "pt-BR": "Uma breve ferramenta de reflexão usada antes da sessão Facilitando a Aprendizagem: ordene afirmações e veja para qual parte do ciclo de aprendizagem você pendeu hoje."
+      },
+      "meta": {
+        "en": "6 sets · under 8 min",
+        "pt-BR": "6 conjuntos · menos de 8 min"
+      }
+    }
+  ]
+}

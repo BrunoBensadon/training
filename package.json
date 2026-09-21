@@ -1,0 +1,38 @@
+{
+  "name": "@training/root",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Online tools supporting training delivery",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w @training/elc-placement",
+    "build": "node scripts/build-site.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "check:no-network": "node scripts/check-no-network.mjs",
+    "check": "npm run typecheck && npm run lint && npm run test && npm run build && npm run check:no-network"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^22.10.2",
+    "eslint": "^9.17.0",
+    "globals": "^15.14.0",
+    "jsdom": "^25.0.1",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.18.1",
+    "vite": "^8.3.0",
+    "vitest": "^5.0.1"
+  }
+}
