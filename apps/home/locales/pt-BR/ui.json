@@ -1,0 +1,26 @@
+{
+  "meta": {
+    "title": "Ferramentas de treinamento",
+    "description": "Ferramentas online de apoio à realização de treinamentos, sobretudo para o CISV International.",
+    "brand": "Ferramentas de treinamento",
+    "langLabel": "PT",
+    "langName": "Português (Brasil)"
+  },
+  "nav": {
+    "skip": "Ir para o conteúdo",
+    "langGroup": "Language / Idioma"
+  },
+  "index": {
+    "kicker": "Índice",
+    "title": "Ferramentas de treinamento",
+    "lead": "Pequenas ferramentas online de apoio à realização de treinamentos — sobretudo para o CISV International, uma ONG de educação para a paz que realiza formação de lideranças conduzida por voluntários em mais de 60 países.",
+    "note": "Tudo aqui funciona no seu navegador. Sem contas, sem análise de uso, nada é recolhido.",
+    "toolsTitle": "Disponíveis agora",
+    "empty": "Nada publicado ainda."
+  },
+  "footer": {
+    "licence": "Código MIT · conteúdo CC BY-SA 4.0",
+    "notOfficial": "Não é uma publicação oficial do CISV International.",
+    "source": "Código-fonte no GitHub"
+  }
+}

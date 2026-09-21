@@ -1,0 +1,16 @@
+{
+  "name": "@training/home",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "The site index at /training/ — lists the available tools",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@training/i18n": "*",
+    "@training/ui": "*"
+  }
+}
