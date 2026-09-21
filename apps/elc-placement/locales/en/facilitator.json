@@ -1,0 +1,37 @@
+{
+  "kicker": "For the trainer",
+  "title": "Facilitating Learning — floor exercise",
+  "lead": "One page. Print it, or open it on a phone. Everything the exercise needs is on it.",
+  "printHint": "Print this page",
+  "quadrantsTitle": "The four quadrants",
+  "quadrantsLead": "Tape a circle on the floor and divide it into quarters. Perceiving runs bottom to top: abstract at the bottom, concrete at the top. Processing runs left to right: reflective on the left, active on the right.",
+  "promptsTitle": "The three questions",
+  "promptsLead": "In quadrant groups, about 8 minutes each. Take one answer from each quadrant before moving on, so no group hears only itself.",
+  "prompts": [
+    "What does a session feel like when it is run entirely in your quadrant? Name what a participant gets from it, and name what they miss.",
+    "Think of a session where you were the one out of step with how it was being run. What did you do — and what could the trainer have done that would have brought you back in?",
+    "Which quadrant do you avoid when you plan a session? What would you have to do differently, concretely, to run that part of the cycle properly?"
+  ],
+  "lopsidedTitle": "When the room is lopsided",
+  "lopsidedLead": "Eleven Reflectors and one Activist happens, and the session as written does not handle it. The imbalance is not a problem with the exercise — it is the most interesting thing in the room, provided you say so.",
+  "lopsided": [
+    "**Never leave one person standing alone.** Ask them to join the nearest group and speak as that quadrant's delegate. Standing alone in front of a room is a different exercise from the one you meant to run.",
+    "**Say the imbalance out loud and use it.** \"This room is nearly all Reflectors. What does that predict about the sessions we design together this week?\" That question is worth more than the original three.",
+    "**Send the people on a line.** Anyone whose result came out on an edge or at the centre can be placed deliberately into the thin quadrant. Tell them why you are doing it — they are covering a gap, not being corrected.",
+    "**If a quadrant is empty, give it to the fullest group.** Ask them to argue that quadrant's case for five minutes. Arguing for the appetite you least share is the actual learning objective.",
+    "**Break the big group into pairs.** A group of eleven is not a discussion, it is a queue. Run the three questions in pairs inside the large quadrant, then take one answer from each pair.",
+    "**Do not re-run the assessment to get a better spread.** The spread is the data. Rigging it teaches the room that the instrument is a formality."
+  ],
+  "runningTitle": "Timing",
+  "running": [
+    "0–10 min — people arrive with a result. Read out the four quadrant descriptions; ask people to stand.",
+    "10–15 min — name the shape of the room. Place the edge and centre results.",
+    "15–40 min — the three questions in quadrant groups, one answer taken from each quadrant after each.",
+    "40–60 min — whole group: what does a trainer have to do to run all four? Collect concrete moves, not principles.",
+    "60–90 min — the rest of the session as planned."
+  ],
+  "sayThisTitle": "Say this at least once",
+  "sayThis": "This is a preference, not a diagnosis, and the research does not support teaching people according to a measured style. We are standing in quadrants so that you can see the room contains all four, not so that you can be told how you learn.",
+  "cautionTitle": "One caution",
+  "caution": "If someone says the result is wrong about them, they are right and you should say so. The instrument has never been validated. What it can do is start the argument — an argument about what a session misses when a trainer runs only their own quarter of the cycle."
+}

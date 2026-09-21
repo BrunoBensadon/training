@@ -1,0 +1,37 @@
+{
+  "kicker": "Para quem treina",
+  "title": "Facilitando a Aprendizagem — exercício de chão",
+  "lead": "Uma página. Imprima, ou abra no celular. Tudo de que o exercício precisa está nela.",
+  "printHint": "Imprimir esta página",
+  "quadrantsTitle": "Os quatro quadrantes",
+  "quadrantsLead": "Marque um círculo no chão com fita e divida-o em quatro. A percepção vai de baixo para cima: abstrato embaixo, concreto em cima. O processamento vai da esquerda para a direita: reflexivo à esquerda, ativo à direita.",
+  "promptsTitle": "As três perguntas",
+  "promptsLead": "Em grupos por quadrante, cerca de 8 minutos cada. Recolha uma resposta de cada quadrante antes de seguir, para que nenhum grupo ouça apenas a si mesmo.",
+  "prompts": [
+    "Como é uma sessão conduzida inteiramente dentro do seu quadrante? Diga o que um participante ganha com ela, e diga o que ele perde.",
+    "Pense numa sessão em que você foi quem ficou fora do compasso de como ela estava sendo conduzida. O que você fez — e o que quem treinava poderia ter feito para trazer você de volta?",
+    "De qual quadrante você foge quando planeja uma sessão? O que você teria de fazer de diferente, concretamente, para conduzir bem essa parte do ciclo?"
+  ],
+  "lopsidedTitle": "Quando a sala está desequilibrada",
+  "lopsidedLead": "Onze Reflexivos e um Ativista acontece, e a sessão como está escrita não dá conta disso. O desequilíbrio não é um problema do exercício — é a coisa mais interessante na sala, desde que você diga isso em voz alta.",
+  "lopsided": [
+    "**Nunca deixe uma pessoa sozinha em pé.** Peça que ela se junte ao grupo mais próximo e fale como representante do quadrante dela. Ficar sozinho diante de uma sala é um exercício diferente do que você pretendia conduzir.",
+    "**Diga o desequilíbrio em voz alta e use-o.** \"Esta sala é quase toda de Reflexivos. O que isso prevê sobre as sessões que vamos desenhar juntos esta semana?\" Essa pergunta vale mais do que as três originais.",
+    "**Mande as pessoas que ficaram na linha.** Quem teve resultado numa borda ou no centro pode ser colocado de propósito no quadrante vazio. Diga por que você está fazendo isso — essa pessoa está cobrindo uma lacuna, não sendo corrigida.",
+    "**Se um quadrante estiver vazio, entregue-o ao grupo mais cheio.** Peça que defendam a posição daquele quadrante por cinco minutos. Defender o apetite que menos se compartilha é o verdadeiro objetivo de aprendizagem.",
+    "**Divida o grupo grande em duplas.** Um grupo de onze não é uma conversa, é uma fila. Conduza as três perguntas em duplas dentro do quadrante grande e depois recolha uma resposta de cada dupla.",
+    "**Não repita a avaliação para conseguir uma distribuição melhor.** A distribuição é o dado. Manipulá-la ensina à sala que o instrumento é uma formalidade."
+  ],
+  "runningTitle": "Tempos",
+  "running": [
+    "0–10 min — as pessoas chegam com um resultado. Leia as quatro descrições de quadrante; peça que se posicionem.",
+    "10–15 min — nomeie o formato da sala. Posicione os resultados de borda e de centro.",
+    "15–40 min — as três perguntas em grupos por quadrante, recolhendo uma resposta de cada quadrante depois de cada pergunta.",
+    "40–60 min — grupo inteiro: o que quem treina precisa fazer para percorrer os quatro? Recolha ações concretas, não princípios.",
+    "60–90 min — o restante da sessão conforme planejado."
+  ],
+  "sayThisTitle": "Diga isto pelo menos uma vez",
+  "sayThis": "Isto é uma preferência, não um diagnóstico, e a pesquisa não sustenta ensinar as pessoas de acordo com um estilo medido. Estamos nos posicionando em quadrantes para que vocês vejam que a sala contém os quatro, não para que alguém diga a vocês como aprendem.",
+  "cautionTitle": "Uma ressalva",
+  "caution": "Se alguém disser que o resultado está errado a respeito dela, essa pessoa tem razão e você deve dizer isso. O instrumento nunca foi validado. O que ele consegue fazer é começar a discussão — uma discussão sobre o que uma sessão perde quando quem treina percorre apenas o seu próprio quarto do ciclo."
+}

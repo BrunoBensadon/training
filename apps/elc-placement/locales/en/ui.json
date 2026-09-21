@@ -1,0 +1,151 @@
+{
+  "meta": {
+    "title": "Where do you lean? — experiential learning cycle",
+    "description": "A short reflection tool used before the CISV Facilitating Learning session. Nothing you enter leaves your device.",
+    "brand": "Training tools",
+    "toolName": "Experiential learning cycle",
+    "langLabel": "EN",
+    "langName": "English"
+  },
+  "nav": {
+    "skip": "Skip to content",
+    "langGroup": "Language / Idioma",
+    "home": "Start",
+    "about": "About this instrument",
+    "facilitator": "Facilitator card",
+    "backToTools": "All tools"
+  },
+  "intro": {
+    "kicker": "Before the session",
+    "title": "Where do you lean?",
+    "lead": "Six sets of four statements. Rank each set. At the end you will see which part of the experiential learning cycle you leaned towards today, and you will stand in that part of the circle when the session starts.",
+    "privacyTitle": "Nothing you enter leaves this device",
+    "privacy": [
+      "There is no account, no server and no database. The whole thing runs in your browser.",
+      "Nothing is uploaded, and nothing is sent anywhere — not while you answer, and not when you finish.",
+      "No cookies, no analytics, no third-party requests. Even the fonts are served from here.",
+      "If you want to keep your result you press a button and it is written into the web address, which stays on your device. Nobody collects it."
+    ],
+    "whatTitle": "What this is, and what it is not",
+    "what": [
+      "It is a way of noticing that a room of trainers contains four different appetites, and that a facilitator has to run all four.",
+      "It is **not** a psychometric test, not a diagnosis, and not a label. It has never been validated.",
+      "Research does not support choosing training methods to match a measured learning style. The [about page]({aboutHref}) says what that means and what this would have to do to claim otherwise."
+    ],
+    "timeNote": "6 sets · under 8 minutes · works offline",
+    "start": "Start",
+    "aboutLink": "About this instrument",
+    "resume": "Continue where you left off"
+  },
+  "assessment": {
+    "progress": "Set {n} of {total}",
+    "progressLabel": "Progress",
+    "instruction": "Rank these four from 1 to 4. 1 is the one most like you, 4 the one least like you. Each number is used once.",
+    "rankLegendFor": "Rank for: {statement}",
+    "rankNames": {
+      "1": "1 — most like me",
+      "2": "2",
+      "3": "3",
+      "4": "4 — least like me"
+    },
+    "rankShort": {
+      "1": "1",
+      "2": "2",
+      "3": "3",
+      "4": "4"
+    },
+    "columnHeader": "Rank",
+    "mostLikeMe": "most like me",
+    "leastLikeMe": "least like me",
+    "announceAssigned": "Rank {rank} given to: {statement}",
+    "announceSwapped": "Rank {rank} given to: {statement}. {other} moved to rank {otherRank}.",
+    "announceDisplaced": "Rank {rank} given to: {statement}. {other} is no longer ranked.",
+    "announceComplete": "All four ranked. You can go to the next set.",
+    "remaining": "{n} still to rank",
+    "complete": "Set complete",
+    "clear": "Clear this set",
+    "back": "Back",
+    "next": "Next set",
+    "finish": "See your result",
+    "incomplete": "Rank all four statements to continue.",
+    "leaveWarning": "Your answers are only held in this page. If you reload, you start again."
+  },
+  "result": {
+    "kicker": "Your result",
+    "title": "Where you leaned today",
+    "disclaimer": "This is a preference, not a diagnosis. Research does not support choosing training methods to match someone's measured style. We use this so you can see that a group contains all four appetites, and that a trainer needs to run the whole cycle — not to tell you how you should be taught.",
+    "leanedQuadrant": "Today you leaned towards **{quadrant}** — {short}.",
+    "leanedEdge": "Today you came out exactly on the line between **{first}** and **{second}**. On {axis} you are even; it is the other axis that leans.",
+    "leanedCentre": "Today you came out at the centre of the circle: even on both axes.",
+    "leanedBalanced": "Today you spread your answers evenly across all four. That is a result, not a failure to answer — it usually means you were ranking by the situation rather than by habit.",
+    "closeCallTitle": "It was close",
+    "closeCall": "**{first}** and **{second}** are within {band} points of each other. That is inside the margin this instrument can see, so treat them as level rather than picking the higher one.",
+    "closeCallMany": "These are within {band} points of each other: {list}. Treat them as level.",
+    "standWhere": "When the session starts, stand in {where}.",
+    "standEdge": "on the line between {first} and {second}",
+    "standCentre": "the middle of the circle — and say why when you are asked",
+    "shapeTitle": "Your whole shape",
+    "shapeLead": "The four numbers together say more than the highest one. They always add up to {total}.",
+    "tableCaption": "Points per quadrant",
+    "colQuadrant": "Quadrant",
+    "colDescription": "In short",
+    "colScore": "Points",
+    "axesTitle": "The two axes",
+    "axesLead": "The axes are the better-supported part of this. The quadrant is just where the two of them cross.",
+    "axisReading": "{name}: {value} towards {pole} ({description})",
+    "axisEven": "{name}: even between {positive} and {negative}",
+    "circleTitle": "The learning cycle, with your position marked",
+    "circleDesc": "A circle divided into four quadrants. Left to right is the processing axis, from reflective to active. Bottom to top is the perceiving axis, from abstract to concrete. Your position is marked with a labelled dot.",
+    "youAreHere": "You",
+    "saveTitle": "Keep this",
+    "saveLead": "Your result is already in this page's web address, after the # sign. That part is never sent to any server. Bookmark it, screenshot it, or print it.",
+    "copy": "Copy link",
+    "copied": "Link copied",
+    "copyFailed": "Could not copy — select the address bar and copy it by hand.",
+    "print": "Print or save as PDF",
+    "restart": "Start again",
+    "staleVersion": "This link was made with an earlier version of the statements (version {saved}; these are version {current}). The scores are still readable, because a saved link records how you ranked the four quadrants rather than which words you saw — but the words have changed since.",
+    "badLinkTitle": "That link could not be read",
+    "badLink": "The result in this address is damaged or was made by a newer version of this tool. Nothing was lost — the answers were never stored anywhere else, so the only way forward is to answer again.",
+    "startOver": "Answer the six sets"
+  },
+  "about": {
+    "kicker": "About",
+    "title": "About this instrument",
+    "whoTitle": "Who built it and why",
+    "who": "This was built for CISV International's *Facilitating Learning* session, part of Train the Trainer. That session asks trainees to arrive knowing which part of the experiential learning cycle they gravitate to, stand in that quadrant of a circle on the floor, and talk in those groups. The assessment it used to link to is dead, and the replacements were either unlicensed copies of commercial instruments or available only in English. This is one CISV can own, in more than one language.",
+    "whatTitle": "What it scores",
+    "what": "Six sets of four statements, ranked 1 to 4. A first place is worth 4 points and a fourth place 1, summed per quadrant, so the four always total {total}. From the same numbers it computes two axes — perceiving (concrete against abstract) and processing (active against reflective) — and the quadrant is read off the signs of those two. The axes are the better-supported unit; the quadrant is a way of standing somewhere on a floor.",
+    "notValidatedTitle": "It has not been validated",
+    "notValidated": "This is a reflection tool. It has no psychometric validation of any kind: no reliability data, no test–retest data, no factor analysis, no norms, no pilot. Nobody has ever answered it under conditions that would let anyone say what it measures.",
+    "whatWouldItTakeTitle": "What would have to be true before it could claim otherwise",
+    "whatWouldItTake": [
+      "Internal consistency of α ≥ .70 for each of the four scales.",
+      "Test–retest agreement of ≥ .70 over about two weeks — a preference that changes week to week is not a preference.",
+      "The four-factor structure actually recovered in a factor analysis on at least 150 respondents.",
+      "And all of it repeated in each language separately, because a translated instrument is a new instrument."
+    ],
+    "evidenceTitle": "On learning styles generally",
+    "evidence": "Two reviews are worth knowing about, because they are why this tool refuses to tell you how you should be taught.",
+    "citations": [
+      "Pashler, H., McDaniel, M., Rohrer, D., & Bjork, R. (2008). Learning styles: Concepts and evidence. *Psychological Science in the Public Interest, 9*(3), 105–119. [doi:10.1111/j.1539-6053.2009.01038.x](https://doi.org/10.1111/j.1539-6053.2009.01038.x) — looked for studies testing whether matching teaching to a measured style improves learning, and found almost none that met the test; those that did, did not support it.",
+      "Coffield, F., Moseley, D., Hall, E., & Ecclestone, K. (2004). *Learning styles and pedagogy in post-16 learning: A systematic and critical review.* London: Learning and Skills Research Centre. — reviewed 71 learning-style models and found most had not been properly validated, including several sold commercially."
+    ],
+    "soWhatTitle": "So why run it at all",
+    "soWhat": "Because the session is not about you. It is about a room noticing that it contains four different appetites, and that a trainer who only runs the part they enjoy will lose three quarters of the room. Getting people to stand in different places and argue about it does that. A measurement would not do it better.",
+    "ipTitle": "Where the items come from",
+    "ip": "The statements were written from behavioural descriptions, not adapted from any existing questionnaire. Nothing here is taken from Honey & Mumford's LSQ, from Kolb's LSI or KELP, or from the Felder–Soloman ILS. The underlying model — two axes from Kolb's experiential learning cycle — is a published idea; the items measuring it belong to whoever wrote them, which is the mistake this replaces.",
+    "privacyTitle": "Privacy",
+    "privacy": "No backend, no accounts, no analytics, no cookies, no third-party requests. Everything is computed in your browser and nothing is transmitted. Saving a result writes it into the part of the web address after the # sign, which browsers never send to a server. There is no way for a facilitator, or for us, to collect results: a facilitator sees your result because you show it to them.",
+    "backToStart": "Back to the start"
+  },
+  "errors": {
+    "unknownRoute": "That page does not exist.",
+    "goHome": "Go to the start"
+  },
+  "footer": {
+    "licence": "Code MIT · content CC BY-SA 4.0",
+    "notOfficial": "Not an official CISV International publication.",
+    "source": "Source"
+  }
+}
