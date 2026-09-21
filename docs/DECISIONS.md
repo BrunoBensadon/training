@@ -118,10 +118,18 @@ tie-break would be a claim the instrument cannot support.
 on both puts you at the centre; all four equal is reported as an even
 spread and explicitly not as a failure to answer.
 **Why** These happen, and a facilitator has to put the person somewhere on
-a taped floor. The result screen tells them where to stand in each case.
-Note that both axes can be zero without the quadrants being equal — an
-activist/theorist diagonal — and that is a different sentence.
-**Reconsider** Nothing.
+a taped floor. With six sets the axes move in steps of two, so landing on
+zero is common rather than freakish: enumerating the exact joint
+distribution over all 24^6 ways of answering puts **23.2% on a line and
+1.5% dead centre** under uniform random responding (an upper bound — real
+respondents are not random — but in a room of twenty it is several
+people). The test in `apps/elc-placement/test/scoring.test.ts` computes
+it. The result screen tells each of them where to stand. Note that both
+axes can be zero without the quadrants being equal — an activist/theorist
+diagonal — and that is a different sentence.
+**Reconsider** A seventh set would not remove the problem, only shift it;
+an odd number of sets makes exact zeros rarer on both axes. Worth
+modelling if a pilot ever shows facilitators struggling with it.
 
 ### A saved link encodes ranks per quadrant, not which statement was picked
 **What** Six characters, one permutation index per set, plus the items

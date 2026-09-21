@@ -213,3 +213,76 @@ describe('axisRange', () => {
     expect(allConcrete.axes.perceiving).toBe(axisRange(6));
   });
 });
+
+describe('how often the boundary cases actually happen', () => {
+  /**
+   * The edge and centre placements are not defensive programming for a
+   * case nobody hits. With six sets the axes move in steps of two and
+   * land on zero often.
+   *
+   * This enumerates the exact joint distribution of the two axes over all
+   * 24^6 ways of answering — by convolution, not by brute force — under
+   * the assumption that every ranking is equally likely. Real respondents
+   * are not random, so treat these as an upper bound; they are still the
+   * reason a facilitator needs somewhere to put these people.
+   */
+  function axisDistribution(setCount: number): {
+    total: number;
+    onALine: number;
+    deadCentre: number;
+  } {
+    const perSet: Array<[number, number]> = [];
+    const permute = (rest: number[], taken: number[]): void => {
+      if (rest.length === 0) {
+        const ranking = rank(taken[0]!, taken[1]!, taken[2]!, taken[3]!);
+        const result = scoreResponses([ranking]);
+        perSet.push([result.axes.perceiving, result.axes.processing]);
+        return;
+      }
+      rest.forEach((value, index) => {
+        permute([...rest.slice(0, index), ...rest.slice(index + 1)], [...taken, value]);
+      });
+    };
+    permute([1, 2, 3, 4], []);
+    expect(perSet).toHaveLength(24);
+
+    let distribution = new Map<string, number>([['0,0', 1]]);
+    for (let set = 0; set < setCount; set += 1) {
+      const next = new Map<string, number>();
+      for (const [key, count] of distribution) {
+        const [a, b] = key.split(',').map(Number) as [number, number];
+        for (const [dp, dq] of perSet) {
+          const nextKey = `${a + dp},${b + dq}`;
+          next.set(nextKey, (next.get(nextKey) ?? 0) + count);
+        }
+      }
+      distribution = next;
+    }
+
+    let total = 0;
+    let onALine = 0;
+    let deadCentre = 0;
+    for (const [key, count] of distribution) {
+      const [a, b] = key.split(',').map(Number) as [number, number];
+      total += count;
+      if (a === 0 || b === 0) onALine += count;
+      if (a === 0 && b === 0) deadCentre += count;
+    }
+    return { total, onALine, deadCentre };
+  }
+
+  it('puts roughly a quarter of random responders on a line', () => {
+    const { total, onALine, deadCentre } = axisDistribution(6);
+    expect(total).toBe(24 ** 6);
+
+    const lineShare = onALine / total;
+    const centreShare = deadCentre / total;
+
+    // ~23.2% on a line, ~1.5% dead centre. In a room of twenty, that is
+    // several people who cannot be put inside a quadrant.
+    expect(lineShare).toBeGreaterThan(0.22);
+    expect(lineShare).toBeLessThan(0.24);
+    expect(centreShare).toBeGreaterThan(0.014);
+    expect(centreShare).toBeLessThan(0.017);
+  });
+});
