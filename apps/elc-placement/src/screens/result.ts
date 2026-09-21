@@ -13,7 +13,7 @@
  */
 import { el } from '@training/ui';
 import { ROUTES } from '../router.ts';
-import { QUADRANTS, type Axis, type Quadrant } from '../model.ts';
+import { AXES, QUADRANTS, type Quadrant } from '../model.ts';
 import { BAND, type Result } from '../scoring.ts';
 import { circleFigure } from '../circle.ts';
 import { richParagraph, scoped, section, type ScreenContext } from './context.ts';
@@ -221,7 +221,9 @@ function axisLines(context: ScreenContext, result: Result): string[] {
   const s = scoped(context.t, 'result');
   const { instrument } = context;
 
-  return (Object.keys(instrument.axes) as Axis[]).map((axis) => {
+  // AXES, not Object.keys: the reading order should not depend on how a
+  // locale file happens to order its keys.
+  return AXES.map((axis) => {
     const info = instrument.axes[axis];
     const value = result.axes[axis];
     if (value === 0) {

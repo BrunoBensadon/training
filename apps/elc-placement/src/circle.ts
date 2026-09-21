@@ -12,7 +12,7 @@
  */
 import { svg, el } from '@training/ui';
 import type { Axis, Quadrant } from './model.ts';
-import { QUADRANT_POLES } from './model.ts';
+import { QUADRANTS, QUADRANT_POLES } from './model.ts';
 import type { Instrument } from './instrument.ts';
 import type { Result } from './scoring.ts';
 import { axisRange } from './scoring.ts';
@@ -83,7 +83,7 @@ export function resultCircle(options: CircleOptions): SVGSVGElement {
   );
 
   // Quadrant wedges. The fill is a tint; the label is the information.
-  for (const quadrant of Object.keys(QUADRANT_POLES) as Quadrant[]) {
+  for (const quadrant of QUADRANTS) {
     const poles = QUADRANT_POLES[quadrant];
     const isLead = lead.includes(quadrant);
     const startX = CENTRE + poles.processing * RADIUS;
@@ -119,7 +119,7 @@ export function resultCircle(options: CircleOptions): SVGSVGElement {
   );
 
   // Quadrant names, inside the wedge they belong to.
-  for (const quadrant of Object.keys(QUADRANT_POLES) as Quadrant[]) {
+  for (const quadrant of QUADRANTS) {
     const { x, y } = quadrantCentre(quadrant);
     root.append(
       svg('text', {

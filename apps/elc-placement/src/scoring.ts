@@ -177,6 +177,14 @@ export function scoreResponses(responses: Responses, expectedSets?: number): Res
   };
 }
 
+/**
+ * The four quadrant scores always add to this. Every rank 1-4 is given out
+ * once per set, so each set contributes 4 + 3 + 2 + 1.
+ */
+export function totalPoints(setCount: number): number {
+  return setCount * ((QUADRANTS.length * (QUADRANTS.length + 1)) / 2);
+}
+
 /** The furthest an axis can travel, for normalising the circle. */
 export function axisRange(setCount: number): number {
   // Per set the best case is 4 + 3 on one pole against 2 + 1 on the other.

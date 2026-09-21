@@ -6,6 +6,7 @@ import {
   axisRange,
   pointsForRank,
   scoreResponses,
+  totalPoints,
 } from '../src/scoring.ts';
 import { QUADRANTS, type Quadrant, type Ranking, type Responses } from '../src/model.ts';
 
@@ -284,5 +285,18 @@ describe('how often the boundary cases actually happen', () => {
     expect(lineShare).toBeLessThan(0.24);
     expect(centreShare).toBeGreaterThan(0.014);
     expect(centreShare).toBeLessThan(0.017);
+  });
+});
+
+describe('totalPoints', () => {
+  it('is what the four quadrant scores always add up to', () => {
+    expect(totalPoints(6)).toBe(60);
+    const result = scoreResponses(repeat(rank(1, 3, 4, 2)));
+    expect(result.total).toBe(totalPoints(6));
+  });
+
+  it('holds for an instrument of a different length', () => {
+    const responses: Responses = [rank(1, 2, 3, 4), rank(2, 1, 4, 3)];
+    expect(scoreResponses(responses).total).toBe(totalPoints(2));
   });
 });

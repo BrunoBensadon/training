@@ -1,11 +1,11 @@
 import { el } from '@training/ui';
 import { ROUTES } from '../router.ts';
+import { totalPoints } from '../scoring.ts';
 import { richListItem, richParagraph, scoped, section, type ScreenContext } from './context.ts';
 
 export function aboutScreen(context: ScreenContext): HTMLElement {
   const s = scoped(context.t, 'about');
-  const total =
-    context.instrument.sets.length * ((1 + 2 + 3 + 4) as number);
+  const total = totalPoints(context.instrument.sets.length);
 
   const block = (titleKey: string, ...body: Node[]): HTMLElement =>
     section(el('h2', { text: s(titleKey) }), el('div', { class: 'prose' }, ...body));
