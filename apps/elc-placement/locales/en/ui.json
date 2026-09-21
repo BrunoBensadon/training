@@ -10,10 +10,8 @@
   "nav": {
     "skip": "Skip to content",
     "langGroup": "Language / Idioma",
-    "home": "Start",
     "about": "About this instrument",
-    "facilitator": "Facilitator card",
-    "backToTools": "All tools"
+    "facilitator": "Facilitator card"
   },
   "intro": {
     "kicker": "Before the session",
@@ -34,27 +32,17 @@
     ],
     "timeNote": "6 sets · under 8 minutes · works offline",
     "start": "Start",
-    "aboutLink": "About this instrument",
-    "resume": "Continue where you left off"
+    "aboutLink": "About this instrument"
   },
   "assessment": {
     "progress": "Set {n} of {total}",
-    "progressLabel": "Progress",
     "instruction": "Rank these four from 1 to 4. 1 is the one most like you, 4 the one least like you. Each number is used once.",
-    "rankLegendFor": "Rank for: {statement}",
     "rankNames": {
       "1": "1 — most like me",
       "2": "2",
       "3": "3",
       "4": "4 — least like me"
     },
-    "rankShort": {
-      "1": "1",
-      "2": "2",
-      "3": "3",
-      "4": "4"
-    },
-    "columnHeader": "Rank",
     "mostLikeMe": "most like me",
     "leastLikeMe": "least like me",
     "announceAssigned": "Rank {rank} given to: {statement}",

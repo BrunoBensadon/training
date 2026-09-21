@@ -21,6 +21,8 @@ import {
 } from '@training/ui';
 import { writeLegacyLang } from '@training/i18n';
 
+import toolsConfig from '../../../tools.config.json';
+
 import { detectLocale, languageOptions, translatorFor } from './locales.ts';
 import { instrumentFrom, shuffledQuadrants, type Instrument } from './instrument.ts';
 import { buildHash, parseHash, ROUTES, setNumberFrom } from './router.ts';
@@ -138,6 +140,11 @@ export function createApp(root: HTMLElement): void {
       siteFooter(
         t.t('footer.notOfficial'),
         t.t('footer.licence'),
+        // A tool that claims it transmits nothing should be checkable.
+        el('a', {
+          text: t.t('footer.source'),
+          attrs: { href: toolsConfig.repositoryUrl, rel: 'noopener noreferrer' },
+        }),
       ),
     );
 
@@ -219,6 +226,9 @@ export function createApp(root: HTMLElement): void {
 
     document.title = t.t('meta.title');
     document.documentElement.lang = locale;
+    document
+      .querySelector('meta[name="description"]')
+      ?.setAttribute('content', t.t('meta.description'));
 
     // Route changes in a single page do not move focus on their own, so a
     // screen-reader user would stay where they were and hear nothing.

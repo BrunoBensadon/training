@@ -206,3 +206,21 @@ test('moving to the next set cannot change the set you just left', async ({ page
   await expect(page.getByText(`Set 1 of ${SETS}`)).toBeVisible();
   await expect(page.getByText(/set complete/i)).toBeVisible();
 });
+
+test('the privacy claim is checkable and the page describes itself in both languages', async ({
+  page,
+}) => {
+  await page.goto(`${APP}#/q/1`);
+
+  // A tool that claims it transmits nothing should link to its own source.
+  const source = page.locator('.site-footer a');
+  await expect(source).toHaveAttribute('href', /github\.com\/.+\/training/);
+
+  // And should say out loud what holding answers in memory only costs.
+  await expect(page.locator('.leave-warning')).toContainText(/reload/i);
+
+  const description = page.locator('meta[name="description"]');
+  await expect(description).toHaveAttribute('content', /leaves your device/i);
+  await page.getByRole('button', { name: 'Português (Brasil)' }).click();
+  await expect(description).toHaveAttribute('content', /sai do seu aparelho/i);
+});

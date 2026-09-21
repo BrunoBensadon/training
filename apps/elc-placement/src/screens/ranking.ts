@@ -204,6 +204,9 @@ export function rankingScreen(
       statusLine,
       errorLine,
       buttons,
+      // The flip side of keeping answers in memory only: say so, rather
+      // than letting someone find out by reloading.
+      el('p', { class: 'leave-warning', text: s('leaveWarning') }),
     ),
   );
 

@@ -10,10 +10,8 @@
   "nav": {
     "skip": "Ir para o conteúdo",
     "langGroup": "Language / Idioma",
-    "home": "Início",
     "about": "Sobre este instrumento",
-    "facilitator": "Ficha do facilitador",
-    "backToTools": "Todas as ferramentas"
+    "facilitator": "Ficha do facilitador"
   },
   "intro": {
     "kicker": "Antes da sessão",
@@ -34,27 +32,17 @@
     ],
     "timeNote": "6 conjuntos · menos de 8 minutos · funciona sem internet",
     "start": "Começar",
-    "aboutLink": "Sobre este instrumento",
-    "resume": "Continuar de onde parou"
+    "aboutLink": "Sobre este instrumento"
   },
   "assessment": {
     "progress": "Conjunto {n} de {total}",
-    "progressLabel": "Progresso",
     "instruction": "Ordene estas quatro de 1 a 4. 1 é a que mais se parece com você, 4 a que menos se parece. Cada número é usado uma vez.",
-    "rankLegendFor": "Posição para: {statement}",
     "rankNames": {
       "1": "1 — a que mais se parece comigo",
       "2": "2",
       "3": "3",
       "4": "4 — a que menos se parece comigo"
     },
-    "rankShort": {
-      "1": "1",
-      "2": "2",
-      "3": "3",
-      "4": "4"
-    },
-    "columnHeader": "Posição",
     "mostLikeMe": "mais se parece comigo",
     "leastLikeMe": "menos se parece comigo",
     "announceAssigned": "Posição {rank} dada a: {statement}",

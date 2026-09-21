@@ -133,7 +133,14 @@ function render(root: HTMLElement, locale: string): void {
         list,
       ),
     ),
-    siteFooter(t.t('footer.notOfficial'), t.t('footer.licence')),
+    siteFooter(
+      t.t('footer.notOfficial'),
+      t.t('footer.licence'),
+      el('a', {
+        text: t.t('footer.source'),
+        attrs: { href: toolsConfig.repositoryUrl, rel: 'noopener noreferrer' },
+      }),
+    ),
   );
 }
 

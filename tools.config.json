@@ -1,5 +1,6 @@
 {
   "$comment": "Single source of truth for what is deployed and where. Adding a tool means adding an entry here plus an apps/<id>/ workspace. See docs/ADDING-A-TOOL.md.",
+  "repositoryUrl": "https://github.com/BrunoBensadon/training",
   "siteBase": "/training/",
   "tools": [
     {
