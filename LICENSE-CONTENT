@@ -1,0 +1,63 @@
+Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)
+
+Copyright (c) 2026 Bruno Bensadon
+
+WHAT THIS COVERS
+----------------
+This licence covers the *content* of this repository, as distinct from the
+code. Content means:
+
+  - the assessment items, in every language
+    (apps/*/locales/**, and apps/*/ITEMS.md)
+  - the interface and explanatory copy in the locale files
+  - the facilitator materials
+  - the prose in docs/ and in the README files
+
+The software is licensed separately under the MIT License; see LICENSE.
+Where a single file contains both (a locale file is content; the loader
+that reads it is code), the licence follows the nature of the material,
+not the file extension.
+
+THE LICENCE
+-----------
+This content is licensed under the Creative Commons
+Attribution-ShareAlike 4.0 International License.
+
+You are free to:
+  Share  — copy and redistribute the material in any medium or format
+  Adapt  — remix, transform, and build upon the material
+for any purpose, even commercially.
+
+Under the following terms:
+  Attribution — You must give appropriate credit, provide a link to the
+    licence, and indicate if changes were made.
+  ShareAlike  — If you remix, transform, or build upon the material, you
+    must distribute your contributions under the same licence as the
+    original.
+
+The full licence text is at:
+  https://creativecommons.org/licenses/by-sa/4.0/legalcode
+A readable summary is at:
+  https://creativecommons.org/licenses/by-sa/4.0/
+
+WHY SHAREALIKE
+--------------
+The items exist because the instrument this replaces was either dead or an
+unlicensed copy of a commercial one. ShareAlike is the term that stops that
+happening again: a translated or revised version stays as free as the
+original, which is also how volunteer translation in a federated
+organisation actually works.
+
+THIS NEEDS A HUMAN DECISION
+---------------------------
+This split was chosen by the session that wrote the first version of this
+repository, and is recorded in docs/DECISIONS.md. It has not been agreed
+with CISV International. If the items are ever handed to CISV, the licence
+is theirs to decide — including the possibility that they want copyright
+assigned rather than licensed. Settle this before any public announcement.
+
+NOT COVERED
+-----------
+The names and marks of CISV International are not licensed here and remain
+the property of their owner. Nothing in this repository is an official CISV
+International publication.
