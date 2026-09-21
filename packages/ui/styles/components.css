@@ -1,0 +1,78 @@
+/* Shared controls. Anything only one tool uses stays in that tool until a
+   second tool needs it — see docs/ADDING-A-TOOL.md. */
+
+.btn-row { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1.6rem; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+  font-family: var(--mono); font-size: var(--t-mono); letter-spacing: 0.1em; text-transform: uppercase;
+  text-decoration: none; color: var(--ink); background: transparent;
+  border: 1px solid var(--ink); border-radius: var(--radius);
+  padding: 0.72rem 1.1rem;
+  min-height: var(--tap);
+  transition: background .2s var(--ease), color .2s var(--ease), transform .15s var(--ease);
+  cursor: pointer;
+}
+.btn:hover { background: var(--ink); color: var(--paper); transform: translateY(-1px); }
+.btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none; background: transparent; color: var(--ink); }
+.btn.accent { border-color: var(--accent); color: var(--accent); }
+.btn.accent:hover { background: var(--accent); color: var(--paper); }
+.btn.quiet { border-color: var(--rule-strong); color: var(--ink-soft); }
+.btn.quiet:hover { background: var(--paper-3); color: var(--ink); }
+.btn .ar { font-size: 0.9em; }
+
+.more {
+  font-family: var(--mono); font-size: var(--t-mono); letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--accent); text-decoration: none; display: inline-flex; gap: 0.45rem; align-items: center;
+}
+.more .ar { transition: transform .2s var(--ease); }
+.more:hover .ar { transform: translateX(4px); }
+
+/* language toggle — visually identical to the toggle on the main site, so
+   someone arriving from there recognises it. The behaviour differs: this
+   one swaps a locale bundle rather than toggling parallel spans. */
+.lang-toggle {
+  display: inline-flex; border: 1px solid var(--control-edge); border-radius: var(--radius);
+  overflow: hidden; font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.06em; flex: none;
+}
+.lang-toggle button {
+  appearance: none; border: 0; background: transparent; color: var(--muted);
+  padding: 0.34rem 0.62rem; cursor: pointer; transition: background .2s, color .2s; line-height: 1;
+  font-family: inherit; font-size: inherit; letter-spacing: inherit;
+}
+.lang-toggle button:hover { color: var(--ink); }
+.lang-toggle button[aria-pressed="true"] { background: var(--control-fill); color: var(--control-on-fill); }
+
+.tag {
+  display: inline-block; font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 0.22em 0.5em; border: 1px solid var(--rule-strong); border-radius: var(--radius); color: var(--muted);
+  white-space: nowrap;
+}
+.tag.live { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 42%, var(--rule-strong)); }
+
+.panel {
+  background: var(--paper-2);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  padding: clamp(1rem, 3vw, 1.6rem);
+}
+.panel > h2, .panel > h3 { margin-top: 0; }
+
+.def { display: grid; grid-template-columns: 8.5rem 1fr; gap: 0.5rem 1.2rem; margin: 0; }
+.def dt {
+  font-family: var(--mono); font-size: var(--t-cap); letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted); padding-top: 0.22rem;
+}
+.def dd { margin: 0; color: var(--ink-soft); }
+
+table.data { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
+table.data caption { text-align: left; font-family: var(--mono); font-size: var(--t-cap); letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding-bottom: 0.6rem; }
+table.data th, table.data td { text-align: left; padding: 0.55rem 0.7rem 0.55rem 0; border-bottom: 1px solid var(--rule); }
+table.data th { font-family: var(--mono); font-size: var(--t-cap); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+table.data td.num { font-family: var(--mono); text-align: right; padding-right: 0; white-space: nowrap; }
+
+@media (max-width: 680px) {
+  .def { grid-template-columns: 1fr; gap: 0.1rem 0; }
+  .def dd { margin-bottom: 0.7rem; }
+  .btn { width: 100%; }
+  .btn-row .btn { width: auto; flex: 1 1 auto; }
+}

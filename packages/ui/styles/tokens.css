@@ -1,0 +1,127 @@
+/* =================================================================
+   Design tokens — "the offprint"
+
+   Lifted from the token layer of https://brunobensadon.github.io so the
+   training tools read as part of the same body of work. Only the tokens
+   and the primitives the tools use were taken; the source stylesheet's
+   page-specific motifs (gallery, lightbox, frontispiece) were not.
+
+   The source has no dark palette — it only has a warm-dark lightbox
+   (--dark #181511). The dark theme below is derived from that warm dark
+   rather than inverted to black, and every pairing introduced here is
+   measured. Ratios are computed, not estimated; see packages/ui/README.md
+   and the contrast test in packages/ui/test/contrast.test.ts.
+   ================================================================= */
+
+:root {
+  color-scheme: light;
+
+  /* paper & ink ------------------------------------------------- */
+  --paper:       #faf7ef;   /* page */
+  --paper-2:     #f4efe3;   /* raised panel / hover */
+  --paper-3:     #ece4d3;   /* deeper panel */
+  --ink:         #211e18;   /* body text            — 15.5:1 on paper */
+  --ink-soft:    #4c463b;   /* secondary text       —  8.7:1 on paper */
+  --muted:       #6e6650;   /* captions, metadata   —  5.3:1 on paper */
+  --rule:        #ddd4c2;   /* hairlines (decorative) */
+  --rule-strong: #c6bba1;   /* heavier hairlines (decorative) */
+  --accent:      #8a2f22;   /* oxblood              —  7.8:1 on paper */
+  --accent-2:    #a8462f;   /* lighter brick        —  5.5:1, hover only */
+
+  /* Borders that identify an interactive control must clear 3:1
+     (WCAG 1.4.11), which --rule-strong does not. Controls use this. */
+  --control-edge: var(--muted);
+  --control-fill: var(--ink);      /* selected state background */
+  --control-on-fill: var(--paper); /* text on a selected control */
+
+  /* type -------------------------------------------------------- */
+  --serif: "Spectral", Georgia, "Times New Roman", serif;
+  --mono:  "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  /* type scale (fluid) ----------------------------------------- */
+  --t-display: clamp(2.7rem, 1.6rem + 4.6vw, 5rem);
+  --t-h1:      clamp(2.2rem, 1.5rem + 2.6vw, 3.4rem);
+  --t-h2:      clamp(1.5rem, 1.15rem + 1.4vw, 2.1rem);
+  --t-h3:      1.18rem;
+  --t-lead:    clamp(1.2rem, 1rem + 0.9vw, 1.55rem);
+  --t-body:    clamp(1.02rem, 0.95rem + 0.3vw, 1.16rem);
+  --t-mono:    0.72rem;
+  --t-cap:     0.7rem;
+
+  /* metrics ----------------------------------------------------- */
+  --maxw:       1140px;
+  --readw:      63ch;
+  --gap:        clamp(1.25rem, 4vw, 2.75rem);
+  --section-y:  clamp(2.2rem, 6vw, 4.5rem);
+  --radius:     2px;
+  --tap:        44px;       /* minimum touch target */
+
+  /* motion ------------------------------------------------------ */
+  --ease: cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+
+/* -----------------------------------------------------------------
+   Dark theme.
+
+   Derived from the source's warm lightbox dark (#181511) so the paper
+   metaphor survives the switch: this is unlit paper, not a black screen.
+   Each token holds roughly the same contrast rank as its light twin
+   (--accent lands at 7.9:1 against the light theme's 7.8:1), so a layout
+   that passes in one theme passes in the other.
+   ----------------------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --paper:       #181511;
+    --paper-2:     #211d17;
+    --paper-3:     #2b261e;
+    --ink:         #ece4d3;   /* 14.4:1 on paper, 11.9:1 on paper-3 */
+    --ink-soft:    #c9bfa9;   /* 10.0:1 on paper,  8.2:1 on paper-3 */
+    --muted:       #9c927c;   /*  5.9:1 on paper,  4.9:1 on paper-3 */
+    --rule:        #332d24;
+    --rule-strong: #4a4235;
+    --accent:      #e09a7c;   /*  7.9:1 on paper,  6.5:1 on paper-3 */
+    --accent-2:    #e6a98d;   /*  9.0:1 on paper, hover only */
+
+    --control-fill: var(--ink);
+    --control-on-fill: var(--paper);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --paper:       #181511;
+  --paper-2:     #211d17;
+  --paper-3:     #2b261e;
+  --ink:         #ece4d3;
+  --ink-soft:    #c9bfa9;
+  --muted:       #9c927c;
+  --rule:        #332d24;
+  --rule-strong: #4a4235;
+  --accent:      #e09a7c;
+  --accent-2:    #e6a98d;
+
+  --control-fill: var(--ink);
+  --control-on-fill: var(--paper);
+}
+
+/* Print is always paper, whatever the screen theme says. */
+@media print {
+  :root, :root[data-theme="dark"] {
+    color-scheme: light;
+    --paper: #fff;
+    --paper-2: #fff;
+    --paper-3: #f2ece0;
+    --ink: #000;
+    --ink-soft: #2b2b2b;
+    --muted: #4a4a4a;
+    --rule: #b9b1a1;
+    --rule-strong: #8a8378;
+    --accent: #7a2a1e;
+    --accent-2: #7a2a1e;
+    --control-fill: #000;
+    --control-on-fill: #fff;
+  }
+}
