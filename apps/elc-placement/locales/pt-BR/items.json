@@ -1,0 +1,106 @@
+{
+  "version": "1.0.0",
+  "instruction": "Ordene as quatro afirmações de 1 a 4: 1 para a que mais se parece com você, 4 para a que menos se parece. Cada número é usado uma vez. Não há respostas melhores ou piores — o que interessa é o que você coloca em primeiro lugar quando não pode colocar tudo em primeiro lugar.",
+  "axes": {
+    "perceiving": {
+      "name": "Percepção",
+      "question": "Como você se aproxima de algo novo",
+      "positive": "Concreto",
+      "negative": "Abstrato",
+      "positiveDescription": "pela própria experiência",
+      "negativeDescription": "pela ideia por trás dela"
+    },
+    "processing": {
+      "name": "Processamento",
+      "question": "O que você faz com isso em seguida",
+      "positive": "Ativo",
+      "negative": "Reflexivo",
+      "positiveDescription": "experimentando",
+      "negativeDescription": "remoendo"
+    }
+  },
+  "quadrants": {
+    "activist": {
+      "name": "Ativista",
+      "short": "Concreto e ativo",
+      "description": "Mergulha na atividade e aprende fazendo. Cansa-se de introduções, improvisa com facilidade e ganha energia com a novidade e com as outras pessoas. Já terá começado antes de as instruções terminarem."
+    },
+    "reflector": {
+      "name": "Reflexivo",
+      "short": "Concreto e reflexivo",
+      "description": "Observa antes de agir. Reúne o que aconteceu, pensa antes de falar e quer tempo e alguma distância antes de assumir uma posição. Costuma ser quem percebeu o que mais ninguém percebeu."
+    },
+    "theorist": {
+      "name": "Teórico",
+      "short": "Abstrato e reflexivo",
+      "description": "Quer o modelo e o raciocínio. Fica desconfortável com uma atividade cujo propósito não foi dito e trabalha encaixando o que é novo em um sistema que já se sustenta."
+    },
+    "pragmatist": {
+      "name": "Pragmático",
+      "short": "Abstrato e ativo",
+      "description": "Quer a técnica em uma forma utilizável. Testa as ideias contra a prática, pergunta como aquilo fica com um grupo real e perde a paciência com teoria que não chega a lugar nenhum."
+    }
+  },
+  "sets": [
+    {
+      "id": "new-activity",
+      "prompt": "Uma sessão começa com uma atividade que eu nunca fiz antes.",
+      "statements": {
+        "activist": "Entro na atividade imediatamente e vou entendendo o que está acontecendo enquanto faço.",
+        "reflector": "Espero e observo como as primeiras pessoas lidam com a atividade.",
+        "theorist": "Quero que me digam para que serve a atividade antes de ela começar.",
+        "pragmatist": "Quero saber o que vou conseguir fazer com isso depois."
+      }
+    },
+    {
+      "id": "group-discussion",
+      "prompt": "O grupo está discutindo uma ideia e eu tenho algo a dizer.",
+      "statements": {
+        "activist": "Começo a falar antes de o pensamento estar pronto e vou ajustando enquanto falo.",
+        "reflector": "Espero até ter decidido o que penso, mesmo que o momento já tenha passado.",
+        "theorist": "Tento juntar o que as pessoas estão dizendo em uma explicação única antes de acrescentar algo.",
+        "pragmatist": "Peço um exemplo da ideia sendo usada com um grupo real."
+      }
+    },
+    {
+      "id": "reading-beforehand",
+      "prompt": "Recebo um texto para ler antes de uma sessão.",
+      "statements": {
+        "activist": "Leio rapidamente e conto com a própria sessão.",
+        "reflector": "Leio tudo e faço anotações, mesmo quando há mais material do que eu preciso.",
+        "theorist": "Procuro o raciocínio por trás do que o texto afirma.",
+        "pragmatist": "Procuro as partes que posso usar e deixo o resto."
+      }
+    },
+    {
+      "id": "after-a-session",
+      "prompt": "Uma sessão da qual participei acabou de terminar.",
+      "statements": {
+        "activist": "Já estou pensando na próxima coisa a fazer.",
+        "reflector": "Reviso o que aconteceu antes de decidir o que penso a respeito.",
+        "theorist": "Tento encaixar o que aconteceu no que eu já pensava sobre o assunto.",
+        "pragmatist": "Escolho uma coisa para fazer diferente na próxima vez que eu conduzir uma sessão."
+      }
+    },
+    {
+      "id": "plan-changes",
+      "prompt": "O plano precisa mudar com muito pouco aviso.",
+      "statements": {
+        "activist": "Improviso e descubro o que funciona enquanto acontece.",
+        "reflector": "Quero alguns minutos para pensar antes de dizer qualquer coisa.",
+        "theorist": "Quero entender por que a mudança é necessária antes de concordar com ela.",
+        "pragmatist": "Procuro a opção que funciona com as pessoas e o tempo que temos agora."
+      }
+    },
+    {
+      "id": "new-method",
+      "prompt": "Alguém me mostra um método que eu poderia usar nas minhas próprias sessões.",
+      "statements": {
+        "activist": "Prefiro experimentar e ir ajustando a planejar tudo antes.",
+        "reflector": "Prefiro ver outra pessoa usando o método algumas vezes primeiro.",
+        "theorist": "Prefiro entender primeiro o raciocínio de onde ele vem.",
+        "pragmatist": "Prefiro receber os passos para poder usar imediatamente."
+      }
+    }
+  ]
+}

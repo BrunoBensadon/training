@@ -1,0 +1,26 @@
+{
+  "meta": {
+    "title": "Training tools",
+    "description": "Online tools supporting training delivery, mostly for CISV International.",
+    "brand": "Training tools",
+    "langLabel": "EN",
+    "langName": "English"
+  },
+  "nav": {
+    "skip": "Skip to content",
+    "langGroup": "Language / Idioma"
+  },
+  "index": {
+    "kicker": "Index",
+    "title": "Training tools",
+    "lead": "Small online tools that support training delivery — mostly for CISV International, a peace-education NGO running volunteer-led leadership training in more than 60 countries.",
+    "note": "Everything here runs in your browser. No accounts, no analytics, nothing collected.",
+    "toolsTitle": "Available now",
+    "empty": "Nothing is published yet."
+  },
+  "footer": {
+    "licence": "Code MIT · content CC BY-SA 4.0",
+    "notOfficial": "Not an official CISV International publication.",
+    "source": "Source on GitHub"
+  }
+}

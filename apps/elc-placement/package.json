@@ -1,0 +1,16 @@
+{
+  "name": "@training/elc-placement",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Experiential learning cycle placement — a reflection tool for the CISV Facilitating Learning session",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@training/i18n": "*",
+    "@training/ui": "*"
+  }
+}

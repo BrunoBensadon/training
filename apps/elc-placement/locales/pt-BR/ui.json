@@ -1,0 +1,139 @@
+{
+  "meta": {
+    "title": "Para onde você pende? — ciclo de aprendizagem vivencial",
+    "description": "Uma breve ferramenta de reflexão usada antes da sessão Facilitando a Aprendizagem, do CISV. Nada do que você responde sai do seu aparelho.",
+    "brand": "Ferramentas de treinamento",
+    "toolName": "Ciclo de aprendizagem vivencial",
+    "langLabel": "PT",
+    "langName": "Português (Brasil)"
+  },
+  "nav": {
+    "skip": "Ir para o conteúdo",
+    "langGroup": "Language / Idioma",
+    "about": "Sobre este instrumento",
+    "facilitator": "Ficha do facilitador"
+  },
+  "intro": {
+    "kicker": "Antes da sessão",
+    "title": "Para onde você pende?",
+    "lead": "Seis conjuntos de quatro afirmações. Ordene cada conjunto. No final você verá para qual parte do ciclo de aprendizagem vivencial você pendeu hoje, e ficará nessa parte do círculo quando a sessão começar.",
+    "privacyTitle": "Nada do que você responde sai deste aparelho",
+    "privacy": [
+      "Não há conta, nem servidor, nem banco de dados. Tudo funciona dentro do seu navegador.",
+      "Nada é enviado para lugar nenhum — nem enquanto você responde, nem quando termina.",
+      "Sem cookies, sem análise de uso, sem pedidos a terceiros. Até as fontes são servidas daqui.",
+      "Se quiser guardar o seu resultado, você aperta um botão e ele é escrito no endereço da página, que fica no seu aparelho. Ninguém o recolhe."
+    ],
+    "whatTitle": "O que isto é, e o que não é",
+    "what": [
+      "É uma forma de perceber que uma sala de treinadores contém quatro apetites diferentes, e que quem facilita precisa percorrer os quatro.",
+      "**Não** é um teste psicométrico, nem um diagnóstico, nem um rótulo. Nunca foi validado.",
+      "A pesquisa não sustenta a escolha de métodos de treinamento para corresponder a um estilo de aprendizagem medido. A [página sobre o instrumento]({aboutHref}) explica o que isso significa e o que faltaria para afirmar o contrário."
+    ],
+    "timeNote": "6 conjuntos · menos de 8 minutos · funciona sem internet",
+    "start": "Começar",
+    "aboutLink": "Sobre este instrumento"
+  },
+  "assessment": {
+    "progress": "Conjunto {n} de {total}",
+    "instruction": "Ordene estas quatro de 1 a 4. 1 é a que mais se parece com você, 4 a que menos se parece. Cada número é usado uma vez.",
+    "rankNames": {
+      "1": "1 — a que mais se parece comigo",
+      "2": "2",
+      "3": "3",
+      "4": "4 — a que menos se parece comigo"
+    },
+    "mostLikeMe": "mais se parece comigo",
+    "leastLikeMe": "menos se parece comigo",
+    "announceAssigned": "Posição {rank} dada a: {statement}",
+    "announceSwapped": "Posição {rank} dada a: {statement}. {other} passou para a posição {otherRank}.",
+    "announceDisplaced": "Posição {rank} dada a: {statement}. {other} ficou sem posição.",
+    "announceComplete": "As quatro foram ordenadas. Você pode ir para o próximo conjunto.",
+    "remaining": "faltam {n}",
+    "complete": "Conjunto completo",
+    "clear": "Limpar este conjunto",
+    "back": "Voltar",
+    "next": "Próximo conjunto",
+    "finish": "Ver o seu resultado",
+    "incomplete": "Ordene as quatro afirmações para continuar.",
+    "leaveWarning": "As suas respostas ficam apenas nesta página. Se recarregar, você recomeça."
+  },
+  "result": {
+    "kicker": "Seu resultado",
+    "title": "Para onde você pendeu hoje",
+    "disclaimer": "Isto é uma preferência, não um diagnóstico. A pesquisa não sustenta a escolha de métodos de treinamento para corresponder ao estilo medido de alguém. Usamos isto para que você veja que um grupo contém os quatro apetites, e que quem treina precisa percorrer o ciclo inteiro — não para dizer como você deve ser ensinado.",
+    "leanedQuadrant": "Hoje você pendeu para **{quadrant}** — {short}.",
+    "leanedEdge": "Hoje você ficou exatamente na linha entre **{first}** e **{second}**. Em {axis} você está equilibrado; quem pende é o outro eixo.",
+    "leanedCentre": "Hoje você ficou no centro do círculo: equilibrado nos dois eixos.",
+    "leanedBalanced": "Hoje você distribuiu as respostas igualmente entre as quatro. Isso é um resultado, não uma falha em responder — em geral significa que você ordenou pela situação e não pelo hábito.",
+    "closeCallTitle": "Ficou perto",
+    "closeCall": "**{first}** e **{second}** estão a {band} pontos ou menos uma da outra. Isso está dentro da margem que este instrumento consegue enxergar, então trate as duas como empatadas em vez de escolher a maior.",
+    "closeCallMany": "Estas estão a {band} pontos ou menos umas das outras: {list}. Trate-as como empatadas.",
+    "standWhere": "Quando a sessão começar, fique em {where}.",
+    "standEdge": "na linha entre {first} e {second}",
+    "standCentre": "no meio do círculo — e diga por quê quando perguntarem",
+    "shapeTitle": "O seu formato completo",
+    "shapeLead": "Os quatro números juntos dizem mais do que o maior deles. Eles sempre somam {total}.",
+    "tableCaption": "Pontos por quadrante",
+    "colQuadrant": "Quadrante",
+    "colDescription": "Em resumo",
+    "colScore": "Pontos",
+    "axesTitle": "Os dois eixos",
+    "axesLead": "Os eixos são a parte mais bem fundamentada disto. O quadrante é apenas onde os dois se cruzam.",
+    "axisReading": "{name}: {value} na direção de {pole} ({description})",
+    "axisEven": "{name}: equilibrado entre {positive} e {negative}",
+    "circleTitle": "O ciclo de aprendizagem, com a sua posição marcada",
+    "circleDesc": "Um círculo dividido em quatro quadrantes. Da esquerda para a direita está o eixo de processamento, do reflexivo ao ativo. De baixo para cima está o eixo de percepção, do abstrato ao concreto. A sua posição está marcada com um ponto identificado.",
+    "youAreHere": "Você",
+    "saveTitle": "Guarde isto",
+    "saveLead": "O seu resultado já está no endereço desta página, depois do sinal #. Essa parte nunca é enviada a servidor nenhum. Salve nos favoritos, tire um print ou imprima.",
+    "copy": "Copiar link",
+    "copied": "Link copiado",
+    "copyFailed": "Não foi possível copiar — selecione a barra de endereço e copie manualmente.",
+    "print": "Imprimir ou salvar em PDF",
+    "restart": "Começar de novo",
+    "staleVersion": "Este link foi criado com uma versão anterior das afirmações (versão {saved}; estas são a versão {current}). As pontuações continuam legíveis, porque um link guardado registra como você ordenou os quatro quadrantes e não quais palavras você viu — mas as palavras mudaram desde então.",
+    "badLinkTitle": "Não foi possível ler esse link",
+    "badLink": "O resultado neste endereço está danificado ou foi criado por uma versão mais nova desta ferramenta. Nada foi perdido — as respostas nunca foram guardadas em outro lugar, então o único caminho é responder de novo.",
+    "startOver": "Responder os seis conjuntos"
+  },
+  "about": {
+    "kicker": "Sobre",
+    "title": "Sobre este instrumento",
+    "whoTitle": "Quem construiu e por quê",
+    "who": "Isto foi construído para a sessão *Facilitando a Aprendizagem* do CISV International, parte do Train the Trainer. Essa sessão pede que os participantes cheguem sabendo para qual parte do ciclo de aprendizagem vivencial eles tendem, fiquem nesse quadrante de um círculo marcado no chão e conversem nesses grupos. A avaliação para a qual a sessão remetia saiu do ar, e as substitutas eram cópias não licenciadas de instrumentos comerciais ou existiam apenas em inglês. Esta é uma que o CISV pode ter como sua, em mais de uma língua.",
+    "whatTitle": "O que ele pontua",
+    "what": "Seis conjuntos de quatro afirmações, ordenadas de 1 a 4. Um primeiro lugar vale 4 pontos e um quarto lugar vale 1, somados por quadrante, de modo que os quatro sempre totalizam {total}. A partir dos mesmos números ele calcula dois eixos — percepção (concreto contra abstrato) e processamento (ativo contra reflexivo) — e o quadrante é lido a partir dos sinais desses dois. Os eixos são a unidade mais bem fundamentada; o quadrante é um jeito de ficar em algum lugar do chão.",
+    "notValidatedTitle": "Ele não foi validado",
+    "notValidated": "Isto é uma ferramenta de reflexão. Não tem validação psicométrica de nenhum tipo: sem dados de confiabilidade, sem teste-reteste, sem análise fatorial, sem normas, sem estudo piloto. Ninguém jamais respondeu a ele em condições que permitissem dizer o que ele mede.",
+    "whatWouldItTakeTitle": "O que precisaria ser verdade para afirmar o contrário",
+    "whatWouldItTake": [
+      "Consistência interna de α ≥ 0,70 para cada uma das quatro escalas.",
+      "Concordância teste-reteste de ≥ 0,70 ao longo de cerca de duas semanas — uma preferência que muda de uma semana para a outra não é uma preferência.",
+      "A estrutura de quatro fatores efetivamente recuperada em uma análise fatorial com pelo menos 150 respondentes.",
+      "E tudo isso repetido em cada língua separadamente, porque um instrumento traduzido é um instrumento novo."
+    ],
+    "evidenceTitle": "Sobre estilos de aprendizagem em geral",
+    "evidence": "Vale conhecer duas revisões, porque são a razão pela qual esta ferramenta se recusa a dizer como você deve ser ensinado.",
+    "citations": [
+      "Pashler, H., McDaniel, M., Rohrer, D., & Bjork, R. (2008). Learning styles: Concepts and evidence. *Psychological Science in the Public Interest, 9*(3), 105–119. [doi:10.1111/j.1539-6053.2009.01038.x](https://doi.org/10.1111/j.1539-6053.2009.01038.x) — procuraram estudos que testassem se ajustar o ensino a um estilo medido melhora a aprendizagem, e encontraram quase nenhum que cumprisse o critério; os que cumpriam não sustentavam a ideia.",
+      "Coffield, F., Moseley, D., Hall, E., & Ecclestone, K. (2004). *Learning styles and pedagogy in post-16 learning: A systematic and critical review.* Londres: Learning and Skills Research Centre. — revisaram 71 modelos de estilos de aprendizagem e concluíram que a maioria não tinha sido devidamente validada, incluindo vários vendidos comercialmente."
+    ],
+    "soWhatTitle": "Então por que usar isto",
+    "soWhat": "Porque a sessão não é sobre você. É sobre uma sala perceber que contém quatro apetites diferentes, e que quem treina percorrendo só a parte de que gosta perde três quartos da sala. Fazer as pessoas ficarem em lugares diferentes e discutirem sobre isso consegue esse efeito. Uma medição não conseguiria melhor.",
+    "ipTitle": "De onde vêm as afirmações",
+    "ip": "As afirmações foram escritas a partir de descrições de comportamento, não adaptadas de nenhum questionário existente. Nada aqui foi tirado do LSQ de Honey & Mumford, do LSI ou do KELP de Kolb, nem do ILS de Felder–Soloman. O modelo por trás — dois eixos do ciclo de aprendizagem vivencial de Kolb — é uma ideia publicada; as afirmações que o medem pertencem a quem as escreveu, e é justamente esse o erro que isto substitui.",
+    "privacyTitle": "Privacidade",
+    "privacy": "Sem servidor, sem contas, sem análise de uso, sem cookies, sem pedidos a terceiros. Tudo é calculado no seu navegador e nada é transmitido. Guardar um resultado o escreve na parte do endereço depois do sinal #, que os navegadores nunca enviam a um servidor. Não há como um facilitador, nem nós, recolher resultados: o facilitador vê o seu resultado porque você o mostra.",
+    "backToStart": "Voltar ao início"
+  },
+  "errors": {
+    "unknownRoute": "Essa página não existe.",
+    "goHome": "Ir para o início"
+  },
+  "footer": {
+    "licence": "Código MIT · conteúdo CC BY-SA 4.0",
+    "notOfficial": "Não é uma publicação oficial do CISV International.",
+    "source": "Código-fonte"
+  }
+}

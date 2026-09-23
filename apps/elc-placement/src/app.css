@@ -1,0 +1,226 @@
+/* ==================================================================
+   elc-placement — what is specific to this tool.
+
+   Anything here that a second tool turns out to need should move to
+   packages/ui rather than being copied. Candidates are listed in
+   docs/ADDING-A-TOOL.md.
+   ================================================================== */
+
+#app { display: flex; flex-direction: column; min-height: 100vh; }
+main { flex: 1 0 auto; padding-bottom: 1rem; }
+
+.tool-nav { display: flex; gap: clamp(0.7rem, 2vw, 1.2rem); }
+.tool-nav a {
+  font-family: var(--mono); font-size: var(--t-mono); letter-spacing: 0.12em;
+  text-transform: uppercase; text-decoration: none; color: var(--ink-soft);
+  white-space: nowrap;
+}
+.tool-nav a:hover { color: var(--accent); }
+
+ul.plain { list-style: none; padding-left: 0; }
+ul.plain > li { padding-left: 1.1rem; position: relative; }
+ul.plain > li::before {
+  content: "—"; position: absolute; left: 0; color: var(--accent);
+  font-family: var(--mono); font-size: 0.8em;
+}
+
+.prose-note { color: var(--ink-soft); }
+.time-note {
+  font-family: var(--mono); font-size: var(--t-cap); letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted);
+}
+.after-note { margin-top: 1.4rem; }
+
+/* ---------------------------------------------------------------- *
+   Ranking
+ * ---------------------------------------------------------------- */
+.set-prompt { font-size: var(--t-h2); max-width: 24ch; }
+.instruction { color: var(--ink-soft); max-width: 58ch; }
+
+.progress { display: flex; gap: 4px; margin: 0 0 1.4rem; }
+.progress .pip {
+  height: 3px; flex: 1 1 0; background: var(--rule);
+  border-radius: 1px; transition: background .25s var(--ease);
+}
+.progress .pip.is-done { background: var(--accent); }
+
+.rank-scale {
+  display: flex; justify-content: space-between; gap: 1rem;
+  font-family: var(--mono); font-size: var(--t-cap); letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--muted);
+  border-bottom: 1px solid var(--rule); padding-bottom: 0.5rem; margin-top: 1.8rem;
+}
+
+.statements { list-style: none; padding: 0; margin: 0; max-width: none; }
+.statement {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.6rem 1.4rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--rule);
+  margin: 0;
+}
+.statement-text { margin: 0; max-width: 46ch; line-height: 1.5; }
+
+.ranks { display: flex; gap: 0.4rem; }
+.rank-option {
+  position: relative;
+  display: grid; place-items: center;
+  min-width: var(--tap); min-height: var(--tap);
+  border: 1px solid var(--control-edge);
+  border-radius: var(--radius);
+  cursor: pointer;
+  background: var(--paper);
+  transition: background .18s var(--ease), color .18s var(--ease), border-color .18s var(--ease);
+}
+.rank-option:hover { background: var(--paper-2); }
+.rank-option input {
+  /* inset:0 is load-bearing. Without offsets an absolutely positioned
+     child of a `place-items: center` grid is laid out from its static
+     (centred) position, so `width: 100%` overflows the label and the
+     input ends up covering whatever is below it — which, at phone width,
+     was the Next button. */
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+.rank-digit {
+  font-family: var(--mono); font-size: 0.95rem; line-height: 1; color: var(--ink-soft);
+}
+.rank-option.is-chosen {
+  background: var(--control-fill);
+  border-color: var(--control-fill);
+}
+.rank-option.is-chosen .rank-digit { color: var(--control-on-fill); font-weight: 500; }
+/* The ring has to come from the label, because the input itself is
+   invisible and a focus ring on an invisible box is not a focus ring. */
+.rank-option:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+.status {
+  font-family: var(--mono); font-size: var(--t-cap); letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--muted); margin: 1rem 0 0; min-height: 1.4em;
+}
+.status.is-complete { color: var(--accent); }
+.form-error { color: var(--accent); margin: 0.4rem 0 0; min-height: 1.4em; font-size: 0.95rem; }
+.leave-warning {
+  margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--rule);
+  font-family: var(--mono); font-size: var(--t-cap); letter-spacing: 0.02em;
+  line-height: 1.6; color: var(--muted); max-width: 54ch;
+}
+
+/* ---------------------------------------------------------------- *
+   Result
+ * ---------------------------------------------------------------- */
+.disclaimer { border-left: 3px solid var(--accent); margin-bottom: 1.6rem; }
+.disclaimer p { margin: 0; color: var(--ink); max-width: 62ch; }
+.close-call { margin-top: 1.4rem; }
+.close-call h2 {
+  font-family: var(--mono); font-size: var(--t-mono); letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 0.7rem;
+}
+.close-call p { margin: 0; color: var(--ink-soft); }
+.stand-where { margin-top: 1.4rem; font-size: 1.1rem; }
+.note.stale { margin-bottom: 0; }
+
+.circle-figure { margin: 0 auto; max-width: 460px; }
+.circle { width: 100%; height: auto; display: block; }
+.circle .wedge { fill: var(--paper-2); stroke: none; }
+.circle .wedge-lead { fill: color-mix(in srgb, var(--accent) 14%, var(--paper-2)); }
+.circle .ring, .circle .axis { fill: none; stroke: var(--rule-strong); stroke-width: 1; }
+.circle .wedge-label {
+  font-family: var(--mono); font-size: 13px; letter-spacing: 0.06em;
+  fill: var(--ink-soft);
+}
+.circle .wedge-label.is-lead { fill: var(--ink); font-weight: 500; }
+.circle .pole-label {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; fill: var(--muted);
+}
+.circle .marker-halo { fill: var(--paper); stroke: var(--paper); stroke-width: 3; }
+.circle .marker { fill: var(--accent); stroke: var(--paper); stroke-width: 2; }
+.circle .marker-label {
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em;
+  text-transform: uppercase; fill: var(--accent);
+}
+
+table.shape tr.is-lead th, table.shape tr.is-lead td { color: var(--ink); font-weight: 500; }
+table.shape tr.is-lead th::after {
+  content: " ◂"; color: var(--accent);
+}
+ul.axes li { font-size: 1.02rem; }
+
+/* ---------------------------------------------------------------- *
+   Facilitator card
+ * ---------------------------------------------------------------- */
+.card { padding-block: var(--section-y) 1rem; }
+.card-head { border-bottom: 1px solid var(--rule); padding-bottom: 1.4rem; margin-bottom: 1.6rem; }
+.card-block { padding-block: 1.4rem; border-bottom: 1px solid var(--rule); }
+.card-block:last-child { border-bottom: 0; }
+.card-block h2 {
+  font-family: var(--mono); font-size: var(--t-mono); letter-spacing: 0.16em;
+  text-transform: uppercase; color: var(--accent); font-weight: 500;
+}
+.card-split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.2rem, 4vw, 2.6rem); }
+.card-split > div > h2:not(:first-child) { margin-top: 1.6rem; }
+
+.quadrant-list { display: grid; grid-template-columns: 11rem 1fr; gap: 0.4rem 1.4rem; margin: 0; }
+.quadrant-list dt { display: flex; flex-direction: column; gap: 0.1rem; }
+.quadrant-list .q-name { font-weight: 600; }
+.quadrant-list .q-short {
+  font-family: var(--mono); font-size: var(--t-cap); letter-spacing: 0.06em; color: var(--muted);
+}
+.quadrant-list dd { margin: 0; color: var(--ink-soft); font-size: 0.97rem; }
+
+.prompts { counter-reset: prompt; list-style: none; padding-left: 0; }
+.prompts li { counter-increment: prompt; position: relative; padding-left: 2.1rem; margin-bottom: 0.8rem; }
+.prompts li::before {
+  content: counter(prompt); position: absolute; left: 0; top: 0.1rem;
+  font-family: var(--mono); font-size: var(--t-cap); color: var(--accent);
+  border: 1px solid var(--rule-strong); border-radius: 50%;
+  width: 1.5rem; height: 1.5rem; display: grid; place-items: center;
+}
+.guidance li, .timing li { color: var(--ink-soft); font-size: 0.97rem; }
+.timing { list-style: none; padding-left: 0; font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.01em; }
+.citations li { font-size: 0.95rem; }
+
+@media (max-width: 720px) {
+  .tool-nav { flex-wrap: wrap; gap: 0.4rem 0.9rem; }
+  .tool-nav a { font-size: 0.66rem; white-space: normal; }
+  .statement { grid-template-columns: 1fr; }
+  .ranks { justify-content: space-between; }
+  .rank-option { flex: 1 1 0; }
+  .card-split { grid-template-columns: 1fr; }
+  .quadrant-list { grid-template-columns: 1fr; }
+  .quadrant-list dd { margin-bottom: 0.8rem; }
+  .rank-scale { margin-top: 1.2rem; }
+}
+
+/* ---------------------------------------------------------------- *
+   Print — the result and the facilitator card are both meant to be
+   printed, and neither wants the chrome.
+ * ---------------------------------------------------------------- */
+@media print {
+  .site-header, .site-footer, .skip-link, .no-print, .tool-nav, .lang-toggle {
+    display: none !important;
+  }
+  main { padding: 0; }
+  .container { max-width: none; padding-inline: 0; }
+  .section { padding-block: 0.6rem; break-inside: avoid; }
+  .section + .section { border-top: 0; }
+  .card-block { break-inside: avoid; padding-block: 0.5rem; }
+  .card { padding-block: 0; }
+  .card-head { padding-bottom: 0.6rem; margin-bottom: 0.8rem; }
+  h1 { font-size: 1.5rem; }
+  h2 { font-size: 1rem; }
+  body { font-size: 10.5pt; line-height: 1.45; }
+  .lead { font-size: 1rem; }
+  .circle-figure { max-width: 330px; }
+  .quadrant-list dd, .guidance li, .timing li, .prompts li { font-size: 9.5pt; }
+  .disclaimer { border-left-width: 2px; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 8pt; color: #444; }
+}
+
+@page { margin: 14mm; }

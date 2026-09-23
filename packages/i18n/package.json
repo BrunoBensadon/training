@@ -1,0 +1,11 @@
+{
+  "name": "@training/i18n",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Locale loading, string lookup and locale-file validation",
+  "exports": {
+    ".": "./src/index.ts",
+    "./vite": "./vite-plugin.mjs"
+  }
+}

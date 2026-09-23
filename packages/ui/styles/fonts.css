@@ -1,0 +1,57 @@
+/**
+ * Self-hosted type.
+ *
+ * The main site loads these from Google Fonts. These tools must not make
+ * third-party requests, so the files are bundled from @fontsource and
+ * served from the same origin as the app.
+ *
+ * Written out by hand rather than importing @fontsource's own stylesheets,
+ * because those also reference a .woff fallback. Every browser that can
+ * run this app supports woff2, and the fallback would otherwise be
+ * deployed and precached for offline use without ever being fetched.
+ *
+ * Latin subsets only — they cover both English and Portuguese.
+ */
+
+@font-face {
+  font-family: "Spectral";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("@fontsource/spectral/files/spectral-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Spectral";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("@fontsource/spectral/files/spectral-latin-400-italic.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Spectral";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("@fontsource/spectral/files/spectral-latin-600-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Spectral";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("@fontsource/spectral/files/spectral-latin-700-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-400-normal.woff2") format("woff2");
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("@fontsource/ibm-plex-mono/files/ibm-plex-mono-latin-500-normal.woff2") format("woff2");
+}
