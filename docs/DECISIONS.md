@@ -271,6 +271,19 @@ third-party request could be added without appearing in the page source,
 so the refusal is written into the worker itself.
 **Reconsider** Nothing.
 
+### Page loads are network-first; build files are cache-first
+**What** The worker fetches the page itself from the network, falling back
+to the cached copy when offline or after 3 seconds. The build's files,
+whose names carry content hashes, are served from the cache.
+**Why** Serving the cached page first meant that after every deploy,
+anyone who had opened the tool before got the old version on their next
+visit — the new worker installs in the background during that visit —
+and the new one only on the visit after. That is how the second edition
+of the items looked undeployed on the day it shipped. Network-first shows
+the new version on the first load and costs one small request online.
+**Reconsider** If the 3-second fallback proves too short on real training
+-room connections, raise it; offline behaviour does not depend on it.
+
 ### The no-network check was split in two
 **What** (1) No cross-origin request, ever. (2) After load, nothing outside
 the app's own precache, read from the generated worker rather than
