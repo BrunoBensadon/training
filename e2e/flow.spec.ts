@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 
 const APP = '/training/elc-placement/';
-const SETS = 6;
+const SETS = 12;
 
 /** Ranks the four statements of the current set, 1..4 top to bottom. */
 async function rankCurrentSet(page: Page): Promise<void> {
@@ -24,11 +24,11 @@ async function completeAllSets(page: Page): Promise<void> {
 }
 
 test.describe('the whole thing works', () => {
-  test('six sets produce a result that adds up', async ({ page }) => {
+  test('twelve sets produce a result that adds up', async ({ page }) => {
     await page.goto(APP);
     await completeAllSets(page);
 
-    await expect(page).toHaveURL(/#\/result\?r=e1%3A1\.0\.0%3A|#\/result\?r=e1:1\.0\.0:/);
+    await expect(page).toHaveURL(/#\/result\?r=e1%3A2\.0\.0%3A|#\/result\?r=e1:2\.0\.0:/);
     await expect(page.getByRole('heading', { name: /where you leaned today/i })).toBeVisible();
 
     // The mandated copy, on the result screen, not buried.
@@ -37,11 +37,17 @@ test.describe('the whole thing works', () => {
     // The whole shape, not a single label.
     const scores = await page.locator('table.shape tbody td.num').allTextContents();
     expect(scores).toHaveLength(4);
-    expect(scores.reduce((sum, value) => sum + Number(value), 0)).toBe(60);
+    expect(scores.reduce((sum, value) => sum + Number(value), 0)).toBe(120);
 
     // The diagram is an image with a name, and its numbers are repeated in text.
     await expect(page.getByRole('img', { name: /learning cycle/i })).toBeVisible();
-    await expect(page.getByRole('list').filter({ hasText: /perceiving/i })).toBeVisible();
+    // Where to stand is said in words, not only drawn.
+    await expect(page.locator('p.stand-where')).toContainText(/when the session starts, stand/i);
+    // Kolb's tensions are there, but secondary: collapsed until asked for.
+    const tensions = page.locator('details.tensions');
+    await expect(tensions.locator('summary')).toHaveText(/kolb.s two tensions/i);
+    await tensions.locator('summary').click();
+    await expect(tensions.getByRole('listitem')).toHaveCount(2);
   });
 
   test('a saved link reproduces the same result', async ({ page }) => {
@@ -61,10 +67,17 @@ test.describe('the whole thing works', () => {
   });
 
   test('a damaged link says so instead of showing a wrong result', async ({ page }) => {
-    await page.goto(`${APP}#/result?r=e1:1.0.0:zzzzzz`);
+    await page.goto(`${APP}#/result?r=e1:2.0.0:zzzzzzzzzzzz`);
     await expect(page.getByRole('heading', { name: /could not be read/i })).toBeVisible();
-    await page.getByRole('button', { name: /answer the six sets/i }).click();
+    await page.getByRole('button', { name: /answer the 12 sets/i }).click();
     await expect(page.getByRole('heading', { name: /where do you lean/i })).toBeVisible();
+  });
+
+  test('a link from the first edition is not re-scored under the new model', async ({ page }) => {
+    // Six sets, items 1.0.0: quadrants and different statements.
+    await page.goto(`${APP}#/result?r=e1:1.0.0:000000`);
+    await expect(page.getByRole('heading', { name: /earlier version/i })).toBeVisible();
+    await expect(page.locator('table.shape')).toHaveCount(0);
   });
 
   test('language comes from the link, and the toggle keeps you where you are', async ({ page }) => {
@@ -83,7 +96,11 @@ test.describe('the whole thing works', () => {
     await expect(page.getByText(/no psychometric validation of any kind/i)).toBeVisible();
     await expect(page.getByText(/Pashler/)).toBeVisible();
     await expect(page.getByText(/Coffield/)).toBeVisible();
-    await expect(page.getByText(/α ≥ \.70/)).toBeVisible();
+    await expect(page.getByText(/Clinton-Lisell/)).toBeVisible();
+    // The criteria it would have to meet are ones that work on ranked
+    // answers — retest agreement — and it says why alpha is not one.
+    await expect(page.getByText(/correlation of at least \.70/)).toBeVisible();
+    await expect(page.getByText(/Cronbach.s alpha and factor analysis, do not work/)).toBeVisible();
   });
 
   test('the facilitator card carries the prompts and the lopsided guidance', async ({ page }) => {
@@ -91,7 +108,7 @@ test.describe('the whole thing works', () => {
     await expect(page.getByRole('heading', { name: /floor exercise/i })).toBeVisible();
     await expect(page.locator('ol.prompts li')).toHaveCount(3);
     await expect(page.getByText(/never leave one person standing alone/i)).toBeVisible();
-    await expect(page.getByText(/eleven reflectors and one activist/i)).toBeVisible();
+    await expect(page.getByText(/eleven reflectives and one active/i)).toBeVisible();
   });
 });
 

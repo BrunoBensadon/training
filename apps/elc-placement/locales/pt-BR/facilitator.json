@@ -3,35 +3,37 @@
   "title": "Facilitando a Aprendizagem — exercício de chão",
   "lead": "Uma página. Imprima, ou abra no celular. Tudo de que o exercício precisa está nela.",
   "printHint": "Imprimir esta página",
-  "quadrantsTitle": "Os quatro quadrantes",
-  "quadrantsLead": "Marque um círculo no chão com fita e divida-o em quatro. A percepção vai de baixo para cima: abstrato embaixo, concreto em cima. O processamento vai da esquerda para a direita: reflexivo à esquerda, ativo à direita.",
+  "pointsTitle": "Os quatro pontos do ciclo",
+  "pointsLead": "Marque um círculo no chão com fita e quatro pontos nele. Escolha uma parede como o alto. Coloque **Ativo** no alto, **Reflexivo** à direita, **Teórico** embaixo e **Pragmático** à esquerda: de pé no centro, olhando para o Ativo, o Reflexivo fica à sua direita. Desenhe setas em volta do círculo nessa ordem (Ativo → Reflexivo → Teórico → Pragmático → Ativo). Esse é o sentido em que o ciclo gira, e é igual à figura no celular de todo mundo.",
+  "positions": "Cada resultado diz onde ficar: em um dos quatro pontos, no círculo no meio do caminho entre dois pontos vizinhos, ou no centro. Espere que mais da metade da sala fique entre dois pontos ou no centro. Isso é proposital: o questionário só nomeia um ponto quando a vantagem é clara.",
   "promptsTitle": "As três perguntas",
-  "promptsLead": "Em grupos por quadrante, cerca de 8 minutos cada. Recolha uma resposta de cada quadrante antes de seguir, para que nenhum grupo ouça apenas a si mesmo.",
+  "promptsLead": "Em grupos por ponto do ciclo, cerca de 8 minutos cada. Recolha uma resposta de cada grupo antes de seguir, para que nenhum grupo ouça apenas a si mesmo.",
   "prompts": [
-    "Como é uma sessão conduzida inteiramente dentro do seu quadrante? Diga o que um participante ganha com ela, e diga o que ele perde.",
+    "Como é uma sessão conduzida inteiramente a partir do seu ponto do ciclo? Diga o que um participante ganha com ela, e diga o que ele perde.",
     "Pense numa sessão em que você foi quem ficou fora do compasso de como ela estava sendo conduzida. O que você fez — e o que quem treinava poderia ter feito para trazer você de volta?",
-    "De qual quadrante você foge quando planeja uma sessão? O que você teria de fazer de diferente, concretamente, para conduzir bem essa parte do ciclo?"
+    "Qual parte do ciclo você pula quando planeja uma sessão? O que você teria de fazer de diferente, concretamente, para conduzir bem essa parte?"
   ],
   "lopsidedTitle": "Quando a sala está desequilibrada",
-  "lopsidedLead": "Onze Reflexivos e um Ativista acontece, e a sessão como está escrita não dá conta disso. O desequilíbrio não é um problema do exercício — é a coisa mais interessante na sala, desde que você diga isso em voz alta.",
+  "lopsidedLead": "Onze Reflexivos e um Ativo acontece, e a sessão como está escrita não dá conta disso. O desequilíbrio não é um problema do exercício — é a coisa mais interessante na sala, desde que você diga isso em voz alta.",
   "lopsided": [
-    "**Nunca deixe uma pessoa sozinha em pé.** Peça que ela se junte ao grupo mais próximo e fale como representante do quadrante dela. Ficar sozinho diante de uma sala é um exercício diferente do que você pretendia conduzir.",
-    "**Diga o desequilíbrio em voz alta e use-o.** \"Esta sala é quase toda de Reflexivos. O que isso prevê sobre as sessões que vamos desenhar juntos esta semana?\" Essa pergunta vale mais do que as três originais.",
-    "**Mande as pessoas que ficaram na linha.** Quem teve resultado numa borda ou no centro pode ser colocado de propósito no quadrante vazio. Diga por que você está fazendo isso — essa pessoa está cobrindo uma lacuna, não sendo corrigida.",
-    "**Se um quadrante estiver vazio, entregue-o ao grupo mais cheio.** Peça que defendam a posição daquele quadrante por cinco minutos. Defender o apetite que menos se compartilha é o verdadeiro objetivo de aprendizagem.",
-    "**Divida o grupo grande em duplas.** Um grupo de onze não é uma conversa, é uma fila. Conduza as três perguntas em duplas dentro do quadrante grande e depois recolha uma resposta de cada dupla.",
+    "**Nunca deixe uma pessoa sozinha em pé.** Peça que ela se junte ao grupo mais próximo e fale como representante do ponto dela. Ficar sozinho diante de uma sala é um exercício diferente do que você pretendia conduzir.",
+    "**Diga o desequilíbrio em voz alta e use-o.** \"Esta sala é quase toda Reflexiva. O que isso prevê sobre as sessões que vamos desenhar juntos esta semana?\" Essa pergunta vale mais do que as três originais.",
+    "**Use as pessoas que ficaram entre pontos e no centro.** Quem está entre dois pontos entra no menor dos seus dois grupos; quem está no centro vai para o menor grupo. Diga por quê: essas pessoas estão cobrindo uma lacuna, não sendo corrigidas.",
+    "**Se um ponto estiver vazio, entregue-o ao grupo mais cheio.** Peça que defendam a posição daquele ponto por cinco minutos. Defender o apetite que menos se compartilha é o verdadeiro objetivo de aprendizagem.",
+    "**Divida o grupo grande em duplas.** Um grupo de onze não é uma conversa, é uma fila. Conduza as três perguntas em duplas dentro do grupo grande e depois recolha uma resposta de cada dupla.",
+    "**Percorra o ciclo.** Se houver tempo, peça que cada grupo passe uma das suas respostas no sentido horário para o ponto seguinte e pergunte o que esse grupo acrescentaria. Isso mostra o ciclo como uma sequência, e não como quatro grupos separados.",
     "**Não repita a avaliação para conseguir uma distribuição melhor.** A distribuição é o dado. Manipulá-la ensina à sala que o instrumento é uma formalidade."
   ],
   "runningTitle": "Tempos",
   "running": [
-    "0–10 min — as pessoas chegam com um resultado. Leia as quatro descrições de quadrante; peça que se posicionem.",
-    "10–15 min — nomeie o formato da sala. Posicione os resultados de borda e de centro.",
-    "15–40 min — as três perguntas em grupos por quadrante, recolhendo uma resposta de cada quadrante depois de cada pergunta.",
+    "0–10 min — as pessoas chegam com um resultado. Leia em voz alta as quatro descrições; peça que cada pessoa fique onde o resultado indica.",
+    "10–15 min — diga em voz alta o formato da sala. Distribua nos grupos as pessoas que estão entre pontos e no centro.",
+    "15–40 min — as três perguntas em grupos por ponto do ciclo, recolhendo uma resposta de cada grupo depois de cada pergunta.",
     "40–60 min — grupo inteiro: o que quem treina precisa fazer para percorrer os quatro? Recolha ações concretas, não princípios.",
     "60–90 min — o restante da sessão conforme planejado."
   ],
   "sayThisTitle": "Diga isto pelo menos uma vez",
-  "sayThis": "Isto é uma preferência, não um diagnóstico, e a pesquisa não sustenta ensinar as pessoas de acordo com um estilo medido. Estamos nos posicionando em quadrantes para que vocês vejam que a sala contém os quatro, não para que alguém diga a vocês como aprendem.",
+  "sayThis": "Isto é uma preferência, não um diagnóstico, e a pesquisa não sustenta ensinar as pessoas de acordo com um estilo medido. Estamos nos posicionando ao redor do ciclo para que vocês vejam que a sala contém os quatro, não para que alguém diga a vocês como aprendem.",
   "cautionTitle": "Uma ressalva",
   "caution": "Se alguém disser que o resultado está errado a respeito dela, essa pessoa tem razão e você deve dizer isso. O instrumento nunca foi validado. O que ele consegue fazer é começar a discussão — uma discussão sobre o que uma sessão perde quando quem treina percorre apenas o seu próprio quarto do ciclo."
 }

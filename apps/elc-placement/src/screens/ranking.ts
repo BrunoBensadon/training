@@ -14,7 +14,7 @@
  */
 import { el } from '@training/ui';
 import { ROUTES } from '../router.ts';
-import { QUADRANTS, RANKS, isComplete, type Quadrant, type Rank } from '../model.ts';
+import { PREFERENCES, RANKS, isComplete, type Preference, type Rank } from '../model.ts';
 import { scoped, section, type ScreenContext } from './context.ts';
 
 export interface RankingScreenOptions {
@@ -38,36 +38,36 @@ export function rankingScreen(
 
   const statusLine = el('p', { class: 'status', attrs: { 'aria-live': 'polite' } });
   const errorLine = el('p', { class: 'form-error', attrs: { role: 'alert' } });
-  const inputs = new Map<Quadrant, Map<Rank, HTMLInputElement>>();
+  const inputs = new Map<Preference, Map<Rank, HTMLInputElement>>();
 
   const refresh = (): void => {
-    for (const [quadrant, byRank] of inputs) {
+    for (const [preference, byRank] of inputs) {
       for (const [rank, input] of byRank) {
-        input.checked = ranking[quadrant] === rank;
+        input.checked = ranking[preference] === rank;
         input.closest('.rank-option')?.classList.toggle('is-chosen', input.checked);
       }
     }
-    const remaining = QUADRANTS.filter((quadrant) => ranking[quadrant] === undefined).length;
+    const remaining = PREFERENCES.filter((preference) => ranking[preference] === undefined).length;
     statusLine.textContent = remaining === 0 ? s('complete') : s('remaining', { n: remaining });
     statusLine.classList.toggle('is-complete', remaining === 0);
   };
 
-  const assign = (quadrant: Quadrant, rank: Rank): void => {
-    const previous = ranking[quadrant];
+  const assign = (preference: Preference, rank: Rank): void => {
+    const previous = ranking[preference];
     if (previous === rank) return;
 
-    const displaced = QUADRANTS.find(
-      (candidate) => candidate !== quadrant && ranking[candidate] === rank,
+    const displaced = PREFERENCES.find(
+      (candidate) => candidate !== preference && ranking[candidate] === rank,
     );
 
-    ranking[quadrant] = rank;
+    ranking[preference] = rank;
 
     let message: string;
     if (displaced && previous !== undefined) {
       ranking[displaced] = previous;
       message = s('announceSwapped', {
         rank,
-        statement: set.statements[quadrant],
+        statement: set.statements[preference],
         other: set.statements[displaced],
         otherRank: previous,
       });
@@ -75,11 +75,11 @@ export function rankingScreen(
       delete ranking[displaced];
       message = s('announceDisplaced', {
         rank,
-        statement: set.statements[quadrant],
+        statement: set.statements[preference],
         other: set.statements[displaced],
       });
     } else {
-      message = s('announceAssigned', { rank, statement: set.statements[quadrant] });
+      message = s('announceAssigned', { rank, statement: set.statements[preference] });
     }
 
     errorLine.textContent = '';
@@ -91,11 +91,11 @@ export function rankingScreen(
 
   const statementList = el('ol', { class: 'statements' });
 
-  for (const quadrant of order) {
-    const groupName = `set-${set.id}-${quadrant}`;
+  for (const preference of order) {
+    const groupName = `set-${set.id}-${preference}`;
     const labelId = `${groupName}-label`;
     const byRank = new Map<Rank, HTMLInputElement>();
-    inputs.set(quadrant, byRank);
+    inputs.set(preference, byRank);
 
     // A radiogroup labelled by the statement, rather than a fieldset:
     // native radios keep arrow-key navigation and screen-reader output,
@@ -113,7 +113,7 @@ export function rankingScreen(
           'aria-label': s(`rankNames.${rank}`),
         },
         on: {
-          change: () => assign(quadrant, rank),
+          change: () => assign(preference, rank),
         },
       });
       byRank.set(rank, input);
@@ -132,7 +132,7 @@ export function rankingScreen(
       el(
         'li',
         { class: 'statement' },
-        el('p', { class: 'statement-text', id: labelId, text: set.statements[quadrant] }),
+        el('p', { class: 'statement-text', id: labelId, text: set.statements[preference] }),
         options,
       ),
     );
@@ -141,7 +141,7 @@ export function rankingScreen(
   const goNext = (): void => {
     if (!isComplete(ranking)) {
       errorLine.textContent = s('incomplete');
-      const firstUnranked = QUADRANTS.find((quadrant) => ranking[quadrant] === undefined);
+      const firstUnranked = PREFERENCES.find((preference) => ranking[preference] === undefined);
       const target = firstUnranked && inputs.get(firstUnranked)?.get(1);
       target?.focus();
       return;
@@ -154,7 +154,7 @@ export function rankingScreen(
   };
 
   const clear = (): void => {
-    for (const quadrant of QUADRANTS) delete ranking[quadrant];
+    for (const preference of PREFERENCES) delete ranking[preference];
     errorLine.textContent = '';
     refresh();
     inputs.get(order[0]!)?.get(1)?.focus();
@@ -198,7 +198,11 @@ export function rankingScreen(
       el('p', { class: 'kicker', text: s('progress', { n: setNumber, total }) }),
       progressBar(setNumber, total),
       el('h1', { class: 'set-prompt', text: set.prompt }),
-      el('p', { class: 'instruction', text: s('instruction') }),
+      // The full instruction once, at the start; a short reminder after.
+      el('p', {
+        class: 'instruction',
+        text: setNumber === 1 ? context.instrument.instruction : s('instruction'),
+      }),
       rankScale(context),
       statementList,
       statusLine,

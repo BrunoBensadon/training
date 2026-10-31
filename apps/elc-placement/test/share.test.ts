@@ -3,15 +3,16 @@ import {
   ENCODING_VERSION,
   decodeResponses,
   encodeResponses,
+  compareEdition,
   itemsVersionMatches,
   permutationFromIndex,
   permutationIndex,
 } from '../src/share.ts';
-import { QUADRANTS, type Ranking, type Responses } from '../src/model.ts';
+import { PREFERENCES, type Ranking, type Responses } from '../src/model.ts';
 import { scoreResponses } from '../src/scoring.ts';
 
-function rank(activist: number, reflector: number, theorist: number, pragmatist: number): Ranking {
-  return { activist, reflector, theorist, pragmatist };
+function rank(active: number, reflective: number, theorist: number, pragmatist: number): Ranking {
+  return { active, reflective, theorist, pragmatist };
 }
 
 const sample: Responses = [
@@ -64,7 +65,9 @@ describe('encodeResponses', () => {
   });
 
   it('stays short enough to survive being typed off a screen', () => {
-    expect(encodeResponses(sample, '1.0.0').length).toBeLessThan(20);
+    // Twelve sets: one character each, plus the version.
+    const twelve = [...sample, ...sample];
+    expect(encodeResponses(twelve, '2.0.0').length).toBeLessThan(24);
   });
 });
 
@@ -93,6 +96,18 @@ describe('decodeResponses', () => {
   });
 });
 
+describe('editions', () => {
+  it('reads the major number as the edition', () => {
+    expect(compareEdition('2.0.0', '2.1.0')).toBe('same');
+    expect(compareEdition('1.0.0', '2.0.0')).toBe('earlier');
+    expect(compareEdition('3.0.0', '2.0.0')).toBe('later');
+  });
+
+  it('treats an unreadable version as the same edition rather than guessing', () => {
+    expect(compareEdition('x', '2.0.0')).toBe('same');
+  });
+});
+
 describe('items version', () => {
   it('is carried so a stale link can say so', () => {
     const decoded = decodeResponses(encodeResponses(sample, '1.0.0'));
@@ -100,12 +115,12 @@ describe('items version', () => {
     expect(decoded.ok && itemsVersionMatches(decoded.itemsVersion, '1.0.0')).toBe(true);
   });
 
-  it('still decodes a stale link, because ranks are stored per quadrant', () => {
+  it('still decodes a stale link, because ranks are stored per preference', () => {
     // Rewording a statement cannot invalidate a saved link: the link never
-    // referred to the statement, only to the quadrant it belonged to.
+    // referred to the statement, only to the preference it belonged to.
     const decoded = decodeResponses(encodeResponses(sample, '1.0.0'));
     expect(decoded.ok).toBe(true);
     if (!decoded.ok) return;
-    expect(Object.keys(decoded.responses[0]!).sort()).toEqual([...QUADRANTS].sort());
+    expect(Object.keys(decoded.responses[0]!).sort()).toEqual([...PREFERENCES].sort());
   });
 });

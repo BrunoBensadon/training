@@ -9,13 +9,13 @@
  * There is no upload, no session code, no dashboard. A facilitator sees a
  * result because a trainee shows it to them.
  *
- * What gets encoded is the rank each quadrant received, not which statement
+ * What gets encoded is the rank each preference received, not which statement
  * was picked. That has a useful consequence: rewording a statement does not
  * invalidate an existing link, because the link never referred to the
  * statement. Only a change to what the sets *mean* does, which is what the
  * items version is for.
  */
-import { QUADRANTS, type Quadrant, type Ranking, type Responses } from './model.ts';
+import { PREFERENCES, type Preference, type Ranking, type Responses } from './model.ts';
 
 /** Bump when the encoding itself changes, not when items change. */
 export const ENCODING_VERSION = 1;
@@ -24,7 +24,7 @@ const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz';
 const PERMUTATION_COUNT = 24; // 4!
 
 /**
- * A ranking is a permutation of 1–4 across four quadrants, so there are
+ * A ranking is a permutation of 1–4 across four preferences, so there are
  * only 24 of them and each fits in one character. Six sets become six
  * characters.
  */
@@ -61,7 +61,7 @@ export function permutationFromIndex(index: number): number[] {
 
 export function encodeResponses(responses: Responses, itemsVersion: string): string {
   const chars = responses.map((ranking) => {
-    const ranks = QUADRANTS.map((quadrant) => ranking[quadrant]);
+    const ranks = PREFERENCES.map((preference) => ranking[preference]);
     return ALPHABET[permutationIndex(ranks)]!;
   });
   return `e${ENCODING_VERSION}:${itemsVersion}:${chars.join('')}`;
@@ -91,7 +91,7 @@ export function decodeResponses(encoded: string): DecodeResult {
     const ranks = permutationFromIndex(index);
     responses.push(
       Object.fromEntries(
-        QUADRANTS.map((quadrant, position) => [quadrant, ranks[position]!]),
+        PREFERENCES.map((preference, position) => [preference, ranks[position]!]),
       ) as Ranking,
     );
   }
@@ -104,6 +104,22 @@ export function itemsVersionMatches(saved: string, current: string): boolean {
   return saved === current;
 }
 
-export function quadrantAt(position: number): Quadrant {
-  return QUADRANTS[position]!;
+/**
+ * How a saved link's items version relates to the current one.
+ *
+ * The major number is the edition: what the sets *mean*. A link from the
+ * same edition can be re-scored even if wording has changed since. A link
+ * from an earlier edition refers to statements and a model that no longer
+ * exist, and must not be re-scored; one from a later edition was made by
+ * a newer copy of this tool than the one reading it.
+ */
+export function compareEdition(saved: string, current: string): 'same' | 'earlier' | 'later' {
+  const major = (version: string): number => Number.parseInt(version.split('.')[0] ?? '', 10);
+  const [a, b] = [major(saved), major(current)];
+  if (!Number.isFinite(a) || !Number.isFinite(b) || a === b) return 'same';
+  return a < b ? 'earlier' : 'later';
+}
+
+export function preferenceAt(position: number): Preference {
+  return PREFERENCES[position]!;
 }

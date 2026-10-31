@@ -31,7 +31,7 @@ apps/elc-placement/locales/
 
 1. Copy the `en` directory to a BCP 47 code — `es`, `fr`, `pt-PT`, `ar`.
 2. Translate the values. Leave every key exactly as it is.
-3. Keep `{placeholders}` — `{n}`, `{total}`, `{quadrant}` — intact and
+3. Keep `{placeholders}` — `{n}`, `{total}`, `{name}` — intact and
    spelled the same. Move them around the sentence freely; word order
    differs between languages and that is the point of having them.
 4. Keep the `version` field in `items.json` identical to the other

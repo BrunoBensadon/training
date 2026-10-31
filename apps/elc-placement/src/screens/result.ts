@@ -1,11 +1,11 @@
 /**
  * The result.
  *
- * Shows the whole four-way shape, never a bare type label. The primary
- * quadrant is named only as "where you leaned today", the axes are
- * presented as the better-supported reading, and when the top two are
- * inside the scoring band the screen says so instead of quietly picking
- * the higher number.
+ * Content and order follow docs/reviews/elc-placement-2-content-guide.md
+ * §3E. The screen never names a single part of the cycle unless the
+ * placement is a clear `point`; it says where to stand in the same words
+ * the diagram uses; it gives the margin a quiz of this length can see; and
+ * it shows the whole four-way shape, never a bare type label.
  *
  * The mandated disclaimer sits directly under the heading, before any
  * number, because a caveat at the bottom of a results page is a caveat
@@ -13,14 +13,15 @@
  */
 import { el } from '@training/ui';
 import { ROUTES } from '../router.ts';
-import { AXES, QUADRANTS, type Quadrant } from '../model.ts';
-import { BAND, type Result } from '../scoring.ts';
+import { PREFERENCES, TENSIONS, TENSION_POLES, type Preference } from '../model.ts';
+import { maxScore, midScore, minScore, type Placement, type Result } from '../scoring.ts';
 import { circleFigure } from '../circle.ts';
-import { richParagraph, scoped, section, type ScreenContext } from './context.ts';
+import { richListItem, richParagraph, scoped, section, type ScreenContext } from './context.ts';
 
 export interface ResultScreenOptions {
   result: Result;
-  /** Set when the link was made against a different edition of the items. */
+  /** Set when the link was made against a different revision of the
+   *  same edition of the items: still scoreable, but worded differently. */
   savedItemsVersion?: string;
   onRestart: () => void;
 }
@@ -29,6 +30,7 @@ export function resultScreen(context: ScreenContext, options: ResultScreenOption
   const s = scoped(context.t, 'result');
   const { result } = options;
   const { instrument } = context;
+  const n = result.setCount;
 
   const screen = el('div', {});
 
@@ -37,7 +39,7 @@ export function resultScreen(context: ScreenContext, options: ResultScreenOption
       section(
         el('p', {
           class: 'note stale',
-          text: s('staleVersion', {
+          text: s('revisedVersion', {
             saved: options.savedItemsVersion,
             current: instrument.version,
           }),
@@ -51,8 +53,10 @@ export function resultScreen(context: ScreenContext, options: ResultScreenOption
       el('p', { class: 'kicker', text: s('kicker') }),
       el('h1', { text: s('title') }),
       el('div', { class: 'panel disclaimer' }, el('p', { text: s('disclaimer') })),
-      ...leaningLines(context, result),
-      el('p', { class: 'stand-where', text: standWhere(context, result) }),
+      ...leanLines(context, result),
+      richParagraph(standSentence(context, result.placement), 'stand-where'),
+      ...lowestLine(context, result),
+      el('p', { class: 'prose-note margin-note', text: s('margin', { tau: result.clearLead }) }),
     ),
   );
 
@@ -63,10 +67,10 @@ export function resultScreen(context: ScreenContext, options: ResultScreenOption
         {
           result,
           instrument,
-          setCount: instrument.sets.length,
           titleText: s('circleTitle'),
           descriptionText: s('circleDesc'),
           youLabel: s('youAreHere'),
+          middleLabel: s('middle'),
         },
         textAlternative(context, result),
       ),
@@ -76,134 +80,148 @@ export function resultScreen(context: ScreenContext, options: ResultScreenOption
   screen.append(
     section(
       el('h2', { text: s('shapeTitle') }),
-      el('p', { class: 'prose-note', text: s('shapeLead', { total: result.total }) }),
+      el('p', {
+        class: 'prose-note',
+        text: s('shapeLead', {
+          min: minScore(n),
+          max: maxScore(n),
+          mid: midScore(n),
+          total: result.total,
+        }),
+      }),
       shapeTable(context, result),
     ),
   );
 
-  screen.append(
-    section(
-      el('h2', { text: s('axesTitle') }),
-      el('p', { class: 'prose-note', text: s('axesLead') }),
-      el('ul', { class: 'plain axes' }, ...axisLines(context, result).map((line) => el('li', { text: line }))),
-    ),
-  );
+  screen.append(section(tensionsBlock(context, result)));
 
   screen.append(saveSection(context, options));
 
   return screen;
 }
 
-function leaningLines(context: ScreenContext, result: Result): HTMLElement[] {
+/** The preferences a placement names, in the order it names them. */
+export function placedPreferences(placement: Placement): Preference[] {
+  switch (placement.kind) {
+    case 'point':
+      return [placement.preference];
+    case 'between':
+    case 'opposite':
+      return [...placement.pair];
+    case 'spread':
+      return [];
+  }
+}
+
+function leanLines(context: ScreenContext, result: Result): HTMLElement[] {
   const s = scoped(context.t, 'result');
-  const { instrument } = context;
-  const name = (quadrant: Quadrant): string => instrument.quadrants[quadrant].name;
+  const { preferences } = context.instrument;
+  const { placement } = result;
   const lines: HTMLElement[] = [];
 
-  if (result.balanced) {
-    lines.push(richParagraph(s('leanedBalanced'), 'lead'));
-    return lines;
-  }
-
-  switch (result.placement.kind) {
-    case 'quadrant': {
-      const quadrant = result.placement.quadrant;
+  switch (placement.kind) {
+    case 'point':
       lines.push(
         richParagraph(
-          s('leanedQuadrant', {
-            quadrant: name(quadrant),
-            short: instrument.quadrants[quadrant].short.toLowerCase(),
+          s('leanPoint', {
+            n: result.setCount,
+            name: preferences[placement.preference].name,
+            lead: result.lead,
+          }),
+          'lead',
+        ),
+      );
+      break;
+    case 'between':
+    case 'opposite': {
+      const [first, second] = placement.pair;
+      lines.push(
+        richParagraph(
+          s(placement.kind === 'between' ? 'leanBetween' : 'leanOpposite', {
+            first: preferences[first].name,
+            second: preferences[second].name,
           }),
           'lead',
         ),
       );
       break;
     }
-    case 'edge': {
-      const [first, second] = result.placement.between;
-      lines.push(
-        richParagraph(
-          s('leanedEdge', {
-            first: name(first),
-            second: name(second),
-            axis: instrument.axes[result.placement.axis].name.toLowerCase(),
-          }),
-          'lead',
-        ),
-      );
-      break;
-    }
-    case 'centre':
-      lines.push(richParagraph(s('leanedCentre'), 'lead'));
+    case 'spread':
+      lines.push(richParagraph(s('leanSpread'), 'lead'));
       break;
   }
 
-  if (result.closeCall.length > 1) {
-    const panel = el('div', { class: 'panel close-call' }, el('h2', { text: s('closeCallTitle') }));
-    if (result.closeCall.length === 2) {
-      panel.append(
-        richParagraph(
-          s('closeCall', {
-            first: name(result.closeCall[0]!),
-            second: name(result.closeCall[1]!),
-            band: BAND,
-          }),
-        ),
-      );
-    } else {
-      panel.append(
-        richParagraph(
-          s('closeCallMany', {
-            band: BAND,
-            list: result.closeCall.map(name).join(', '),
-          }),
-        ),
-      );
-    }
-    lines.push(panel);
+  for (const preference of placedPreferences(placement)) {
+    const info = preferences[preference];
+    lines.push(
+      richParagraph(
+        s('describe', { name: info.name, step: info.step, description: info.description }),
+        'describe',
+      ),
+    );
   }
 
   return lines;
 }
 
-function standWhere(context: ScreenContext, result: Result): string {
+/** Where to stand, in the words the diagram and the facilitator card use. */
+export function standSentence(context: ScreenContext, placement: Placement): string {
   const s = scoped(context.t, 'result');
-  const name = (quadrant: Quadrant): string => context.instrument.quadrants[quadrant].name;
+  const { preferences } = context.instrument;
+  switch (placement.kind) {
+    case 'point': {
+      const info = preferences[placement.preference];
+      return s('standPoint', { name: info.name, where: info.where });
+    }
+    case 'between':
+    case 'opposite': {
+      const [first, second] = placement.pair;
+      return s(placement.kind === 'between' ? 'standBetween' : 'standOpposite', {
+        first: preferences[first].name,
+        second: preferences[second].name,
+      });
+    }
+    case 'spread':
+      return s('standSpread');
+  }
+}
 
-  if (result.balanced || result.placement.kind === 'centre') {
-    return s('standWhere', { where: s('standCentre') });
-  }
-  if (result.placement.kind === 'edge') {
-    const [first, second] = result.placement.between;
-    return s('standWhere', {
-      where: s('standEdge', { first: name(first), second: name(second) }),
-    });
-  }
-  return s('standWhere', { where: name(result.placement.quadrant) });
+function lowestLine(context: ScreenContext, result: Result): HTMLElement[] {
+  if (!result.lowest) return [];
+  const s = scoped(context.t, 'result');
+  return [
+    richParagraph(
+      s('lowest', {
+        name: context.instrument.preferences[result.lowest.preference].name,
+        gap: result.lowest.gap,
+      }),
+      'lowest',
+    ),
+  ];
 }
 
 function shapeTable(context: ScreenContext, result: Result): HTMLElement {
   const s = scoped(context.t, 'result');
-  const { instrument } = context;
+  const { preferences } = context.instrument;
+  const placed = placedPreferences(result.placement);
 
   const head = el(
     'tr',
     {},
-    el('th', { text: s('colQuadrant'), attrs: { scope: 'col' } }),
-    el('th', { text: s('colDescription'), attrs: { scope: 'col' } }),
+    el('th', { text: s('colPreference'), attrs: { scope: 'col' } }),
+    el('th', { text: s('colStage'), attrs: { scope: 'col' } }),
     el('th', { class: 'num', text: s('colScore'), attrs: { scope: 'col' } }),
   );
 
   const body = el('tbody');
-  for (const quadrant of result.order) {
-    const isLead = result.closeCall.includes(quadrant);
+  for (const preference of result.order) {
     body.append(
       el(
         'tr',
-        { class: isLead ? 'is-lead' : '' },
-        el('th', { text: instrument.quadrants[quadrant].name, attrs: { scope: 'row' } }),
-        el('td', { text: instrument.quadrants[quadrant].short }),
-        el('td', { class: 'num', text: String(result.scores[quadrant]) }),
+        { class: placed.includes(preference) ? 'is-lead' : '' },
+        el('th', { text: preferences[preference].name, attrs: { scope: 'row' } }),
+        el('td', { text: preferences[preference].step }),
+        el('td', { class: 'num', text: String(result.scores[preference]) }),
       ),
     );
   }
@@ -217,38 +235,82 @@ function shapeTable(context: ScreenContext, result: Result): HTMLElement {
   );
 }
 
-function axisLines(context: ScreenContext, result: Result): string[] {
+/** Kolb's two tensions, secondary: collapsed until asked for. */
+function tensionsBlock(context: ScreenContext, result: Result): HTMLElement {
   const s = scoped(context.t, 'result');
-  const { instrument } = context;
+  return el(
+    'details',
+    { class: 'tensions' },
+    el('summary', { text: s('tensionsTitle') }),
+    el('p', { class: 'prose-note', text: s('tensionsLead') }),
+    el('ul', { class: 'plain tension-list' }, ...tensionLines(context, result).map(richListItem)),
+  );
+}
 
-  // AXES, not Object.keys: the reading order should not depend on how a
-  // locale file happens to order its keys.
-  return AXES.map((axis) => {
-    const info = instrument.axes[axis];
-    const value = result.axes[axis];
-    if (value === 0) {
-      return s('axisEven', {
-        name: info.name,
-        positive: info.positive,
-        negative: info.negative,
-      });
-    }
-    return s('axisReading', {
-      name: info.name,
-      value: Math.abs(value),
-      pole: value > 0 ? info.positive : info.negative,
-      description: value > 0 ? info.positiveDescription : info.negativeDescription,
-    });
+function tensionLines(context: ScreenContext, result: Result): string[] {
+  const s = scoped(context.t, 'result');
+  const { preferences } = context.instrument;
+  // TENSIONS, not Object.keys: the reading order should not depend on
+  // how anything happens to order its keys.
+  return TENSIONS.map((tension) => {
+    const { positive, negative } = TENSION_POLES[tension];
+    const ends = { a: preferences[positive].name, b: preferences[negative].name };
+    const reading = result.tensions[tension];
+    if (reading.kind === 'even') return s('tensionEven', { ...ends, tau: result.clearLead });
+    return s('tensionLean', { ...ends, name: preferences[reading.towards].name, d: reading.by });
   });
 }
 
 /** What the diagram says, in words, for anyone not using the diagram. */
 function textAlternative(context: ScreenContext, result: Result): string {
-  const { instrument } = context;
-  const scores = QUADRANTS.map(
-    (quadrant) => `${instrument.quadrants[quadrant].name} ${result.scores[quadrant]}`,
-  ).join('; ');
-  return `${axisLines(context, result).join('. ')}. ${scores}.`;
+  const s = scoped(context.t, 'result');
+  const n = result.setCount;
+  const scores = PREFERENCES.map(
+    (preference) => `${context.instrument.preferences[preference].name} ${result.scores[preference]}`,
+  ).join(', ');
+  return plain(
+    s('circleAlt', {
+      scores,
+      min: minScore(n),
+      max: maxScore(n),
+      mid: midScore(n),
+      stand: standSentence(context, result.placement),
+    }),
+  );
+}
+
+/** Drops the bold markers the rich-text strings use. */
+function plain(text: string): string {
+  return text.replace(/\*\*/g, '');
+}
+
+/**
+ * A link made with an earlier edition of the items. Its ranks belong to
+ * statements and a model that no longer exist, so it is not re-scored.
+ */
+export function staleLinkScreen(
+  context: ScreenContext,
+  savedVersion: string,
+  onRestart: () => void,
+): HTMLElement {
+  const s = scoped(context.t, 'result');
+  return section(
+    el('h1', { text: s('staleTitle') }),
+    el('p', {
+      class: 'prose-note',
+      text: s('staleVersion', { saved: savedVersion, n: context.instrument.sets.length }),
+    }),
+    el(
+      'div',
+      { class: 'btn-row' },
+      el('button', {
+        class: 'btn accent',
+        text: s('startOver', { n: context.instrument.sets.length }),
+        attrs: { type: 'button' },
+        on: { click: onRestart },
+      }),
+    ),
+  );
 }
 
 function saveSection(context: ScreenContext, options: ResultScreenOptions): HTMLElement {
@@ -318,7 +380,7 @@ export function badLinkScreen(context: ScreenContext, onRestart: () => void): HT
       { class: 'btn-row' },
       el('button', {
         class: 'btn accent',
-        text: s('startOver'),
+        text: s('startOver', { n: context.instrument.sets.length }),
         attrs: { type: 'button' },
         on: { click: onRestart },
       }),

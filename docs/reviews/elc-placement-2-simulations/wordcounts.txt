@@ -1,0 +1,64 @@
+S01 active    12  I take part straight away and notice what the experience is like.
+S01 reflective 11  I watch how the first people do it before I join.
+S01 theorist  10  I want to understand the idea behind the activity first.
+S01 pragmatist 14  I want to know how I could use this activity with my own groups.
+S02 active    16  I start from a personal experience of the topic, or find a way to have one.
+S02 reflective 13  I start by listening to people who see the topic in different ways.
+S02 theorist  13  I start from the key concepts and how they connect to each other.
+S02 pragmatist 13  I start from activities on this topic that have worked with other groups.
+S03 active    12  I say what I feel and respond directly to what others share.
+S03 reflective 14  I listen to everyone first and speak after I have heard the different views.
+S03 theorist  12  I try to identify the general principle behind what people are saying.
+S03 pragmatist 13  I suggest that the group focuses on what we could do about it.
+S04 active    14  I stop following the plan and respond to how people are feeling right now.
+S04 reflective 13  I pause for a moment and observe what is happening before I act.
+S04 theorist  12  I try to understand what explains the reaction before I change anything.
+S04 pragmatist 12  I switch to a different activity and check whether it works better.
+S05 active    12  What mattered most were the moments I experienced together with other people.
+S05 reflective 13  What mattered most was what I noticed by watching and listening to others.
+S05 theorist   9  What mattered most was understanding why some approaches work.
+S05 pragmatist 15  What mattered most were the tools and plans I can use in my next session.
+S06 active    14  I think most about how the session felt, for me and for the group.
+S06 reflective 12  I go through the session step by step to see what happened.
+S06 theorist  13  I look for ideas about learning that explain why it went that way.
+S06 pragmatist 13  I decide on one concrete change for the next time I run it.
+S07 active    14  I want to experience the idea in an activity, not only hear it described.
+S07 reflective 12  I want some time to consider it before I form an opinion.
+S07 theorist  10  I check whether the idea is consistent and well argued.
+S07 pragmatist 12  I think about whether it would change anything in my next training.
+S08 active    14  I say how I feel about each option and ask how my co-trainer feels.
+S08 reflective 14  I ask my co-trainer to explain their view fully and listen before I answer.
+S08 theorist  12  I compare both options with what we know about how people learn.
+S08 pragmatist 12  I propose that we try each version once and compare the results.
+S09 active    12  I let myself get absorbed in my role and in the situation.
+S09 reflective 12  I keep part of my attention on observing how the group behaves.
+S09 theorist  12  I try to identify the general principles the role-play is based on.
+S09 pragmatist 13  I think about how I would adapt this role-play for my own groups.
+S10 active    13  I pay attention to how the mistake affected the people in the room.
+S10 reflective 13  Afterwards, I review that moment in my mind before I draw any conclusion.
+S10 theorist  10  I try to understand the general cause behind the mistake.
+S10 pragmatist 13  I plan exactly what I will do if the same situation happens again.
+S11 active    13  I tell them about the moments I experienced and what they were like.
+S11 reflective 11  I describe what I noticed about the group and about myself.
+S11 theorist   9  I explain the main ideas and how they connect.
+S11 pragmatist 13  I show them something I am going to do differently from now on.
+S12 active    11  I pay most attention to the comments about how people felt.
+S12 reflective 14  I read all the comments and compare the different points of view in them.
+S12 theorist  12  I look for a pattern that explains the comments as a whole.
+S12 pragmatist 11  I select the comments that point to changes I can make.
+R1 active    11  I ask to experience the method myself as a participant first.
+R1 reflective 12  I ask to observe them while they use it with a group.
+R1 theorist  12  I ask them to explain the principles that make the method work.
+R1 pragmatist 15  I ask for the steps so that I can test it in my next session.
+R2 active    16  I choose the one where we live through a group experience, such as a simulation game.
+R2 reflective 16  I choose the one where we watch recordings of real sessions and discuss what we noticed.
+R2 theorist  17  I choose the one where a speaker presents a model of learning and the research behind it.
+R2 pragmatist 15  I choose the one where we practise a technique and plan how to use it.
+R3 active     9  I share what participants and trainers experienced last year.
+R3 reflective 10  I listen to everyone's views before I give my own.
+R3 theorist   9  I propose an overall framework that links the sessions.
+R3 pragmatist 14  I focus on what we can deliver with the volunteers and time we have.
+R4 active    15  I let myself take part in the session as if I were in the group.
+R4 reflective 14  I note what the trainer does at each moment and how the group responds.
+R4 theorist  11  I try to identify the principles that make the session work.
+R4 pragmatist 12  I choose techniques that I want to use in my own sessions.

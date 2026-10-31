@@ -1,105 +1,151 @@
 {
-  "version": "1.0.0",
-  "instruction": "Ordene as quatro afirmações de 1 a 4: 1 para a que mais se parece com você, 4 para a que menos se parece. Cada número é usado uma vez. Não há respostas melhores ou piores — o que interessa é o que você coloca em primeiro lugar quando não pode colocar tudo em primeiro lugar.",
-  "axes": {
-    "perceiving": {
-      "name": "Percepção",
-      "question": "Como você se aproxima de algo novo",
-      "positive": "Concreto",
-      "negative": "Abstrato",
-      "positiveDescription": "pela própria experiência",
-      "negativeDescription": "pela ideia por trás dela"
+  "version": "2.0.0",
+  "instruction": "Ordene as quatro afirmações de 1 a 4: 1 para a que mais se parece com você, 4 para a que menos se parece. Cada número é usado uma vez. Pense no que você costuma fazer, e não no que você acha que deveria fazer. Não há respostas melhores ou piores.",
+  "preferences": {
+    "active": {
+      "name": "Ativo",
+      "step": "vivenciar",
+      "where": "no alto do círculo",
+      "description": "Aprende estando dentro da experiência: participando, percebendo como ela é e prestando atenção às pessoas e ao momento. Pode seguir em frente antes de entender o que aconteceu."
     },
-    "processing": {
-      "name": "Processamento",
-      "question": "O que você faz com isso em seguida",
-      "positive": "Ativo",
-      "negative": "Reflexivo",
-      "positiveDescription": "experimentando",
-      "negativeDescription": "remoendo"
-    }
-  },
-  "quadrants": {
-    "activist": {
-      "name": "Ativista",
-      "short": "Concreto e ativo",
-      "description": "Mergulha na atividade e aprende fazendo. Cansa-se de introduções, improvisa com facilidade e ganha energia com a novidade e com as outras pessoas. Já terá começado antes de as instruções terminarem."
-    },
-    "reflector": {
+    "reflective": {
       "name": "Reflexivo",
-      "short": "Concreto e reflexivo",
-      "description": "Observa antes de agir. Reúne o que aconteceu, pensa antes de falar e quer tempo e alguma distância antes de assumir uma posição. Costuma ser quem percebeu o que mais ninguém percebeu."
+      "step": "refletir",
+      "where": "à direita do círculo",
+      "description": "Aprende observando, escutando e revendo o que aconteceu a partir de mais de um ponto de vista. Pode adiar uma conclusão ou uma decisão por mais tempo do que o grupo precisa."
     },
     "theorist": {
       "name": "Teórico",
-      "short": "Abstrato e reflexivo",
-      "description": "Quer o modelo e o raciocínio. Fica desconfortável com uma atividade cujo propósito não foi dito e trabalha encaixando o que é novo em um sistema que já se sustenta."
+      "step": "conceituar",
+      "where": "embaixo do círculo",
+      "description": "Aprende construindo uma explicação: princípios, modelos e como as coisas se conectam. Pode perder de vista a pessoa ou o momento que não se encaixa no modelo."
     },
     "pragmatist": {
       "name": "Pragmático",
-      "short": "Abstrato e ativo",
-      "description": "Quer a técnica em uma forma utilizável. Testa as ideias contra a prática, pergunta como aquilo fica com um grupo real e perde a paciência com teoria que não chega a lugar nenhum."
+      "step": "experimentar",
+      "where": "à esquerda do círculo",
+      "description": "Aprende colocando as ideias em prática e planejando o que fazer de outro jeito. Pode adotar rápido o que funciona sem perguntar se é a coisa certa a fazer."
     }
   },
   "sets": [
     {
       "id": "new-activity",
-      "prompt": "Uma sessão começa com uma atividade que eu nunca fiz antes.",
+      "prompt": "Uma oficina começa com uma atividade que eu nunca fiz.",
       "statements": {
-        "activist": "Entro na atividade imediatamente e vou entendendo o que está acontecendo enquanto faço.",
-        "reflector": "Espero e observo como as primeiras pessoas lidam com a atividade.",
-        "theorist": "Quero que me digam para que serve a atividade antes de ela começar.",
-        "pragmatist": "Quero saber o que vou conseguir fazer com isso depois."
+        "active": "Participo desde o início e presto atenção em como é a experiência.",
+        "reflective": "Observo como as primeiras pessoas fazem antes de entrar.",
+        "theorist": "Quero entender primeiro a ideia por trás da atividade.",
+        "pragmatist": "Quero saber como eu poderia usar essa atividade com os meus grupos."
       }
     },
     {
-      "id": "group-discussion",
-      "prompt": "O grupo está discutindo uma ideia e eu tenho algo a dizer.",
+      "id": "new-topic",
+      "prompt": "Preciso preparar uma sessão sobre um tema que é novo para mim.",
       "statements": {
-        "activist": "Começo a falar antes de o pensamento estar pronto e vou ajustando enquanto falo.",
-        "reflector": "Espero até ter decidido o que penso, mesmo que o momento já tenha passado.",
-        "theorist": "Tento juntar o que as pessoas estão dizendo em uma explicação única antes de acrescentar algo.",
-        "pragmatist": "Peço um exemplo da ideia sendo usada com um grupo real."
+        "active": "Começo por uma experiência pessoal com o tema, ou procuro um jeito de ter uma.",
+        "reflective": "Começo ouvindo pessoas que veem o tema de maneiras diferentes.",
+        "theorist": "Começo pelos conceitos principais e por como eles se ligam entre si.",
+        "pragmatist": "Começo por atividades sobre o tema que já funcionaram com outros grupos."
       }
     },
     {
-      "id": "reading-beforehand",
-      "prompt": "Recebo um texto para ler antes de uma sessão.",
+      "id": "sensitive-discussion",
+      "prompt": "Durante um treinamento, meu pequeno grupo começa a discutir um tema delicado.",
       "statements": {
-        "activist": "Leio rapidamente e conto com a própria sessão.",
-        "reflector": "Leio tudo e faço anotações, mesmo quando há mais material do que eu preciso.",
-        "theorist": "Procuro o raciocínio por trás do que o texto afirma.",
-        "pragmatist": "Procuro as partes que posso usar e deixo o resto."
+        "active": "Digo o que sinto e reajo diretamente ao que os outros compartilham.",
+        "reflective": "Escuto todo mundo primeiro e falo depois de ouvir os diferentes pontos de vista.",
+        "theorist": "Tento identificar o princípio geral por trás do que as pessoas estão dizendo.",
+        "pragmatist": "Proponho que o grupo se concentre no que podemos fazer a respeito."
       }
     },
     {
-      "id": "after-a-session",
-      "prompt": "Uma sessão da qual participei acabou de terminar.",
+      "id": "unexpected-reaction",
+      "prompt": "Durante uma sessão que estou conduzindo, o grupo reage de um jeito que eu não esperava.",
       "statements": {
-        "activist": "Já estou pensando na próxima coisa a fazer.",
-        "reflector": "Reviso o que aconteceu antes de decidir o que penso a respeito.",
-        "theorist": "Tento encaixar o que aconteceu no que eu já pensava sobre o assunto.",
-        "pragmatist": "Escolho uma coisa para fazer diferente na próxima vez que eu conduzir uma sessão."
+        "active": "Paro de seguir o plano e respondo ao que as pessoas estão sentindo agora.",
+        "reflective": "Faço uma pausa e observo o que está acontecendo antes de agir.",
+        "theorist": "Tento entender o que explica essa reação antes de mudar qualquer coisa.",
+        "pragmatist": "Mudo para outra atividade e verifico se ela funciona melhor."
       }
     },
     {
-      "id": "plan-changes",
-      "prompt": "O plano precisa mudar com muito pouco aviso.",
+      "id": "end-of-event",
+      "prompt": "Um evento de formação está terminando, e eu penso no que foi mais importante para mim.",
       "statements": {
-        "activist": "Improviso e descubro o que funciona enquanto acontece.",
-        "reflector": "Quero alguns minutos para pensar antes de dizer qualquer coisa.",
-        "theorist": "Quero entender por que a mudança é necessária antes de concordar com ela.",
-        "pragmatist": "Procuro a opção que funciona com as pessoas e o tempo que temos agora."
+        "active": "O mais importante foram os momentos que vivi junto com outras pessoas.",
+        "reflective": "O mais importante foi o que percebi observando e escutando os outros.",
+        "theorist": "O mais importante foi entender por que algumas abordagens de aprendizagem funcionam.",
+        "pragmatist": "O mais importante foram as ferramentas e os planos para a minha próxima sessão."
       }
     },
     {
-      "id": "new-method",
-      "prompt": "Alguém me mostra um método que eu poderia usar nas minhas próprias sessões.",
+      "id": "session-ended",
+      "prompt": "Uma sessão que eu conduzi acabou de terminar.",
       "statements": {
-        "activist": "Prefiro experimentar e ir ajustando a planejar tudo antes.",
-        "reflector": "Prefiro ver outra pessoa usando o método algumas vezes primeiro.",
-        "theorist": "Prefiro entender primeiro o raciocínio de onde ele vem.",
-        "pragmatist": "Prefiro receber os passos para poder usar imediatamente."
+        "active": "Penso principalmente em como foi viver a sessão, para mim e para o grupo.",
+        "reflective": "Repasso a sessão passo a passo para ver o que aconteceu.",
+        "theorist": "Procuro ideias sobre aprendizagem que expliquem por que ela foi assim.",
+        "pragmatist": "Decido uma mudança concreta para a próxima vez que eu conduzir essa sessão."
+      }
+    },
+    {
+      "id": "new-idea",
+      "prompt": "Alguém apresenta uma ideia nova sobre como as pessoas aprendem.",
+      "statements": {
+        "active": "Quero vivenciar a ideia em uma atividade, e não só ouvir alguém descrevê-la.",
+        "reflective": "Quero um tempo para pensar antes de formar uma opinião.",
+        "theorist": "Verifico se a ideia é coerente e bem fundamentada.",
+        "pragmatist": "Penso se ela mudaria alguma coisa no meu próximo treinamento."
+      }
+    },
+    {
+      "id": "co-trainer-disagrees",
+      "prompt": "Eu e minha dupla de facilitação discordamos sobre como conduzir uma atividade.",
+      "statements": {
+        "active": "Digo como me sinto em relação a cada opção e pergunto como minha dupla se sente.",
+        "reflective": "Peço que minha dupla explique bem o ponto de vista dela e escuto antes de responder.",
+        "theorist": "Comparo as duas opções com o que sabemos sobre como as pessoas aprendem.",
+        "pragmatist": "Proponho testarmos cada versão uma vez e compararmos os resultados."
+      }
+    },
+    {
+      "id": "role-play",
+      "prompt": "Um treinamento inclui uma dramatização, e eu sou uma das pessoas que participam.",
+      "statements": {
+        "active": "Eu me deixo envolver pelo meu papel e pela situação.",
+        "reflective": "Mantenho parte da atenção em observar como o grupo se comporta.",
+        "theorist": "Tento identificar os princípios gerais em que a dramatização se baseia.",
+        "pragmatist": "Penso em como eu adaptaria essa dramatização para os meus grupos."
+      }
+    },
+    {
+      "id": "own-mistake",
+      "prompt": "Percebo que cometi um erro enquanto facilitava.",
+      "statements": {
+        "active": "Presto atenção em como o erro afetou as pessoas na sala.",
+        "reflective": "Depois, volto a pensar naquele momento antes de tirar qualquer conclusão.",
+        "theorist": "Tento entender a causa geral por trás do erro.",
+        "pragmatist": "Planejo exatamente o que vou fazer se a mesma situação acontecer de novo."
+      }
+    },
+    {
+      "id": "what-did-you-learn",
+      "prompt": "Uma pessoa próxima me pergunta o que aprendi em um fim de semana de formação.",
+      "statements": {
+        "active": "Conto os momentos que vivi e como eles foram.",
+        "reflective": "Descrevo o que percebi sobre o grupo e sobre mim.",
+        "theorist": "Explico as ideias principais e como elas se conectam.",
+        "pragmatist": "Mostro algo que vou fazer de outro jeito a partir de agora."
+      }
+    },
+    {
+      "id": "written-feedback",
+      "prompt": "Recebo comentários escritos dos participantes sobre uma sessão que conduzi.",
+      "statements": {
+        "active": "Presto mais atenção aos comentários sobre como as pessoas se sentiram.",
+        "reflective": "Leio todos os comentários e comparo os diferentes pontos de vista que eles trazem.",
+        "theorist": "Procuro um padrão que explique os comentários como um todo.",
+        "pragmatist": "Separo os comentários que indicam mudanças que eu posso fazer."
       }
     }
   ]
