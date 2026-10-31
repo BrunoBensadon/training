@@ -16,17 +16,20 @@ One GitHub Pages site, each tool under its own path.
 ### `elc-placement` — experiential learning cycle placement
 
 A short reflection tool used before CISV's *Facilitating Learning* session.
-Six sets of four statements, ranked 1–4; it reports which of the four
-stages of Kolb's experiential learning cycle — Active, Reflective, Theorist,
-Pragmatist — you leaned towards, and draws your whole profile on the cycle,
-so a room of trainers can
-see that it contains four different appetites and that a facilitator has
-to run all four.
+Twelve sets of four statements, ranked 1–4. It draws your four scores on
+Kolb's experiential learning cycle — Active, Reflective, Theorist,
+Pragmatist, at its four compass points — and names one of them only when
+it leads by at least the quiz's margin; otherwise it puts you between two,
+or in the centre. It tells you where to stand in a circle on the floor, so
+a room of trainers can see that it contains four different appetites and
+that a facilitator has to run all four.
 
 It is **not** a psychometric instrument, has never been validated, and
 says so to its users in their own language. See
 [`apps/elc-placement/ITEMS.md`](apps/elc-placement/ITEMS.md) for the items
-and, more usefully, for which of them I do not trust.
+and, more usefully, for which of them I do not trust, and
+[`docs/reviews/`](docs/reviews/) for the evaluation and the independent
+content review behind the current edition.
 
 ## How it works
 

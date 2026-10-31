@@ -100,9 +100,10 @@ site, this is dead weight.
 ## The instrument
 
 ### The four preferences are stages of the cycle, at its compass points
-**What** Active (concrete experience) north, Reflective (reflective
-observation) east, Theorist (abstract conceptualisation) south, Pragmatist
-(active experimentation) west, with the cycle running clockwise. The first
+**What** Active (experiencing; concrete experience) north, Reflective
+(reflecting; reflective observation) east, Theorist (conceptualising;
+abstract conceptualisation) south, Pragmatist (experimenting; active
+experimentation) west, with the cycle running clockwise. The first
 version drew them as the four *quadrants* between two axes (Activist NE,
 Reflector NW, Theorist SW, Pragmatist SE) and named the first two
 "Activist" and "Reflector".
@@ -115,52 +116,78 @@ Reflexivo, Teórico, Pragmático*), which also removes the political sense of
 `docs/reviews/elc-placement-1-evaluation.md`.
 **Reconsider** Nothing — this is the model, not a design choice.
 
-### Where you stand is your highest score
-**What** One preference with the most points: stand at it. Two neighbours
-level at the top: stand on the circle between them. Two opposites level,
-three level, or all four level: stand in the middle. The result also draws
-all four scores as a kite on the cycle, so the shape is visible and not
-only the winner.
-**Why** The first version read the placement off the signs of two axes
-built from *pairs* of preferences. That put 22.7% of random-responding
-patterns with a clear top score in a quadrant that was not their top
-score, and 9.7% in their third or fourth; ranking the Activist statement
-first in every set came out "on the line between Activist and Reflector".
-Under uniform random responding the current rule gives 85.0% at one point,
-9.0% between two neighbours and 5.9% in the middle — the test in
-`apps/elc-placement/test/scoring.test.ts` computes it.
-**Reconsider** If the instrument becomes precise enough to say *how much*
-someone leans, the placement should use that rather than exact ties.
+### Twelve sets of four, ranked
+**What** Forced ranking of four statements, one per preference, in twelve
+sets: 48 original statements written to a role × phase blueprint. The
+first version had six sets.
+**Why** The independent content review
+(`docs/reviews/elc-placement-2-content-guide.md`) estimated retest r of
+.52–.67 per score at six sets and .68–.80 at twelve — the KLSI's length.
+Ranking stays because the question is within-person ("where did *I*
+lean"), which ipsative scores answer legitimately; a Likert format would
+need norms this tool does not have, and Thurstonian IRT would need
+calibration on hundreds of people per language. Expected time is 7–10
+minutes on a phone.
+**Reconsider** If the pilot's retest r is below .70 for any score, ship
+sixteen (the four reserve sets are in `ITEMS.md`).
 
-### The scoring band is three points
-**What** Preferences within three points of the top are reported as level.
-**Why** Three points is one statement moving one place in three of the six
-sets. Below that the ordering says more about which set someone read
-carefully than about them. The brief asked for a band and did not set one.
-**Reconsider** The first thing to revisit with real data. If a pilot shows
-a tighter distribution, the band should widen, not narrow.
+### Where you stand needs a clear lead
+**What** With n sets, τ = ⌈2√n⌉ (7 at twelve) and τ2 = ⌈√n⌉ (4). A single
+point only when the top score leads the next by τ. Otherwise, if the top
+two lead the third by τ2: on the circle between them when they are
+neighbours, in the centre when they are opposites. Otherwise the centre.
+The lowest is named, as a question, when it trails the third by τ.
+**Why** The first version placed by the signs of two axes built from
+*pairs*, which put 22.7% of clear-top random patterns somewhere other than
+their top score; ranking Activist first in every set came out "on the line
+between Activist and Reflector". A plain highest-score rule (the first
+fix) was honest about direction but not about precision: the 3-point band
+it used was smaller than the ~4-point standard error of a difference
+between two scores. τ is about 1.2 of those errors. In simulation a clear
+result moves to a *different* point on retest 2.7–3.9% of the time
+(against 30–39% before), and 97–98% land in the same or a neighbouring
+position. About a third to two-fifths of people get a single point; the
+facilitator card tells trainers to expect that. Under uniform random
+answering, exactly 12.6% get a point (the test enumerates all 24^12
+patterns), so a point is not something the arithmetic hands out.
+**Reconsider** After the pilot: choose the smallest τ with at most 5% of
+clear results moving to a different point on retest, per language.
 
-### Ties break by canonical order, and the screen says they are ties
-**What** A deterministic secondary sort, plus an explicit "it was close".
-**Why** The same answers must always read the same way. A hidden
+### No tie ever decides a placement
+**What** Every placement branch needs a strictly positive gap, so the
+preference or pair it names is unique. Equal scores are listed in
+canonical order in the table, for display only.
+**Why** The same answers must always read the same way, and a hidden
 tie-break would be a claim the instrument cannot support.
 **Reconsider** Nothing.
 
-### The two axes are Kolb's dialectics, and are reported, not used to place
-**What** Perceiving = Active − Theorist; processing = Pragmatist −
-Reflective. Each compares two preferences facing each other on the circle.
-**Why** They are part of the model and worth showing in words, but where
-you stand comes from the scores, so two people with the same top
-preference are never sent to different places by an axis.
+### Kolb's two tensions are reported, collapsed, and never place anyone
+**What** Active − Theorist and Pragmatist − Reflective, read with the same
+margin τ, in a collapsed section under the scores.
+**Why** They are part of Kolb's model and worth saying, but independent
+factor analyses do not support them as robust bipolar dimensions, and a
+balance point placed people less consistently on retest (2.5–4× more
+gross disagreements in the review's simulation).
+**Reconsider** Nothing.
+
+### A link from an earlier edition is not re-scored
+**What** The items version's major number is the edition. A saved link
+from an earlier edition shows "made with an earlier version" and the way
+back to the start; one from the same edition with different wording is
+scored, with a note; one from a later edition is treated as unreadable.
+**Why** A 1.x link holds six rankings of statements and a model that no
+longer exist. Scoring it under the new model would produce a confident,
+wrong result.
 **Reconsider** Nothing.
 
 ### A saved link encodes ranks per preference, not which statement was picked
-**What** Six characters, one permutation index per set, plus the items
-version.
+**What** One character per set (twelve), one permutation index each, plus
+the items version.
 **Why** It is short enough to read off a screen, and rewording a statement
 cannot invalidate an existing link, because the link never referred to the
 statement. Only a change of meaning does — hence the version, which
-produces a notice rather than a wrong number.
+produces a notice rather than a wrong number (see the entry above on
+earlier editions).
 **Reconsider** Nothing.
 
 ### Answers live in memory only, until you finish
@@ -168,7 +195,7 @@ produces a notice rather than a wrong number.
 fragment until the result screen.
 **Why** Writing progress to the fragment would be free privacy-wise and
 would survive a reload — but it would put partial answers into the browser
-history of what is often a shared training-room laptop. Eight minutes of
+history of what is often a shared training-room laptop. Ten minutes of
 work is the price.
 **Reconsider** If trainees report losing answers in practice, an explicit
 "keep my progress on this device" with a clear warning would be the
@@ -186,7 +213,9 @@ shuffle cannot affect a result or a saved link.
 uses". They were not available to this session, so three were written.
 **Why** A facilitator card without prompts is not a facilitator card.
 **Reconsider** Replace them with the real ones before this is used. They
-are in `locales/<locale>/facilitator.json` and need no code change.
+are in `locales/<locale>/facilitator.json` and need no code change. (The
+first and third were reworded for the cycle's four points by the content
+review; the second is unchanged.)
 
 ---
 
