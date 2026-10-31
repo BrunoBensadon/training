@@ -11,7 +11,7 @@ import { fileURLToPath } from 'node:url';
 import { describe, expect, it } from 'vitest';
 
 import { assertLocaleParity, buildBundles, placeholders } from '@training/i18n';
-import { QUADRANTS } from '../src/model.ts';
+import { PREFERENCES } from '../src/model.ts';
 
 const localesDir = fileURLToPath(new URL('../locales', import.meta.url));
 
@@ -35,7 +35,10 @@ interface ItemsFile {
   version: string;
   instruction: string;
   sets: Array<{ id: string; prompt: string; statements: Record<string, string> }>;
-  quadrants: Record<string, { name: string; short: string; description: string }>;
+  preferences: Record<
+    string,
+    { name: string; stage: string; step: string; short: string; description: string }
+  >;
 }
 
 const items = Object.fromEntries(
@@ -58,20 +61,33 @@ describe('the instrument', () => {
     const file = items[locale]!;
     expect(file.sets).toHaveLength(6);
     for (const set of file.sets) {
-      expect(Object.keys(set.statements).sort()).toEqual([...QUADRANTS].sort());
-      for (const quadrant of QUADRANTS) {
-        expect(set.statements[quadrant]!.trim().length).toBeGreaterThan(20);
+      expect(Object.keys(set.statements).sort()).toEqual([...PREFERENCES].sort());
+      for (const preference of PREFERENCES) {
+        expect(set.statements[preference]!.trim().length).toBeGreaterThan(20);
       }
     }
   });
 
-  it.each(locales)('%s names all four quadrants and both axes', (locale) => {
+  it.each(locales)('%s names all four preferences and their stages of the cycle', (locale) => {
     const file = items[locale]!;
-    expect(Object.keys(file.quadrants).sort()).toEqual([...QUADRANTS].sort());
-    for (const quadrant of QUADRANTS) {
-      expect(file.quadrants[quadrant]!.name).toBeTruthy();
-      expect(file.quadrants[quadrant]!.description.length).toBeGreaterThan(40);
+    expect(Object.keys(file.preferences).sort()).toEqual([...PREFERENCES].sort());
+    for (const preference of PREFERENCES) {
+      const info = file.preferences[preference]!;
+      expect(info.name).toBeTruthy();
+      expect(info.stage).toBeTruthy();
+      expect(info.step).toBeTruthy();
+      // Drawn on the circle beside the ring: it has to fit.
+      expect(info.step.length).toBeLessThanOrEqual(14);
+      expect(info.name.length).toBeLessThanOrEqual(12);
+      expect(info.description.length).toBeGreaterThan(40);
     }
+  });
+
+  it('uses the corrected names, not the ones that put the preferences in quadrants', () => {
+    const names = (locale: string): string[] =>
+      PREFERENCES.map((preference) => items[locale]!.preferences[preference]!.name);
+    expect(names('en')).toEqual(['Active', 'Reflective', 'Theorist', 'Pragmatist']);
+    expect(names('pt-BR')).toEqual(['Ativo', 'Reflexivo', 'Teórico', 'Pragmático']);
   });
 
   it('uses the same set ids in every locale, so scoring lines up', () => {
@@ -94,8 +110,8 @@ describe('the instrument', () => {
     // on code. Items are meant to be readable as written.
     for (const locale of locales) {
       for (const set of items[locale]!.sets) {
-        for (const quadrant of QUADRANTS) {
-          expect(placeholders(set.statements[quadrant]), `${locale} ${set.id}`).toEqual([]);
+        for (const preference of PREFERENCES) {
+          expect(placeholders(set.statements[preference]), `${locale} ${set.id}`).toEqual([]);
         }
       }
     }
@@ -104,7 +120,7 @@ describe('the instrument', () => {
   it('gives every statement its own wording within a set', () => {
     for (const locale of locales) {
       for (const set of items[locale]!.sets) {
-        const texts = QUADRANTS.map((quadrant) => set.statements[quadrant]);
+        const texts = PREFERENCES.map((preference) => set.statements[preference]);
         expect(new Set(texts).size, `${locale} ${set.id}`).toBe(4);
       }
     }

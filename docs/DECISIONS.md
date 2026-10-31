@@ -99,39 +99,62 @@ site, this is dead weight.
 
 ## The instrument
 
+### The four preferences are stages of the cycle, at its compass points
+**What** Active (concrete experience) north, Reflective (reflective
+observation) east, Theorist (abstract conceptualisation) south, Pragmatist
+(active experimentation) west, with the cycle running clockwise. The first
+version drew them as the four *quadrants* between two axes (Activist NE,
+Reflector NW, Theorist SW, Pragmatist SE) and named the first two
+"Activist" and "Reflector".
+**Why** Honey & Mumford built their four preferences on the four stages of
+Kolb's cycle, not on Kolb's combined styles, which are what the quadrants
+are. Kolb's own figure puts concrete experience at the top and reflective
+observation on the right. The names follow the CHAEA usage (*Ativo,
+Reflexivo, Teórico, Pragmático*), which also removes the political sense of
+`Ativista` in Portuguese. Full reasoning in
+`docs/reviews/elc-placement-1-evaluation.md`.
+**Reconsider** Nothing — this is the model, not a design choice.
+
+### Where you stand is your highest score
+**What** One preference with the most points: stand at it. Two neighbours
+level at the top: stand on the circle between them. Two opposites level,
+three level, or all four level: stand in the middle. The result also draws
+all four scores as a kite on the cycle, so the shape is visible and not
+only the winner.
+**Why** The first version read the placement off the signs of two axes
+built from *pairs* of preferences. That put 22.7% of random-responding
+patterns with a clear top score in a quadrant that was not their top
+score, and 9.7% in their third or fourth; ranking the Activist statement
+first in every set came out "on the line between Activist and Reflector".
+Under uniform random responding the current rule gives 85.0% at one point,
+9.0% between two neighbours and 5.9% in the middle — the test in
+`apps/elc-placement/test/scoring.test.ts` computes it.
+**Reconsider** If the instrument becomes precise enough to say *how much*
+someone leans, the placement should use that rather than exact ties.
+
 ### The scoring band is three points
-**What** Quadrants within three points of the top are reported as level.
+**What** Preferences within three points of the top are reported as level.
 **Why** Three points is one statement moving one place in three of the six
 sets. Below that the ordering says more about which set someone read
 carefully than about them. The brief asked for a band and did not set one.
 **Reconsider** The first thing to revisit with real data. If a pilot shows
 a tighter distribution, the band should widen, not narrow.
 
-### Ties break by canonical quadrant order, and the screen says they are ties
+### Ties break by canonical order, and the screen says they are ties
 **What** A deterministic secondary sort, plus an explicit "it was close".
 **Why** The same answers must always read the same way. A hidden
 tie-break would be a claim the instrument cannot support.
 **Reconsider** Nothing.
 
-### An axis at zero is a placement, not a rounding problem
-**What** Zero on one axis puts you on the line between two quadrants; zero
-on both puts you at the centre; all four equal is reported as an even
-spread and explicitly not as a failure to answer.
-**Why** These happen, and a facilitator has to put the person somewhere on
-a taped floor. With six sets the axes move in steps of two, so landing on
-zero is common rather than freakish: enumerating the exact joint
-distribution over all 24^6 ways of answering puts **23.2% on a line and
-1.5% dead centre** under uniform random responding (an upper bound — real
-respondents are not random — but in a room of twenty it is several
-people). The test in `apps/elc-placement/test/scoring.test.ts` computes
-it. The result screen tells each of them where to stand. Note that both
-axes can be zero without the quadrants being equal — an activist/theorist
-diagonal — and that is a different sentence.
-**Reconsider** A seventh set would not remove the problem, only shift it;
-an odd number of sets makes exact zeros rarer on both axes. Worth
-modelling if a pilot ever shows facilitators struggling with it.
+### The two axes are Kolb's dialectics, and are reported, not used to place
+**What** Perceiving = Active − Theorist; processing = Pragmatist −
+Reflective. Each compares two preferences facing each other on the circle.
+**Why** They are part of the model and worth showing in words, but where
+you stand comes from the scores, so two people with the same top
+preference are never sent to different places by an axis.
+**Reconsider** Nothing.
 
-### A saved link encodes ranks per quadrant, not which statement was picked
+### A saved link encodes ranks per preference, not which statement was picked
 **What** Six characters, one permutation index per set, plus the items
 version.
 **Why** It is short enough to read off a screen, and rewording a statement
@@ -154,7 +177,7 @@ smallest change that helps.
 ### Statement order is shuffled per respondent
 **What** Fixed for a sitting, random between sittings.
 **Why** With a fixed order the first statement is read most carefully and
-the last least. Scoring reads the rank given to each quadrant, so the
+the last least. Scoring reads the rank given to each preference, so the
 shuffle cannot affect a result or a saved link.
 **Reconsider** Nothing.
 

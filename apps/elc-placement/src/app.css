@@ -125,25 +125,35 @@ ul.plain > li::before {
 .stand-where { margin-top: 1.4rem; font-size: 1.1rem; }
 .note.stale { margin-bottom: 0; }
 
-.circle-figure { margin: 0 auto; max-width: 460px; }
+.circle-figure { margin: 0 auto; max-width: 512px; }
 .circle { width: 100%; height: auto; display: block; }
-.circle .wedge { fill: var(--paper-2); stroke: none; }
-.circle .wedge-lead { fill: color-mix(in srgb, var(--accent) 14%, var(--paper-2)); }
+.circle .sector { fill: var(--paper-2); stroke: none; }
+.circle .sector-lead { fill: color-mix(in srgb, var(--accent) 14%, var(--paper-2)); }
 .circle .ring, .circle .axis { fill: none; stroke: var(--rule-strong); stroke-width: 1; }
-.circle .wedge-label {
-  font-family: var(--mono); font-size: 13px; letter-spacing: 0.06em;
+.circle .ring { stroke-width: 1.5; }
+.circle .cycle-arrow { fill: var(--rule-strong); stroke: none; }
+.circle .even-ring { fill: none; stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 4; opacity: 0.7; }
+.circle .kite {
+  fill: color-mix(in srgb, var(--accent) 16%, transparent);
+  stroke: var(--accent); stroke-width: 1.75; stroke-linejoin: round;
+}
+.circle .kite-point { fill: var(--accent); stroke: var(--paper); stroke-width: 1.5; }
+/* Text drawn over tints and lines keeps a paper-coloured halo. */
+.circle text { paint-order: stroke; stroke: var(--paper); stroke-width: 3px; stroke-linejoin: round; }
+.circle .pref-label {
+  font-family: var(--mono); font-size: 16px; letter-spacing: 0.02em;
   fill: var(--ink-soft);
 }
-.circle .wedge-label.is-lead { fill: var(--ink); font-weight: 500; }
-.circle .pole-label {
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em;
-  text-transform: uppercase; fill: var(--muted);
+.circle .pref-label.is-lead { fill: var(--accent); font-weight: 600; }
+.circle .step-label {
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em;
+  fill: var(--muted);
 }
 .circle .marker-halo { fill: var(--paper); stroke: var(--paper); stroke-width: 3; }
 .circle .marker { fill: var(--accent); stroke: var(--paper); stroke-width: 2; }
 .circle .marker-label {
   font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em;
-  text-transform: uppercase; fill: var(--accent);
+  text-transform: uppercase; fill: var(--accent); font-weight: 600;
 }
 
 table.shape tr.is-lead th, table.shape tr.is-lead td { color: var(--ink); font-weight: 500; }
@@ -166,13 +176,13 @@ ul.axes li { font-size: 1.02rem; }
 .card-split { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(1.2rem, 4vw, 2.6rem); }
 .card-split > div > h2:not(:first-child) { margin-top: 1.6rem; }
 
-.quadrant-list { display: grid; grid-template-columns: 11rem 1fr; gap: 0.4rem 1.4rem; margin: 0; }
-.quadrant-list dt { display: flex; flex-direction: column; gap: 0.1rem; }
-.quadrant-list .q-name { font-weight: 600; }
-.quadrant-list .q-short {
+.preference-list { display: grid; grid-template-columns: 11rem 1fr; gap: 0.4rem 1.4rem; margin: 0; }
+.preference-list dt { display: flex; flex-direction: column; gap: 0.1rem; }
+.preference-list .p-name { font-weight: 600; }
+.preference-list .p-stage {
   font-family: var(--mono); font-size: var(--t-cap); letter-spacing: 0.06em; color: var(--muted);
 }
-.quadrant-list dd { margin: 0; color: var(--ink-soft); font-size: 0.97rem; }
+.preference-list dd { margin: 0; color: var(--ink-soft); font-size: 0.97rem; }
 
 .prompts { counter-reset: prompt; list-style: none; padding-left: 0; }
 .prompts li { counter-increment: prompt; position: relative; padding-left: 2.1rem; margin-bottom: 0.8rem; }
@@ -193,8 +203,8 @@ ul.axes li { font-size: 1.02rem; }
   .ranks { justify-content: space-between; }
   .rank-option { flex: 1 1 0; }
   .card-split { grid-template-columns: 1fr; }
-  .quadrant-list { grid-template-columns: 1fr; }
-  .quadrant-list dd { margin-bottom: 0.8rem; }
+  .preference-list { grid-template-columns: 1fr; }
+  .preference-list dd { margin-bottom: 0.8rem; }
   .rank-scale { margin-top: 1.2rem; }
 }
 
@@ -218,7 +228,7 @@ ul.axes li { font-size: 1.02rem; }
   body { font-size: 10.5pt; line-height: 1.45; }
   .lead { font-size: 1rem; }
   .circle-figure { max-width: 330px; }
-  .quadrant-list dd, .guidance li, .timing li, .prompts li { font-size: 9.5pt; }
+  .preference-list dd, .guidance li, .timing li, .prompts li { font-size: 9.5pt; }
   .disclaimer { border-left-width: 2px; }
   a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 8pt; color: #444; }
 }

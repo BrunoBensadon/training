@@ -24,7 +24,7 @@ import { writeLegacyLang } from '@training/i18n';
 import toolsConfig from '../../../tools.config.json';
 
 import { detectLocale, languageOptions, translatorFor } from './locales.ts';
-import { instrumentFrom, shuffledQuadrants, type Instrument } from './instrument.ts';
+import { instrumentFrom, shuffledPreferences, type Instrument } from './instrument.ts';
 import { buildHash, parseHash, ROUTES, setNumberFrom } from './router.ts';
 import { isComplete, type PartialRanking } from './model.ts';
 import { scoreResponses } from './scoring.ts';
@@ -39,7 +39,7 @@ import { facilitatorScreen } from './screens/facilitator.ts';
 function freshState(setCount: number): SessionState {
   return {
     responses: Array.from({ length: setCount }, () => ({}) as PartialRanking),
-    displayOrder: Array.from({ length: setCount }, () => shuffledQuadrants()),
+    displayOrder: Array.from({ length: setCount }, () => shuffledPreferences()),
   };
 }
 

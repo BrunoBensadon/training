@@ -6,7 +6,7 @@
  * buttons and the language toggle all come off.
  */
 import { el } from '@training/ui';
-import { QUADRANTS } from '../model.ts';
+import { PREFERENCES } from '../model.ts';
 import { ROUTES } from '../router.ts';
 import { richListItem, scoped, type ScreenContext } from './context.ts';
 
@@ -14,11 +14,16 @@ export function facilitatorScreen(context: ScreenContext): HTMLElement {
   const s = scoped(context.t, 'facilitator');
   const { instrument } = context;
 
-  const quadrantList = el('dl', { class: 'quadrant-list' });
-  for (const quadrant of QUADRANTS) {
-    const info = instrument.quadrants[quadrant];
-    quadrantList.append(
-      el('dt', {}, el('span', { class: 'q-name', text: info.name }), el('span', { class: 'q-short', text: info.short })),
+  const preferenceList = el('dl', { class: 'preference-list' });
+  for (const preference of PREFERENCES) {
+    const info = instrument.preferences[preference];
+    preferenceList.append(
+      el(
+        'dt',
+        {},
+        el('span', { class: 'p-name', text: info.name }),
+        el('span', { class: 'p-stage', text: info.stage }),
+      ),
       el('dd', { text: info.description }),
     );
   }
@@ -59,9 +64,9 @@ export function facilitatorScreen(context: ScreenContext): HTMLElement {
     el(
       'section',
       { class: 'card-block' },
-      el('h2', { text: s('quadrantsTitle') }),
-      el('p', { class: 'prose-note', text: s('quadrantsLead') }),
-      quadrantList,
+      el('h2', { text: s('preferencesTitle') }),
+      el('p', { class: 'prose-note', text: s('preferencesLead') }),
+      preferenceList,
     ),
 
     el(

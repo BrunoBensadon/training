@@ -4,20 +4,48 @@ import {
   InvalidResponsesError,
   assertValidResponses,
   axisRange,
+  maxScore,
   pointsForRank,
   scoreResponses,
   totalPoints,
 } from '../src/scoring.ts';
-import { QUADRANTS, type Quadrant, type Ranking, type Responses } from '../src/model.ts';
+import {
+  BEARING,
+  PREFERENCES,
+  areAdjacent,
+  nextInCycle,
+  type Preference,
+  type Ranking,
+  type Responses,
+} from '../src/model.ts';
 
-/** Shorthand: rank(1, 2, 3, 4) in canonical quadrant order. */
-function rank(activist: number, reflector: number, theorist: number, pragmatist: number): Ranking {
-  return { activist, reflector, theorist, pragmatist };
+/** Shorthand: rank(1, 2, 3, 4) in canonical order — active, reflective, theorist, pragmatist. */
+function rank(active: number, reflective: number, theorist: number, pragmatist: number): Ranking {
+  return { active, reflective, theorist, pragmatist };
 }
 
 function repeat(ranking: Ranking, times = 6): Responses {
   return Array.from({ length: times }, () => ({ ...ranking }));
 }
+
+describe('the cycle', () => {
+  it('runs clockwise from the top: Active, Reflective, Theorist, Pragmatist', () => {
+    expect(PREFERENCES).toEqual(['active', 'reflective', 'theorist', 'pragmatist']);
+    expect(BEARING).toEqual({ active: 0, reflective: 90, theorist: 180, pragmatist: 270 });
+  });
+
+  it('goes round and back to the start', () => {
+    expect(nextInCycle('active')).toBe('reflective');
+    expect(nextInCycle('pragmatist')).toBe('active');
+  });
+
+  it('knows neighbours from opposites', () => {
+    expect(areAdjacent('active', 'reflective')).toBe(true);
+    expect(areAdjacent('pragmatist', 'active')).toBe(true);
+    expect(areAdjacent('active', 'theorist')).toBe(false);
+    expect(areAdjacent('reflective', 'pragmatist')).toBe(false);
+  });
+});
 
 describe('pointsForRank', () => {
   it('is reverse-ranked: first choice scores most', () => {
@@ -26,61 +54,70 @@ describe('pointsForRank', () => {
 });
 
 describe('scoreResponses', () => {
-  it('sums reverse-ranked points per quadrant and always totals 60', () => {
+  it('sums reverse-ranked points per preference and always totals 60', () => {
     const result = scoreResponses(repeat(rank(1, 2, 3, 4)));
-    expect(result.scores).toEqual({ activist: 24, reflector: 18, theorist: 12, pragmatist: 6 });
+    expect(result.scores).toEqual({ active: 24, reflective: 18, theorist: 12, pragmatist: 6 });
     expect(result.total).toBe(60);
   });
 
-  it('keeps every quadrant inside its possible range', () => {
+  it('keeps every preference inside its possible range', () => {
     const result = scoreResponses(repeat(rank(4, 3, 2, 1)));
-    for (const quadrant of QUADRANTS) {
-      expect(result.scores[quadrant]).toBeGreaterThanOrEqual(6);
-      expect(result.scores[quadrant]).toBeLessThanOrEqual(24);
+    for (const preference of PREFERENCES) {
+      expect(result.scores[preference]).toBeGreaterThanOrEqual(6);
+      expect(result.scores[preference]).toBeLessThanOrEqual(24);
     }
   });
 
-  it('derives the quadrant from the signs of the two axes', () => {
-    // activist 1st, pragmatist 2nd, reflector 3rd, theorist 4th.
-    const result = scoreResponses(repeat(rank(1, 3, 4, 2)));
-    expect(result.scores).toEqual({ activist: 24, reflector: 12, theorist: 6, pragmatist: 18 });
-    // Concrete over abstract, active over reflective.
-    expect(result.axes).toEqual({ perceiving: 12, processing: 24 });
-    expect(result.placement).toEqual({ kind: 'quadrant', quadrant: 'activist' });
-  });
-
-  it('puts a straight 1-2-3-4 down the canonical order on an axis, not in a quadrant', () => {
-    // Worth pinning: ranking the quadrants in the order they are declared
-    // cancels the processing axis exactly, and the honest answer is "you
-    // are on the line", not "you are an Activist".
+  it('puts you at the preference with the most points', () => {
+    // The case the first version got wrong: Active first in every set was
+    // reported as "on the line between Activist and Reflector".
     const result = scoreResponses(repeat(rank(1, 2, 3, 4)));
-    expect(result.axes).toEqual({ perceiving: 24, processing: 0 });
-    expect(result.placement).toEqual({
-      kind: 'edge',
-      axis: 'processing',
-      between: ['activist', 'reflector'],
-    });
+    expect(result.placement).toEqual({ kind: 'single', preference: 'active' });
   });
 
-  it('reaches each quadrant', () => {
-    const cases: Array<[Ranking, Quadrant]> = [
-      [rank(1, 3, 4, 2), 'activist'],
-      [rank(3, 1, 2, 4), 'reflector'],
+  it('never places you anywhere but your highest score', () => {
+    // Active 17, Theorist 16, Reflective 15, Pragmatist 12 — the first
+    // version put this person at Reflector, their third-highest.
+    const responses: Responses = [
+      rank(1, 2, 3, 4),
+      rank(1, 2, 3, 4),
+      rank(1, 2, 3, 4),
+      rank(2, 3, 1, 4),
+      rank(4, 3, 2, 1),
+      rank(4, 3, 2, 1),
+    ];
+    const result = scoreResponses(responses);
+    expect(result.scores).toEqual({ active: 17, reflective: 15, theorist: 16, pragmatist: 12 });
+    expect(result.placement).toEqual({ kind: 'single', preference: 'active' });
+    expect(result.order).toEqual(['active', 'theorist', 'reflective', 'pragmatist']);
+  });
+
+  it('reaches each preference', () => {
+    const cases: Array<[Ranking, Preference]> = [
+      [rank(1, 3, 4, 2), 'active'],
+      [rank(3, 1, 2, 4), 'reflective'],
       [rank(4, 2, 1, 3), 'theorist'],
       [rank(3, 4, 2, 1), 'pragmatist'],
     ];
     for (const [ranking, expected] of cases) {
       expect(scoreResponses(repeat(ranking)).placement).toEqual({
-        kind: 'quadrant',
-        quadrant: expected,
+        kind: 'single',
+        preference: expected,
       });
     }
   });
 
+  it('computes the axes from the preferences facing each other', () => {
+    // Active 24, Reflective 12, Theorist 6, Pragmatist 18.
+    const result = scoreResponses(repeat(rank(1, 3, 4, 2)));
+    // Perceiving: Active − Theorist. Processing: Pragmatist − Reflective.
+    expect(result.axes).toEqual({ perceiving: 18, processing: 6 });
+  });
+
   describe('the cases a facilitator has to handle in the room', () => {
     it('an exactly balanced profile is a result, not a failure', () => {
-      // Each quadrant takes each rank in turn across four sets; repeated to
-      // six would skew, so this uses a four-set instrument.
+      // Each preference takes each rank in turn across four sets; repeated
+      // to six would skew, so this uses a four-set instrument.
       const responses: Responses = [
         rank(1, 2, 3, 4),
         rank(2, 3, 4, 1),
@@ -88,64 +125,50 @@ describe('scoreResponses', () => {
         rank(4, 1, 2, 3),
       ];
       const result = scoreResponses(responses);
-      expect(result.scores).toEqual({ activist: 10, reflector: 10, theorist: 10, pragmatist: 10 });
+      expect(result.scores).toEqual({ active: 10, reflective: 10, theorist: 10, pragmatist: 10 });
       expect(result.balanced).toBe(true);
       expect(result.axes).toEqual({ perceiving: 0, processing: 0 });
       expect(result.placement).toEqual({ kind: 'centre' });
-      expect(result.tiedAtTop).toEqual([...QUADRANTS]);
-      expect(result.closeCall).toEqual([...QUADRANTS]);
+      expect(result.tiedAtTop).toEqual([...PREFERENCES]);
+      expect(result.closeCall).toEqual([...PREFERENCES]);
     });
 
-    it('both axes at zero without the quadrants being equal is a diagonal, not a centre-dweller', () => {
-      // activist = theorist and reflector = pragmatist makes both axes zero.
-      const responses: Responses = [
-        rank(1, 3, 2, 4),
-        rank(1, 3, 2, 4),
-        rank(2, 4, 1, 3),
-        rank(2, 4, 1, 3),
-      ];
-      const result = scoreResponses(responses);
-      expect(result.axes).toEqual({ perceiving: 0, processing: 0 });
-      expect(result.placement).toEqual({ kind: 'centre' });
-      expect(result.balanced).toBe(false);
-      // The shape still has something to say: two quadrants lead.
-      expect(result.scores.activist).toBe(result.scores.theorist);
-      expect(result.scores.reflector).toBe(result.scores.pragmatist);
-      expect(result.scores.activist).toBeGreaterThan(result.scores.reflector);
-    });
-
-    it('a single axis at zero puts you on a line between two quadrants', () => {
-      // Perceiving zero, processing active: between activist and pragmatist.
-      const responses: Responses = [rank(1, 4, 3, 2), rank(2, 3, 4, 1)];
-      const result = scoreResponses(responses);
-      expect(result.axes.perceiving).toBe(0);
-      expect(result.axes.processing).toBeGreaterThan(0);
-      expect(result.placement).toEqual({
-        kind: 'edge',
-        axis: 'perceiving',
-        between: ['activist', 'pragmatist'],
-      });
-    });
-
-    it('the other single-axis zero puts you on the other line', () => {
-      // Processing zero, perceiving concrete: between activist and reflector.
-      const responses: Responses = [rank(1, 2, 4, 3), rank(2, 1, 3, 4)];
-      const result = scoreResponses(responses);
-      expect(result.axes.processing).toBe(0);
-      expect(result.axes.perceiving).toBeGreaterThan(0);
-      expect(result.placement).toEqual({
-        kind: 'edge',
-        axis: 'processing',
-        between: ['activist', 'reflector'],
-      });
-    });
-
-    it('breaks an exact tie by canonical order rather than by chance', () => {
+    it('two neighbours level at the top puts you on the circle between them', () => {
       const responses: Responses = [rank(1, 2, 3, 4), rank(2, 1, 4, 3)];
       const result = scoreResponses(responses);
-      expect(result.scores.activist).toBe(result.scores.reflector);
-      expect(result.order[0]).toBe('activist');
-      expect(result.tiedAtTop).toEqual(['activist', 'reflector']);
+      expect(result.tiedAtTop).toEqual(['active', 'reflective']);
+      expect(result.placement).toEqual({ kind: 'between', pair: ['active', 'reflective'] });
+    });
+
+    it('lists a pair that wraps round the top clockwise, Pragmatist then Active', () => {
+      const responses: Responses = [rank(1, 3, 4, 2), rank(2, 4, 3, 1)];
+      const result = scoreResponses(responses);
+      expect(result.tiedAtTop).toEqual(['active', 'pragmatist']);
+      expect(result.placement).toEqual({ kind: 'between', pair: ['pragmatist', 'active'] });
+    });
+
+    it('two opposites level at the top puts you in the middle, not between them', () => {
+      // Active and Theorist face each other across the circle; there is no
+      // arc between them to stand on.
+      const responses: Responses = [rank(1, 3, 2, 4), rank(2, 4, 1, 3)];
+      const result = scoreResponses(responses);
+      expect(result.tiedAtTop).toEqual(['active', 'theorist']);
+      expect(result.placement).toEqual({ kind: 'centre' });
+      expect(result.balanced).toBe(false);
+    });
+
+    it('three level at the top puts you in the middle', () => {
+      const responses: Responses = [rank(1, 2, 3, 4), rank(2, 3, 1, 4), rank(3, 1, 2, 4)];
+      const result = scoreResponses(responses);
+      expect(result.tiedAtTop).toEqual(['active', 'reflective', 'theorist']);
+      expect(result.placement).toEqual({ kind: 'centre' });
+    });
+
+    it('breaks an exact tie in the ordering by canonical order rather than by chance', () => {
+      const responses: Responses = [rank(1, 2, 3, 4), rank(2, 1, 4, 3)];
+      const result = scoreResponses(responses);
+      expect(result.scores.active).toBe(result.scores.reflective);
+      expect(result.order[0]).toBe('active');
     });
 
     it('is deterministic: the same answers always read the same way', () => {
@@ -156,7 +179,7 @@ describe('scoreResponses', () => {
     });
 
     it('flags a close call when the top two are within one band', () => {
-      // activist 21, reflector 19: two apart, inside the band of 3.
+      // active 21, reflective 19: two apart, inside the band of 3.
       const responses: Responses = [
         rank(1, 2, 3, 4),
         rank(1, 2, 3, 4),
@@ -166,15 +189,15 @@ describe('scoreResponses', () => {
         rank(2, 1, 4, 3),
       ];
       const result = scoreResponses(responses);
-      expect(result.scores.activist - result.scores.reflector).toBeLessThanOrEqual(BAND);
+      expect(result.scores.active - result.scores.reflective).toBeLessThanOrEqual(BAND);
       expect(result.closeCall.length).toBeGreaterThan(1);
-      expect(result.closeCall.slice(0, 2)).toEqual(['activist', 'reflector']);
-      expect(result.tiedAtTop).toEqual(['activist']);
+      expect(result.closeCall.slice(0, 2)).toEqual(['active', 'reflective']);
+      expect(result.tiedAtTop).toEqual(['active']);
     });
 
     it('does not flag a close call when the lead is clear', () => {
       const result = scoreResponses(repeat(rank(1, 2, 3, 4)));
-      expect(result.closeCall).toEqual(['activist']);
+      expect(result.closeCall).toEqual(['active']);
     });
 
     it('puts the band at three points, which is one place in half the sets', () => {
@@ -202,42 +225,33 @@ describe('scoreResponses', () => {
   });
 });
 
-describe('axisRange', () => {
-  it('is the furthest an axis can travel over six sets', () => {
-    expect(axisRange(6)).toBe(24);
-    const extreme = scoreResponses(repeat(rank(1, 2, 3, 4)));
-    expect(Math.abs(extreme.axes.perceiving)).toBeLessThanOrEqual(axisRange(6));
+describe('ranges', () => {
+  it('maxScore is first place in every set', () => {
+    expect(maxScore(6)).toBe(24);
+    expect(scoreResponses(repeat(rank(1, 2, 3, 4))).scores.active).toBe(maxScore(6));
   });
 
-  it('is actually reached by the most extreme possible answers', () => {
-    const allConcrete = scoreResponses(repeat(rank(1, 2, 3, 4)));
-    expect(allConcrete.axes.perceiving).toBe(axisRange(6));
+  it('axisRange is first place against last, every set, and is reached', () => {
+    expect(axisRange(6)).toBe(18);
+    const extreme = scoreResponses(repeat(rank(1, 2, 4, 3)));
+    expect(extreme.axes.perceiving).toBe(axisRange(6));
   });
 });
 
-describe('how often the boundary cases actually happen', () => {
+describe('how often the in-between cases actually happen', () => {
   /**
-   * The edge and centre placements are not defensive programming for a
-   * case nobody hits. With six sets the axes move in steps of two and
-   * land on zero often.
-   *
-   * This enumerates the exact joint distribution of the two axes over all
-   * 24^6 ways of answering — by convolution, not by brute force — under
-   * the assumption that every ranking is equally likely. Real respondents
+   * "Between two" and "the middle" are not defensive programming for a
+   * case nobody hits. This enumerates the exact distribution of the four
+   * scores over all 24^6 ways of answering — by convolution, not brute
+   * force — assuming every ranking is equally likely. Real respondents
    * are not random, so treat these as an upper bound; they are still the
    * reason a facilitator needs somewhere to put these people.
    */
-  function axisDistribution(setCount: number): {
-    total: number;
-    onALine: number;
-    deadCentre: number;
-  } {
-    const perSet: Array<[number, number]> = [];
+  function placementDistribution(setCount: number): Record<string, number> {
+    const perSet: Ranking[] = [];
     const permute = (rest: number[], taken: number[]): void => {
       if (rest.length === 0) {
-        const ranking = rank(taken[0]!, taken[1]!, taken[2]!, taken[3]!);
-        const result = scoreResponses([ranking]);
-        perSet.push([result.axes.perceiving, result.axes.processing]);
+        perSet.push(rank(taken[0]!, taken[1]!, taken[2]!, taken[3]!));
         return;
       }
       rest.forEach((value, index) => {
@@ -247,49 +261,56 @@ describe('how often the boundary cases actually happen', () => {
     permute([1, 2, 3, 4], []);
     expect(perSet).toHaveLength(24);
 
-    let distribution = new Map<string, number>([['0,0', 1]]);
+    let distribution = new Map<string, number>([['0,0,0,0', 1]]);
     for (let set = 0; set < setCount; set += 1) {
       const next = new Map<string, number>();
       for (const [key, count] of distribution) {
-        const [a, b] = key.split(',').map(Number) as [number, number];
-        for (const [dp, dq] of perSet) {
-          const nextKey = `${a + dp},${b + dq}`;
+        const scores = key.split(',').map(Number);
+        for (const ranking of perSet) {
+          const nextKey = PREFERENCES.map(
+            (preference, index) => scores[index]! + pointsForRank(ranking[preference]),
+          ).join(',');
           next.set(nextKey, (next.get(nextKey) ?? 0) + count);
         }
       }
       distribution = next;
     }
 
-    let total = 0;
-    let onALine = 0;
-    let deadCentre = 0;
+    // Any responses with these scores place the same way; build one.
+    const kinds: Record<string, number> = { single: 0, between: 0, centre: 0, total: 0 };
     for (const [key, count] of distribution) {
-      const [a, b] = key.split(',').map(Number) as [number, number];
-      total += count;
-      if (a === 0 || b === 0) onALine += count;
-      if (a === 0 && b === 0) deadCentre += count;
+      const scores = key.split(',').map(Number);
+      const top = Math.max(...scores);
+      const tied = PREFERENCES.filter((_, index) => scores[index] === top);
+      const kind =
+        tied.length === 1
+          ? 'single'
+          : tied.length === 2 && areAdjacent(tied[0]!, tied[1]!)
+            ? 'between'
+            : 'centre';
+      kinds[kind]! += count;
+      kinds.total! += count;
     }
-    return { total, onALine, deadCentre };
+    return kinds;
   }
 
-  it('puts roughly a quarter of random responders on a line', () => {
-    const { total, onALine, deadCentre } = axisDistribution(6);
+  it('places most random responders at one point, and some between or in the middle', () => {
+    const { single, between, centre, total } = placementDistribution(6);
     expect(total).toBe(24 ** 6);
-
-    const lineShare = onALine / total;
-    const centreShare = deadCentre / total;
-
-    // ~23.2% on a line, ~1.5% dead centre. In a room of twenty, that is
-    // several people who cannot be put inside a quadrant.
-    expect(lineShare).toBeGreaterThan(0.22);
-    expect(lineShare).toBeLessThan(0.24);
-    expect(centreShare).toBeGreaterThan(0.014);
-    expect(centreShare).toBeLessThan(0.017);
+    // ~85.0% at one point, ~9.0% between two neighbours, ~5.9% in the
+    // middle. In a room of twenty, a few people need somewhere to stand
+    // that is not a point.
+    expect(single! / total!).toBeGreaterThan(0.84);
+    expect(single! / total!).toBeLessThan(0.86);
+    expect(between! / total!).toBeGreaterThan(0.085);
+    expect(between! / total!).toBeLessThan(0.095);
+    expect(centre! / total!).toBeGreaterThan(0.055);
+    expect(centre! / total!).toBeLessThan(0.065);
   });
 });
 
 describe('totalPoints', () => {
-  it('is what the four quadrant scores always add up to', () => {
+  it('is what the four scores always add up to', () => {
     expect(totalPoints(6)).toBe(60);
     const result = scoreResponses(repeat(rank(1, 3, 4, 2)));
     expect(result.total).toBe(totalPoints(6));

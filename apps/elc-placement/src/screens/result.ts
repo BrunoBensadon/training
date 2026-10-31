@@ -1,11 +1,11 @@
 /**
  * The result.
  *
- * Shows the whole four-way shape, never a bare type label. The primary
- * quadrant is named only as "where you leaned today", the axes are
- * presented as the better-supported reading, and when the top two are
- * inside the scoring band the screen says so instead of quietly picking
- * the higher number.
+ * Shows the whole four-way shape, never a bare type label. The highest
+ * preference is named only as "where you leaned today", the diagram draws
+ * all four scores on the cycle, and when the top two are inside the
+ * scoring band the screen says so instead of quietly picking the higher
+ * number.
  *
  * The mandated disclaimer sits directly under the heading, before any
  * number, because a caveat at the bottom of a results page is a caveat
@@ -13,7 +13,7 @@
  */
 import { el } from '@training/ui';
 import { ROUTES } from '../router.ts';
-import { AXES, QUADRANTS, type Quadrant } from '../model.ts';
+import { AXES, AXIS_POLES, PREFERENCES, type Preference } from '../model.ts';
 import { BAND, type Result } from '../scoring.ts';
 import { circleFigure } from '../circle.ts';
 import { richParagraph, scoped, section, type ScreenContext } from './context.ts';
@@ -97,7 +97,7 @@ export function resultScreen(context: ScreenContext, options: ResultScreenOption
 function leaningLines(context: ScreenContext, result: Result): HTMLElement[] {
   const s = scoped(context.t, 'result');
   const { instrument } = context;
-  const name = (quadrant: Quadrant): string => instrument.quadrants[quadrant].name;
+  const name = (preference: Preference): string => instrument.preferences[preference].name;
   const lines: HTMLElement[] = [];
 
   if (result.balanced) {
@@ -106,35 +106,33 @@ function leaningLines(context: ScreenContext, result: Result): HTMLElement[] {
   }
 
   switch (result.placement.kind) {
-    case 'quadrant': {
-      const quadrant = result.placement.quadrant;
+    case 'single': {
+      const preference = result.placement.preference;
       lines.push(
         richParagraph(
-          s('leanedQuadrant', {
-            quadrant: name(quadrant),
-            short: instrument.quadrants[quadrant].short.toLowerCase(),
+          s('leanedSingle', {
+            preference: name(preference),
+            short: instrument.preferences[preference].short,
           }),
           'lead',
         ),
       );
       break;
     }
-    case 'edge': {
-      const [first, second] = result.placement.between;
+    case 'between': {
+      const [first, second] = result.placement.pair;
       lines.push(
-        richParagraph(
-          s('leanedEdge', {
-            first: name(first),
-            second: name(second),
-            axis: instrument.axes[result.placement.axis].name.toLowerCase(),
-          }),
-          'lead',
-        ),
+        richParagraph(s('leanedBetween', { first: name(first), second: name(second) }), 'lead'),
       );
       break;
     }
     case 'centre':
-      lines.push(richParagraph(s('leanedCentre'), 'lead'));
+      lines.push(
+        richParagraph(
+          s('leanedCentre', { list: result.tiedAtTop.map(name).join(', ') }),
+          'lead',
+        ),
+      );
       break;
   }
 
@@ -168,18 +166,20 @@ function leaningLines(context: ScreenContext, result: Result): HTMLElement[] {
 
 function standWhere(context: ScreenContext, result: Result): string {
   const s = scoped(context.t, 'result');
-  const name = (quadrant: Quadrant): string => context.instrument.quadrants[quadrant].name;
+  const name = (preference: Preference): string => context.instrument.preferences[preference].name;
 
-  if (result.balanced || result.placement.kind === 'centre') {
-    return s('standWhere', { where: s('standCentre') });
+  switch (result.placement.kind) {
+    case 'single':
+      return s('standWhere', { where: s('standAt', { preference: name(result.placement.preference) }) });
+    case 'between': {
+      const [first, second] = result.placement.pair;
+      return s('standWhere', {
+        where: s('standBetween', { first: name(first), second: name(second) }),
+      });
+    }
+    case 'centre':
+      return s('standWhere', { where: s('standCentre') });
   }
-  if (result.placement.kind === 'edge') {
-    const [first, second] = result.placement.between;
-    return s('standWhere', {
-      where: s('standEdge', { first: name(first), second: name(second) }),
-    });
-  }
-  return s('standWhere', { where: name(result.placement.quadrant) });
 }
 
 function shapeTable(context: ScreenContext, result: Result): HTMLElement {
@@ -189,21 +189,21 @@ function shapeTable(context: ScreenContext, result: Result): HTMLElement {
   const head = el(
     'tr',
     {},
-    el('th', { text: s('colQuadrant'), attrs: { scope: 'col' } }),
-    el('th', { text: s('colDescription'), attrs: { scope: 'col' } }),
+    el('th', { text: s('colPreference'), attrs: { scope: 'col' } }),
+    el('th', { text: s('colStage'), attrs: { scope: 'col' } }),
     el('th', { class: 'num', text: s('colScore'), attrs: { scope: 'col' } }),
   );
 
   const body = el('tbody');
-  for (const quadrant of result.order) {
-    const isLead = result.closeCall.includes(quadrant);
+  for (const preference of result.order) {
+    const isLead = result.closeCall.includes(preference);
     body.append(
       el(
         'tr',
         { class: isLead ? 'is-lead' : '' },
-        el('th', { text: instrument.quadrants[quadrant].name, attrs: { scope: 'row' } }),
-        el('td', { text: instrument.quadrants[quadrant].short }),
-        el('td', { class: 'num', text: String(result.scores[quadrant]) }),
+        el('th', { text: instrument.preferences[preference].name, attrs: { scope: 'row' } }),
+        el('td', { text: instrument.preferences[preference].stage }),
+        el('td', { class: 'num', text: String(result.scores[preference]) }),
       ),
     );
   }
@@ -226,17 +226,18 @@ function axisLines(context: ScreenContext, result: Result): string[] {
   return AXES.map((axis) => {
     const info = instrument.axes[axis];
     const value = result.axes[axis];
+    const { positive, negative } = AXIS_POLES[axis];
     if (value === 0) {
       return s('axisEven', {
         name: info.name,
-        positive: info.positive,
-        negative: info.negative,
+        positive: instrument.preferences[positive].name,
+        negative: instrument.preferences[negative].name,
       });
     }
     return s('axisReading', {
       name: info.name,
       value: Math.abs(value),
-      pole: value > 0 ? info.positive : info.negative,
+      pole: instrument.preferences[value > 0 ? positive : negative].name,
       description: value > 0 ? info.positiveDescription : info.negativeDescription,
     });
   });
@@ -245,10 +246,10 @@ function axisLines(context: ScreenContext, result: Result): string[] {
 /** What the diagram says, in words, for anyone not using the diagram. */
 function textAlternative(context: ScreenContext, result: Result): string {
   const { instrument } = context;
-  const scores = QUADRANTS.map(
-    (quadrant) => `${instrument.quadrants[quadrant].name} ${result.scores[quadrant]}`,
+  const scores = PREFERENCES.map(
+    (preference) => `${instrument.preferences[preference].name} ${result.scores[preference]}`,
   ).join('; ');
-  return `${axisLines(context, result).join('. ')}. ${scores}.`;
+  return `${standWhere(context, result)} ${scores}. ${axisLines(context, result).join('. ')}.`;
 }
 
 function saveSection(context: ScreenContext, options: ResultScreenOptions): HTMLElement {

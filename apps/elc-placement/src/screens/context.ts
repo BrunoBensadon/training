@@ -1,14 +1,14 @@
 import { el, richText } from '@training/ui';
 import type { Translator, Vars } from '@training/i18n';
 import type { Instrument } from '../instrument.ts';
-import type { PartialRanking, Quadrant } from '../model.ts';
+import type { PartialRanking, Preference } from '../model.ts';
 
 /** Answers for this sitting. Held in memory only — see DECISIONS.md. */
 export interface SessionState {
   responses: PartialRanking[];
   /** Display order per set, fixed once per sitting so answers do not jump
    *  around when you press Back. */
-  displayOrder: Quadrant[][];
+  displayOrder: Preference[][];
 }
 
 export interface ScreenContext {

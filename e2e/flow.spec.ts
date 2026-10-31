@@ -91,7 +91,7 @@ test.describe('the whole thing works', () => {
     await expect(page.getByRole('heading', { name: /floor exercise/i })).toBeVisible();
     await expect(page.locator('ol.prompts li')).toHaveCount(3);
     await expect(page.getByText(/never leave one person standing alone/i)).toBeVisible();
-    await expect(page.getByText(/eleven reflectors and one activist/i)).toBeVisible();
+    await expect(page.getByText(/eleven people at reflective and one at active/i)).toBeVisible();
   });
 });
 
