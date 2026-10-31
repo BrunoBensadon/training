@@ -1,10 +1,19 @@
+/**
+ * Scoring, against the specification in
+ * docs/reviews/elc-placement-2-content-guide.md §3D — including its nine
+ * test vectors (§3D8), which were checked there against a separate
+ * reference implementation.
+ */
 import { describe, expect, it } from 'vitest';
 import {
-  BAND,
   InvalidResponsesError,
   assertValidResponses,
-  axisRange,
+  clearLead,
+  classify,
   maxScore,
+  midScore,
+  minScore,
+  pairLead,
   pointsForRank,
   scoreResponses,
   totalPoints,
@@ -24,8 +33,17 @@ function rank(active: number, reflective: number, theorist: number, pragmatist: 
   return { active, reflective, theorist, pragmatist };
 }
 
-function repeat(ranking: Ranking, times = 6): Responses {
+function repeat(ranking: Ranking, times = 12): Responses {
   return Array.from({ length: times }, () => ({ ...ranking }));
+}
+
+function scores(
+  active: number,
+  reflective: number,
+  theorist: number,
+  pragmatist: number,
+): Record<Preference, number> {
+  return { active, reflective, theorist, pragmatist };
 }
 
 describe('the cycle', () => {
@@ -47,211 +65,111 @@ describe('the cycle', () => {
   });
 });
 
-describe('pointsForRank', () => {
+describe('points and ranges', () => {
   it('is reverse-ranked: first choice scores most', () => {
     expect([1, 2, 3, 4].map(pointsForRank)).toEqual([4, 3, 2, 1]);
   });
+
+  it('runs from n to 4n with 2.5n in the middle, and always totals 10n', () => {
+    expect([minScore(12), midScore(12), maxScore(12), totalPoints(12)]).toEqual([12, 30, 48, 120]);
+    const result = scoreResponses(repeat(rank(1, 3, 4, 2)));
+    expect(result.total).toBe(120);
+    expect(result.setCount).toBe(12);
+  });
 });
 
-describe('scoreResponses', () => {
-  it('sums reverse-ranked points per preference and always totals 60', () => {
+describe('the margins grow with the length of the quiz', () => {
+  it('τ = ⌈2√n⌉ and τ2 = ⌈√n⌉', () => {
+    expect([6, 12, 16].map((n) => [clearLead(n), pairLead(n)])).toEqual([
+      [5, 3],
+      [7, 4],
+      [8, 4],
+    ]);
+  });
+});
+
+describe('the guide’s test vectors (§3D8)', () => {
+  it('1 — first in every set is a point, with the last-ranked as lowest', () => {
     const result = scoreResponses(repeat(rank(1, 2, 3, 4)));
-    expect(result.scores).toEqual({ active: 24, reflective: 18, theorist: 12, pragmatist: 6 });
-    expect(result.total).toBe(60);
+    expect(result.scores).toEqual(scores(48, 36, 24, 12));
+    expect(result.placement).toEqual({ kind: 'point', preference: 'active' });
+    expect(result.lead).toBe(12);
+    expect(result.lowest).toEqual({ preference: 'pragmatist', gap: 12 });
+    expect(result.tensions).toEqual({
+      grasping: { kind: 'lean', towards: 'active', by: 24 },
+      transforming: { kind: 'lean', towards: 'reflective', by: 24 },
+    });
   });
 
-  it('keeps every preference inside its possible range', () => {
-    const result = scoreResponses(repeat(rank(4, 3, 2, 1)));
-    for (const preference of PREFERENCES) {
-      expect(result.scores[preference]).toBeGreaterThanOrEqual(6);
-      expect(result.scores[preference]).toBeLessThanOrEqual(24);
-    }
-  });
-
-  it('puts you at the preference with the most points', () => {
-    // The case the first version got wrong: Active first in every set was
-    // reported as "on the line between Activist and Reflector".
-    const result = scoreResponses(repeat(rank(1, 2, 3, 4)));
-    expect(result.placement).toEqual({ kind: 'single', preference: 'active' });
-  });
-
-  it('never places you anywhere but your highest score', () => {
-    // Active 17, Theorist 16, Reflective 15, Pragmatist 12 — the first
-    // version put this person at Reflector, their third-highest.
+  it('2 — each rank given to each preference equally is a spread', () => {
     const responses: Responses = [
-      rank(1, 2, 3, 4),
-      rank(1, 2, 3, 4),
-      rank(1, 2, 3, 4),
-      rank(2, 3, 1, 4),
-      rank(4, 3, 2, 1),
-      rank(4, 3, 2, 1),
+      ...repeat(rank(1, 2, 3, 4), 3),
+      ...repeat(rank(2, 3, 4, 1), 3),
+      ...repeat(rank(3, 4, 1, 2), 3),
+      ...repeat(rank(4, 1, 2, 3), 3),
     ];
     const result = scoreResponses(responses);
-    expect(result.scores).toEqual({ active: 17, reflective: 15, theorist: 16, pragmatist: 12 });
-    expect(result.placement).toEqual({ kind: 'single', preference: 'active' });
-    expect(result.order).toEqual(['active', 'theorist', 'reflective', 'pragmatist']);
+    expect(result.scores).toEqual(scores(30, 30, 30, 30));
+    expect(result.placement).toEqual({ kind: 'spread' });
+    expect(result.lowest).toBeNull();
+    expect(result.tensions).toEqual({ grasping: { kind: 'even' }, transforming: { kind: 'even' } });
   });
 
-  it('reaches each preference', () => {
-    const cases: Array<[Ranking, Preference]> = [
-      [rank(1, 3, 4, 2), 'active'],
-      [rank(3, 1, 2, 4), 'reflective'],
-      [rank(4, 2, 1, 3), 'theorist'],
-      [rank(3, 4, 2, 1), 'pragmatist'],
-    ];
-    for (const [ranking, expected] of cases) {
-      expect(scoreResponses(repeat(ranking)).placement).toEqual({
-        kind: 'single',
-        preference: expected,
-      });
-    }
+  it('3 — two neighbours level and well ahead stand between them', () => {
+    const result = scoreResponses([...repeat(rank(1, 2, 4, 3), 6), ...repeat(rank(2, 1, 3, 4), 6)]);
+    expect(result.scores).toEqual(scores(42, 42, 18, 18));
+    expect(result.placement).toEqual({ kind: 'between', pair: ['active', 'reflective'] });
+    expect(result.lowest).toBeNull();
   });
 
-  it('computes the axes from the preferences facing each other', () => {
-    // Active 24, Reflective 12, Theorist 6, Pragmatist 18.
-    const result = scoreResponses(repeat(rank(1, 3, 4, 2)));
-    // Perceiving: Active − Theorist. Processing: Pragmatist − Reflective.
-    expect(result.axes).toEqual({ perceiving: 18, processing: 6 });
+  it('4 — two opposites level and well ahead stand in the centre', () => {
+    const result = scoreResponses([...repeat(rank(1, 3, 2, 4), 6), ...repeat(rank(2, 4, 1, 3), 6)]);
+    expect(result.scores).toEqual(scores(42, 18, 42, 18));
+    expect(result.placement).toEqual({ kind: 'opposite', pair: ['active', 'theorist'] });
+    expect(result.tensions).toEqual({ grasping: { kind: 'even' }, transforming: { kind: 'even' } });
   });
 
-  describe('the cases a facilitator has to handle in the room', () => {
-    it('an exactly balanced profile is a result, not a failure', () => {
-      // Each preference takes each rank in turn across four sets; repeated
-      // to six would skew, so this uses a four-set instrument.
-      const responses: Responses = [
-        rank(1, 2, 3, 4),
-        rank(2, 3, 4, 1),
-        rank(3, 4, 1, 2),
-        rank(4, 1, 2, 3),
-      ];
-      const result = scoreResponses(responses);
-      expect(result.scores).toEqual({ active: 10, reflective: 10, theorist: 10, pragmatist: 10 });
-      expect(result.balanced).toBe(true);
-      expect(result.axes).toEqual({ perceiving: 0, processing: 0 });
-      expect(result.placement).toEqual({ kind: 'centre' });
-      expect(result.tiedAtTop).toEqual([...PREFERENCES]);
-      expect(result.closeCall).toEqual([...PREFERENCES]);
-    });
+  it('5 — a lead of exactly τ is a point', () => {
+    const result = classify(scores(37, 30, 27, 26), 12);
+    expect(result.placement).toEqual({ kind: 'point', preference: 'active' });
+    expect(result.lead).toBe(7);
+    expect(result.lowest).toBeNull();
+    expect(result.tensions.grasping).toEqual({ kind: 'lean', towards: 'active', by: 10 });
+    expect(result.tensions.transforming).toEqual({ kind: 'even' });
+  });
 
-    it('two neighbours level at the top puts you on the circle between them', () => {
-      const responses: Responses = [rank(1, 2, 3, 4), rank(2, 1, 4, 3)];
-      const result = scoreResponses(responses);
-      expect(result.tiedAtTop).toEqual(['active', 'reflective']);
-      expect(result.placement).toEqual({ kind: 'between', pair: ['active', 'reflective'] });
-    });
+  it('6 — a lead of τ − 1, with no pair ahead, is a spread', () => {
+    expect(classify(scores(36, 30, 28, 26), 12).placement).toEqual({ kind: 'spread' });
+  });
 
-    it('lists a pair that wraps round the top clockwise, Pragmatist then Active', () => {
-      const responses: Responses = [rank(1, 3, 4, 2), rank(2, 4, 3, 1)];
-      const result = scoreResponses(responses);
-      expect(result.tiedAtTop).toEqual(['active', 'pragmatist']);
-      expect(result.placement).toEqual({ kind: 'between', pair: ['pragmatist', 'active'] });
-    });
+  it('7 — a pair ahead by exactly τ2 is between, when neighbours', () => {
+    const result = classify(scores(36, 31, 26, 27), 12);
+    expect(result.order).toEqual(['active', 'reflective', 'pragmatist', 'theorist']);
+    expect(result.placement).toEqual({ kind: 'between', pair: ['active', 'reflective'] });
+  });
 
-    it('two opposites level at the top puts you in the middle, not between them', () => {
-      // Active and Theorist face each other across the circle; there is no
-      // arc between them to stand on.
-      const responses: Responses = [rank(1, 3, 2, 4), rank(2, 4, 1, 3)];
-      const result = scoreResponses(responses);
-      expect(result.tiedAtTop).toEqual(['active', 'theorist']);
-      expect(result.placement).toEqual({ kind: 'centre' });
-      expect(result.balanced).toBe(false);
-    });
-
-    it('three level at the top puts you in the middle', () => {
-      const responses: Responses = [rank(1, 2, 3, 4), rank(2, 3, 1, 4), rank(3, 1, 2, 4)];
-      const result = scoreResponses(responses);
-      expect(result.tiedAtTop).toEqual(['active', 'reflective', 'theorist']);
-      expect(result.placement).toEqual({ kind: 'centre' });
-    });
-
-    it('breaks an exact tie in the ordering by canonical order rather than by chance', () => {
-      const responses: Responses = [rank(1, 2, 3, 4), rank(2, 1, 4, 3)];
-      const result = scoreResponses(responses);
-      expect(result.scores.active).toBe(result.scores.reflective);
-      expect(result.order[0]).toBe('active');
-    });
-
-    it('is deterministic: the same answers always read the same way', () => {
-      const responses: Responses = [rank(1, 2, 3, 4), rank(2, 1, 4, 3)];
-      const first = scoreResponses(responses);
-      const second = scoreResponses(responses.map((entry) => ({ ...entry })));
-      expect(second).toEqual(first);
-    });
-
-    it('flags a close call when the top two are within one band', () => {
-      // active 21, reflective 19: two apart, inside the band of 3.
-      const responses: Responses = [
-        rank(1, 2, 3, 4),
-        rank(1, 2, 3, 4),
-        rank(1, 2, 3, 4),
-        rank(1, 2, 4, 3),
-        rank(2, 1, 3, 4),
-        rank(2, 1, 4, 3),
-      ];
-      const result = scoreResponses(responses);
-      expect(result.scores.active - result.scores.reflective).toBeLessThanOrEqual(BAND);
-      expect(result.closeCall.length).toBeGreaterThan(1);
-      expect(result.closeCall.slice(0, 2)).toEqual(['active', 'reflective']);
-      expect(result.tiedAtTop).toEqual(['active']);
-    });
-
-    it('does not flag a close call when the lead is clear', () => {
-      const result = scoreResponses(repeat(rank(1, 2, 3, 4)));
-      expect(result.closeCall).toEqual(['active']);
-    });
-
-    it('puts the band at three points, which is one place in half the sets', () => {
-      expect(BAND).toBe(3);
+  it('8 — a pair ahead, when opposites, is opposite', () => {
+    expect(classify(scores(34, 26, 34, 26), 12).placement).toEqual({
+      kind: 'opposite',
+      pair: ['active', 'theorist'],
     });
   });
 
-  describe('refusing bad input', () => {
-    it('rejects a repeated rank', () => {
-      expect(() => scoreResponses([rank(1, 1, 3, 4)])).toThrow(InvalidResponsesError);
-    });
-    it('rejects an out-of-range rank', () => {
-      expect(() => scoreResponses([rank(0, 2, 3, 4)])).toThrow(/whole numbers/);
-    });
-    it('rejects a fractional rank', () => {
-      expect(() => scoreResponses([rank(1.5, 2, 3, 4)])).toThrow(/whole numbers/);
-    });
-    it('rejects an empty instrument rather than scoring it as zeroes', () => {
-      expect(() => scoreResponses([])).toThrow(/no rankings/);
-    });
-    it('rejects the wrong number of sets when told how many to expect', () => {
-      expect(() => scoreResponses(repeat(rank(1, 2, 3, 4), 5), 6)).toThrow(/expected 6/);
-      expect(() => assertValidResponses(repeat(rank(1, 2, 3, 4), 6), 6)).not.toThrow();
-    });
-  });
-});
-
-describe('ranges', () => {
-  it('maxScore is first place in every set', () => {
-    expect(maxScore(6)).toBe(24);
-    expect(scoreResponses(repeat(rank(1, 2, 3, 4))).scores.active).toBe(maxScore(6));
+  it('9 — the first version’s counter-example names its top score', () => {
+    // At six sets the first version told this person "Activist" while
+    // the table under it led with Pragmatist by five points.
+    const result = classify(scores(32, 32, 14, 42), 12);
+    expect(result.placement).toEqual({ kind: 'point', preference: 'pragmatist' });
+    expect(result.lowest).toEqual({ preference: 'theorist', gap: 18 });
+    expect(result.tensions.grasping).toEqual({ kind: 'lean', towards: 'active', by: 18 });
+    expect(result.tensions.transforming).toEqual({ kind: 'lean', towards: 'pragmatist', by: 10 });
   });
 
-  it('axisRange is first place against last, every set, and is reached', () => {
-    expect(axisRange(6)).toBe(18);
-    const extreme = scoreResponses(repeat(rank(1, 2, 4, 3)));
-    expect(extreme.axes.perceiving).toBe(axisRange(6));
-  });
-});
-
-describe('how often the in-between cases actually happen', () => {
-  /**
-   * "Between two" and "the middle" are not defensive programming for a
-   * case nobody hits. This enumerates the exact distribution of the four
-   * scores over all 24^6 ways of answering — by convolution, not brute
-   * force — assuming every ranking is equally likely. Real respondents
-   * are not random, so treat these as an upper bound; they are still the
-   * reason a facilitator needs somewhere to put these people.
-   */
-  function placementDistribution(setCount: number): Record<string, number> {
-    const perSet: Ranking[] = [];
+  it('every ranking given twelve times is a point at the first, with the last as lowest', () => {
+    const permutations: number[][] = [];
     const permute = (rest: number[], taken: number[]): void => {
       if (rest.length === 0) {
-        perSet.push(rank(taken[0]!, taken[1]!, taken[2]!, taken[3]!));
+        permutations.push(taken);
         return;
       }
       rest.forEach((value, index) => {
@@ -259,65 +177,117 @@ describe('how often the in-between cases actually happen', () => {
       });
     };
     permute([1, 2, 3, 4], []);
-    expect(perSet).toHaveLength(24);
+    expect(permutations).toHaveLength(24);
 
-    let distribution = new Map<string, number>([['0,0,0,0', 1]]);
-    for (let set = 0; set < setCount; set += 1) {
+    for (const ranks of permutations) {
+      const result = scoreResponses(repeat(rank(ranks[0]!, ranks[1]!, ranks[2]!, ranks[3]!)));
+      expect(result.placement).toEqual({
+        kind: 'point',
+        preference: PREFERENCES[ranks.indexOf(1)],
+      });
+      expect(result.lowest?.preference).toBe(PREFERENCES[ranks.indexOf(4)]);
+    }
+  });
+});
+
+describe('placement details', () => {
+  it('lists a pair that wraps round the top clockwise, Pragmatist then Active', () => {
+    // The marker goes 45° clockwise from the first of the pair, so the
+    // order is what puts it on the right diagonal.
+    expect(classify(scores(40, 20, 20, 40), 12).placement).toEqual({
+      kind: 'between',
+      pair: ['pragmatist', 'active'],
+    });
+  });
+
+  it('never lets an exact tie decide: level top two with no lead over the third is a spread', () => {
+    expect(classify(scores(32, 32, 30, 26), 12).placement).toEqual({ kind: 'spread' });
+  });
+
+  it('never names a single point unless it is the highest score', () => {
+    for (const vector of [scores(40, 26, 27, 27), scores(26, 27, 40, 27), scores(27, 26, 27, 40)]) {
+      const result = classify(vector, 12);
+      if (result.placement.kind === 'point') {
+        expect(vector[result.placement.preference]).toBe(Math.max(...Object.values(vector)));
+      }
+    }
+  });
+
+  it('is deterministic: the same answers always read the same way', () => {
+    const responses = [...repeat(rank(1, 2, 3, 4), 6), ...repeat(rank(2, 1, 4, 3), 6)];
+    expect(scoreResponses(responses.map((entry) => ({ ...entry })))).toEqual(
+      scoreResponses(responses),
+    );
+  });
+});
+
+describe('refusing bad input', () => {
+  it('rejects a repeated rank', () => {
+    expect(() => scoreResponses([rank(1, 1, 3, 4)])).toThrow(InvalidResponsesError);
+  });
+  it('rejects an out-of-range rank', () => {
+    expect(() => scoreResponses([rank(0, 2, 3, 4)])).toThrow(/whole numbers/);
+  });
+  it('rejects a fractional rank', () => {
+    expect(() => scoreResponses([rank(1.5, 2, 3, 4)])).toThrow(/whole numbers/);
+  });
+  it('rejects an empty instrument rather than scoring it as zeroes', () => {
+    expect(() => scoreResponses([])).toThrow(/no rankings/);
+  });
+  it('rejects the wrong number of sets when told how many to expect', () => {
+    expect(() => scoreResponses(repeat(rank(1, 2, 3, 4), 6), 12)).toThrow(/expected 12/);
+    expect(() => assertValidResponses(repeat(rank(1, 2, 3, 4), 12), 12)).not.toThrow();
+  });
+});
+
+describe('how often each placement happens under random answering', () => {
+  /**
+   * Exact, not simulated: the distribution of the four scores over all
+   * 24^12 ways of answering, by convolution, assuming every ranking is
+   * equally likely. This is the floor the statements have to beat — a
+   * random responder is named a single point about one time in eight —
+   * and it matches the content review's own simulation of random
+   * responding (12% / 18% / 9% / 61%).
+   */
+  it('names a single point for about one random responder in eight', () => {
+    const n = 12;
+    const permutations: Ranking[] = [];
+    const permute = (rest: number[], taken: number[]): void => {
+      if (rest.length === 0) {
+        permutations.push(rank(taken[0]!, taken[1]!, taken[2]!, taken[3]!));
+        return;
+      }
+      rest.forEach((value, index) => {
+        permute([...rest.slice(0, index), ...rest.slice(index + 1)], [...taken, value]);
+      });
+    };
+    permute([1, 2, 3, 4], []);
+
+    // The fourth score is fixed by the other three: they total 10n.
+    let distribution = new Map<string, number>([['0,0,0', 1]]);
+    for (let set = 0; set < n; set += 1) {
       const next = new Map<string, number>();
       for (const [key, count] of distribution) {
-        const scores = key.split(',').map(Number);
-        for (const ranking of perSet) {
-          const nextKey = PREFERENCES.map(
-            (preference, index) => scores[index]! + pointsForRank(ranking[preference]),
-          ).join(',');
+        const [a, r, t] = key.split(',').map(Number) as [number, number, number];
+        for (const ranking of permutations) {
+          const nextKey = `${a + pointsForRank(ranking.active)},${r + pointsForRank(ranking.reflective)},${t + pointsForRank(ranking.theorist)}`;
           next.set(nextKey, (next.get(nextKey) ?? 0) + count);
         }
       }
       distribution = next;
     }
 
-    // Any responses with these scores place the same way; build one.
-    const kinds: Record<string, number> = { single: 0, between: 0, centre: 0, total: 0 };
+    const share = { point: 0, between: 0, opposite: 0, spread: 0 };
+    let total = 0;
     for (const [key, count] of distribution) {
-      const scores = key.split(',').map(Number);
-      const top = Math.max(...scores);
-      const tied = PREFERENCES.filter((_, index) => scores[index] === top);
-      const kind =
-        tied.length === 1
-          ? 'single'
-          : tied.length === 2 && areAdjacent(tied[0]!, tied[1]!)
-            ? 'between'
-            : 'centre';
-      kinds[kind]! += count;
-      kinds.total! += count;
+      const [a, r, t] = key.split(',').map(Number) as [number, number, number];
+      share[classify(scores(a, r, t, totalPoints(n) - a - r - t), n).placement.kind] += count;
+      total += count;
     }
-    return kinds;
-  }
 
-  it('places most random responders at one point, and some between or in the middle', () => {
-    const { single, between, centre, total } = placementDistribution(6);
-    expect(total).toBe(24 ** 6);
-    // ~85.0% at one point, ~9.0% between two neighbours, ~5.9% in the
-    // middle. In a room of twenty, a few people need somewhere to stand
-    // that is not a point.
-    expect(single! / total!).toBeGreaterThan(0.84);
-    expect(single! / total!).toBeLessThan(0.86);
-    expect(between! / total!).toBeGreaterThan(0.085);
-    expect(between! / total!).toBeLessThan(0.095);
-    expect(centre! / total!).toBeGreaterThan(0.055);
-    expect(centre! / total!).toBeLessThan(0.065);
-  });
-});
-
-describe('totalPoints', () => {
-  it('is what the four scores always add up to', () => {
-    expect(totalPoints(6)).toBe(60);
-    const result = scoreResponses(repeat(rank(1, 3, 4, 2)));
-    expect(result.total).toBe(totalPoints(6));
-  });
-
-  it('holds for an instrument of a different length', () => {
-    const responses: Responses = [rank(1, 2, 3, 4), rank(2, 1, 4, 3)];
-    expect(scoreResponses(responses).total).toBe(totalPoints(2));
+    expect(share.point / total).toBeCloseTo(0.1255, 3);
+    expect(share.between / total).toBeCloseTo(0.1809, 3);
+    expect(share.opposite / total).toBeCloseTo(0.0904, 3);
+    expect(share.spread / total).toBeCloseTo(0.6032, 3);
   });
 });

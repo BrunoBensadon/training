@@ -28,11 +28,11 @@ import { instrumentFrom, shuffledPreferences, type Instrument } from './instrume
 import { buildHash, parseHash, ROUTES, setNumberFrom } from './router.ts';
 import { isComplete, type PartialRanking } from './model.ts';
 import { scoreResponses } from './scoring.ts';
-import { decodeResponses, encodeResponses } from './share.ts';
+import { compareEdition, decodeResponses, encodeResponses } from './share.ts';
 import type { ScreenContext, SessionState } from './screens/context.ts';
 import { introScreen } from './screens/intro.ts';
 import { rankingScreen } from './screens/ranking.ts';
-import { badLinkScreen, resultScreen } from './screens/result.ts';
+import { badLinkScreen, resultScreen, staleLinkScreen } from './screens/result.ts';
 import { aboutScreen } from './screens/about.ts';
 import { facilitatorScreen } from './screens/facilitator.ts';
 
@@ -184,6 +184,11 @@ export function createApp(root: HTMLElement): void {
       if (encoded) {
         const decoded = decodeResponses(encoded);
         if (!decoded.ok) return badLinkScreen(context(), restart);
+        const edition = compareEdition(decoded.itemsVersion, instrument.version);
+        if (edition === 'earlier') {
+          return staleLinkScreen(context(), decoded.itemsVersion, restart);
+        }
+        if (edition === 'later') return badLinkScreen(context(), restart);
         try {
           return resultScreen(context(), {
             result: scoreResponses(decoded.responses, instrument.sets.length),

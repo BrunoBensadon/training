@@ -116,12 +116,6 @@ ul.plain > li::before {
  * ---------------------------------------------------------------- */
 .disclaimer { border-left: 3px solid var(--accent); margin-bottom: 1.6rem; }
 .disclaimer p { margin: 0; color: var(--ink); max-width: 62ch; }
-.close-call { margin-top: 1.4rem; }
-.close-call h2 {
-  font-family: var(--mono); font-size: var(--t-mono); letter-spacing: 0.16em;
-  text-transform: uppercase; color: var(--accent); margin-bottom: 0.7rem;
-}
-.close-call p { margin: 0; color: var(--ink-soft); }
 .stand-where { margin-top: 1.4rem; font-size: 1.1rem; }
 .note.stale { margin-bottom: 0; }
 
@@ -151,6 +145,12 @@ ul.plain > li::before {
 }
 .circle .marker-halo { fill: var(--paper); stroke: var(--paper); stroke-width: 3; }
 .circle .marker { fill: var(--accent); stroke: var(--paper); stroke-width: 2; }
+.circle .score-label {
+  font-family: var(--mono); font-size: 12px; font-weight: 600; fill: var(--accent);
+}
+.circle .even-label {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.04em; fill: var(--muted);
+}
 .circle .marker-label {
   font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em;
   text-transform: uppercase; fill: var(--accent); font-weight: 600;
@@ -160,7 +160,16 @@ table.shape tr.is-lead th, table.shape tr.is-lead td { color: var(--ink); font-w
 table.shape tr.is-lead th::after {
   content: " ◂"; color: var(--accent);
 }
-ul.axes li { font-size: 1.02rem; }
+.describe { color: var(--ink-soft); margin-top: 0.6rem; }
+.lowest { margin-top: 1rem; }
+.margin-note { margin-top: 1rem; font-size: 0.95rem; }
+details.tensions summary {
+  cursor: pointer; font-family: var(--mono); font-size: var(--t-mono); letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--accent);
+}
+details.tensions summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+details.tensions[open] summary { margin-bottom: 0.8rem; }
+ul.tension-list li { font-size: 1.02rem; }
 
 /* ---------------------------------------------------------------- *
    Facilitator card

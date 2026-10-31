@@ -104,6 +104,22 @@ export function itemsVersionMatches(saved: string, current: string): boolean {
   return saved === current;
 }
 
+/**
+ * How a saved link's items version relates to the current one.
+ *
+ * The major number is the edition: what the sets *mean*. A link from the
+ * same edition can be re-scored even if wording has changed since. A link
+ * from an earlier edition refers to statements and a model that no longer
+ * exist, and must not be re-scored; one from a later edition was made by
+ * a newer copy of this tool than the one reading it.
+ */
+export function compareEdition(saved: string, current: string): 'same' | 'earlier' | 'later' {
+  const major = (version: string): number => Number.parseInt(version.split('.')[0] ?? '', 10);
+  const [a, b] = [major(saved), major(current)];
+  if (!Number.isFinite(a) || !Number.isFinite(b) || a === b) return 'same';
+  return a < b ? 'earlier' : 'later';
+}
+
 export function preferenceAt(position: number): Preference {
   return PREFERENCES[position]!;
 }

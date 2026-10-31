@@ -198,7 +198,11 @@ export function rankingScreen(
       el('p', { class: 'kicker', text: s('progress', { n: setNumber, total }) }),
       progressBar(setNumber, total),
       el('h1', { class: 'set-prompt', text: set.prompt }),
-      el('p', { class: 'instruction', text: s('instruction') }),
+      // The full instruction once, at the start; a short reminder after.
+      el('p', {
+        class: 'instruction',
+        text: setNumber === 1 ? context.instrument.instruction : s('instruction'),
+      }),
       rankScale(context),
       statementList,
       statusLine,

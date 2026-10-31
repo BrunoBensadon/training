@@ -3,6 +3,7 @@ import {
   ENCODING_VERSION,
   decodeResponses,
   encodeResponses,
+  compareEdition,
   itemsVersionMatches,
   permutationFromIndex,
   permutationIndex,
@@ -64,7 +65,9 @@ describe('encodeResponses', () => {
   });
 
   it('stays short enough to survive being typed off a screen', () => {
-    expect(encodeResponses(sample, '1.0.0').length).toBeLessThan(20);
+    // Twelve sets: one character each, plus the version.
+    const twelve = [...sample, ...sample];
+    expect(encodeResponses(twelve, '2.0.0').length).toBeLessThan(24);
   });
 });
 
@@ -90,6 +93,18 @@ describe('decodeResponses', () => {
 
   it('tolerates surrounding whitespace, because links get copied by hand', () => {
     expect(decodeResponses(`  ${encodeResponses(sample, '1.0.0')}  `)).toMatchObject({ ok: true });
+  });
+});
+
+describe('editions', () => {
+  it('reads the major number as the edition', () => {
+    expect(compareEdition('2.0.0', '2.1.0')).toBe('same');
+    expect(compareEdition('1.0.0', '2.0.0')).toBe('earlier');
+    expect(compareEdition('3.0.0', '2.0.0')).toBe('later');
+  });
+
+  it('treats an unreadable version as the same edition rather than guessing', () => {
+    expect(compareEdition('x', '2.0.0')).toBe('same');
   });
 });
 

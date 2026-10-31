@@ -6,12 +6,16 @@
  *
  *   Active      — North — concrete experience        (experiencing)
  *   Reflective  — East  — reflective observation     (reflecting)
- *   Theorist    — South — abstract conceptualisation (thinking)
- *   Pragmatist  — West  — active experimentation     (acting)
+ *   Theorist    — South — abstract conceptualisation (conceptualising)
+ *   Pragmatist  — West  — active experimentation     (experimenting)
  *
- * Each preference is a *stage* of Kolb's cycle and sits on the cycle
- * itself, at the end of one axis. They are not the quadrants between the
- * axes: those are Kolb's combined styles, which this tool does not report.
+ * Note that Kolb's "active experimentation" is the Pragmatist point, not
+ * the Active one.
+ *
+ * Each preference is a *stage* of Kolb's cycle — Honey & Mumford tie one
+ * preference to each stage — and sits on the cycle itself. They are not
+ * the quadrants between the stages: those are Kolb's blended styles,
+ * which this tool does not report.
  * Treating the four as quadrants was the error in the first version — see
  * docs/reviews/elc-placement-1-evaluation.md.
  *
@@ -32,20 +36,23 @@ export const BEARING: Record<Preference, 0 | 90 | 180 | 270> = {
   pragmatist: 270,
 };
 
-export const AXES = ['perceiving', 'processing'] as const;
-export type Axis = (typeof AXES)[number];
-
 /**
- * The two dialectics of the cycle. Each axis runs between two preferences
- * that face each other across the circle, and its score is the first
- * minus the second.
+ * Kolb's two tensions. Each runs between two preferences that face each
+ * other across the circle, and its value is the first minus the second.
  *
- *   Perceiving (grasping):     Active (concrete)     − Theorist (abstract)
- *   Processing (transforming): Pragmatist (active)   − Reflective (reflective)
+ *   Grasping (vertical):       Active (experiencing)    − Theorist (conceptualising)
+ *   Transforming (horizontal): Pragmatist (experimenting) − Reflective (reflecting)
+ *
+ * They are reported in words, secondarily. They never decide where anyone
+ * stands: factor analyses of instruments like this one do not support the
+ * two dimensions as robust bipolar scales.
  */
-export const AXIS_POLES: Record<Axis, { positive: Preference; negative: Preference }> = {
-  perceiving: { positive: 'active', negative: 'theorist' },
-  processing: { positive: 'pragmatist', negative: 'reflective' },
+export const TENSIONS = ['grasping', 'transforming'] as const;
+export type Tension = (typeof TENSIONS)[number];
+
+export const TENSION_POLES: Record<Tension, { positive: Preference; negative: Preference }> = {
+  grasping: { positive: 'active', negative: 'theorist' },
+  transforming: { positive: 'pragmatist', negative: 'reflective' },
 };
 
 /** The next preference clockwise round the cycle. */

@@ -8,7 +8,7 @@
 import { el } from '@training/ui';
 import { PREFERENCES } from '../model.ts';
 import { ROUTES } from '../router.ts';
-import { richListItem, scoped, type ScreenContext } from './context.ts';
+import { richListItem, richParagraph, scoped, type ScreenContext } from './context.ts';
 
 export function facilitatorScreen(context: ScreenContext): HTMLElement {
   const s = scoped(context.t, 'facilitator');
@@ -22,7 +22,7 @@ export function facilitatorScreen(context: ScreenContext): HTMLElement {
         'dt',
         {},
         el('span', { class: 'p-name', text: info.name }),
-        el('span', { class: 'p-stage', text: info.stage }),
+        el('span', { class: 'p-stage', text: info.step }),
       ),
       el('dd', { text: info.description }),
     );
@@ -64,9 +64,10 @@ export function facilitatorScreen(context: ScreenContext): HTMLElement {
     el(
       'section',
       { class: 'card-block' },
-      el('h2', { text: s('preferencesTitle') }),
-      el('p', { class: 'prose-note', text: s('preferencesLead') }),
+      el('h2', { text: s('pointsTitle') }),
+      richParagraph(s('pointsLead'), 'prose-note'),
       preferenceList,
+      richParagraph(s('positions'), 'prose-note'),
     ),
 
     el(

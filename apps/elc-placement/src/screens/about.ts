@@ -1,11 +1,18 @@
 import { el } from '@training/ui';
 import { ROUTES } from '../router.ts';
-import { totalPoints } from '../scoring.ts';
+import { clearLead, maxScore, minScore, totalPoints } from '../scoring.ts';
 import { richListItem, richParagraph, scoped, section, type ScreenContext } from './context.ts';
 
 export function aboutScreen(context: ScreenContext): HTMLElement {
   const s = scoped(context.t, 'about');
-  const total = totalPoints(context.instrument.sets.length);
+  const n = context.instrument.sets.length;
+  const scale = {
+    n,
+    min: minScore(n),
+    max: maxScore(n),
+    total: totalPoints(n),
+    tau: clearLead(n),
+  };
 
   const block = (titleKey: string, ...body: Node[]): HTMLElement =>
     section(el('h2', { text: s(titleKey) }), el('div', { class: 'prose' }, ...body));
@@ -18,7 +25,8 @@ export function aboutScreen(context: ScreenContext): HTMLElement {
       el('h1', { text: s('title') }),
     ),
     block('whoTitle', richParagraph(s('who'))),
-    block('whatTitle', richParagraph(s('what', { total }))),
+    block('whatTitle', richParagraph(s('what', scale))),
+    block('modelTitle', richParagraph(s('model'))),
     block('notValidatedTitle', richParagraph(s('notValidated'))),
     block(
       'whatWouldItTakeTitle',
@@ -27,6 +35,7 @@ export function aboutScreen(context: ScreenContext): HTMLElement {
         {},
         ...(context.t.raw<string[]>('about.whatWouldItTake') ?? []).map(richListItem),
       ),
+      richParagraph(s('whyNotAlpha')),
     ),
     block(
       'evidenceTitle',

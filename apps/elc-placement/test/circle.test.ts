@@ -11,29 +11,18 @@
 import { describe, expect, it } from 'vitest';
 import { resultCircle } from '../src/circle.ts';
 import type { Instrument } from '../src/instrument.ts';
-import { PREFERENCES, type Preference, type Ranking, type Responses } from '../src/model.ts';
+import type { Ranking, Responses } from '../src/model.ts';
 import { scoreResponses } from '../src/scoring.ts';
-
-const NAMES: Record<Preference, string> = {
-  active: 'Active',
-  reflective: 'Reflective',
-  theorist: 'Theorist',
-  pragmatist: 'Pragmatist',
-};
 
 const instrument: Instrument = {
   version: 'test',
   instruction: '',
   sets: [],
-  preferences: Object.fromEntries(
-    PREFERENCES.map((preference) => [
-      preference,
-      { name: NAMES[preference], stage: '', step: preference, short: '', description: '' },
-    ]),
-  ) as Instrument['preferences'],
-  axes: {
-    perceiving: { name: 'Perceiving', positiveDescription: '', negativeDescription: '' },
-    processing: { name: 'Processing', positiveDescription: '', negativeDescription: '' },
+  preferences: {
+    active: { name: 'Active', step: 'experiencing', where: '', description: '' },
+    reflective: { name: 'Reflective', step: 'reflecting', where: '', description: '' },
+    theorist: { name: 'Theorist', step: 'conceptualising', where: '', description: '' },
+    pragmatist: { name: 'Pragmatist', step: 'experimenting', where: '', description: '' },
   },
 };
 
@@ -45,10 +34,10 @@ function draw(responses: Responses): SVGSVGElement {
   return resultCircle({
     result: scoreResponses(responses),
     instrument,
-    setCount: responses.length,
     titleText: 'title',
     descriptionText: 'description',
-    youLabel: 'You',
+    youLabel: 'Stand here',
+    middleLabel: 'middle',
   });
 }
 
@@ -63,11 +52,12 @@ function labelPosition(svg: SVGSVGElement, name: string): { x: number; y: number
   return { x: Number(label.getAttribute('x')), y: Number(label.getAttribute('y')) };
 }
 
-const sixTimes = (ranking: Ranking): Responses => Array.from({ length: 6 }, () => ({ ...ranking }));
+const twelveTimes = (ranking: Ranking): Responses =>
+  Array.from({ length: 12 }, () => ({ ...ranking }));
 
 describe('the result circle', () => {
   it('puts Active north, Reflective east, Theorist south and Pragmatist west', () => {
-    const svg = draw(sixTimes(rank(1, 2, 3, 4)));
+    const svg = draw(twelveTimes(rank(1, 2, 3, 4)));
     const centre = centreOf(svg);
 
     const active = labelPosition(svg, 'Active');
@@ -86,8 +76,8 @@ describe('the result circle', () => {
   });
 
   it('draws the four scores as a kite, each point on its own spoke', () => {
-    // Active 24, Reflective 18, Theorist 12, Pragmatist 6.
-    const svg = draw(sixTimes(rank(1, 2, 3, 4)));
+    // Active 48, Reflective 36, Theorist 24, Pragmatist 12.
+    const svg = draw(twelveTimes(rank(1, 2, 3, 4)));
     const centre = centreOf(svg);
     const points = svg
       .querySelector('polygon.kite')!
@@ -112,10 +102,21 @@ describe('the result circle', () => {
     expect(reach(...north)).toBeGreaterThan(reach(...east));
     expect(reach(...east)).toBeGreaterThan(reach(...south));
     expect(reach(...south)).toBeGreaterThan(reach(...west));
+
+    // First in every set reaches the ring; last in every set is the centre;
+    // the middle score sits on the dashed ring at half the radius.
+    const ring = Number(svg.querySelector('circle.ring')!.getAttribute('r'));
+    expect(reach(...north)).toBeCloseTo(ring);
+    expect(reach(...west)).toBeCloseTo(0);
+    expect(Number(svg.querySelector('circle.even-ring')!.getAttribute('r'))).toBe(ring / 2);
+
+    // And the numbers are written beside the points.
+    const written = [...svg.querySelectorAll('text.score-label')].map((node) => node.textContent);
+    expect(written).toEqual(['48', '36', '24', '12']);
   });
 
-  it('marks "You" at the top for an Active result, and shades only that part', () => {
-    const svg = draw(sixTimes(rank(1, 2, 3, 4)));
+  it('marks where to stand at the top for an Active result, and shades only that part', () => {
+    const svg = draw(twelveTimes(rank(1, 2, 3, 4)));
     const centre = centreOf(svg);
     const marker = svg.querySelector('circle.marker')!;
     expect(Number(marker.getAttribute('cx'))).toBeCloseTo(centre.x);
@@ -127,18 +128,36 @@ describe('the result circle', () => {
     expect(shaded).toEqual(['active']);
   });
 
-  it('marks "You" in the middle when no single part fits', () => {
+  it('marks where to stand in the centre for opposites, and names both', () => {
     // Active and Theorist level at the top: opposite each other.
-    const svg = draw([rank(1, 3, 2, 4), rank(2, 4, 1, 3)]);
+    const svg = draw([...twelveTimes(rank(1, 3, 2, 4)).slice(6), ...twelveTimes(rank(2, 4, 1, 3)).slice(6)]);
     const centre = centreOf(svg);
     const marker = svg.querySelector('circle.marker')!;
     expect(Number(marker.getAttribute('cx'))).toBe(centre.x);
     expect(Number(marker.getAttribute('cy'))).toBe(centre.y);
     expect(svg.querySelectorAll('path.sector-lead')).toHaveLength(0);
+    const lit = [...svg.querySelectorAll('text.pref-label.is-lead')].map((node) => node.textContent);
+    expect(lit).toEqual(['Active', 'Theorist']);
+  });
+
+  it('marks where to stand on the ring between two neighbours', () => {
+    // Pragmatist and Active level and well ahead: the marker is at the
+    // north-west, between the two, and both parts of the floor are shaded.
+    const svg = draw([...twelveTimes(rank(1, 3, 4, 2)).slice(6), ...twelveTimes(rank(2, 4, 3, 1)).slice(6)]);
+    const centre = centreOf(svg);
+    const marker = svg.querySelector('circle.marker')!;
+    expect(Number(marker.getAttribute('cx'))).toBeLessThan(centre.x);
+    expect(Number(marker.getAttribute('cy'))).toBeLessThan(centre.y);
+    const shaded = [...svg.querySelectorAll('path.sector-lead')].map((node) =>
+      node.getAttribute('data-preference'),
+    );
+    expect(shaded).toEqual(['active', 'pragmatist']);
+    // No arrow drawn under the marker.
+    expect(svg.querySelectorAll('path.cycle-arrow')).toHaveLength(3);
   });
 
   it('shows the cycle running clockwise, with one arrow between each pair of neighbours', () => {
-    const svg = draw(sixTimes(rank(1, 2, 3, 4)));
+    const svg = draw(twelveTimes(rank(1, 2, 3, 4)));
     expect(svg.querySelectorAll('path.cycle-arrow')).toHaveLength(4);
   });
 });

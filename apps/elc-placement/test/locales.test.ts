@@ -35,10 +35,7 @@ interface ItemsFile {
   version: string;
   instruction: string;
   sets: Array<{ id: string; prompt: string; statements: Record<string, string> }>;
-  preferences: Record<
-    string,
-    { name: string; stage: string; step: string; short: string; description: string }
-  >;
+  preferences: Record<string, { name: string; step: string; where: string; description: string }>;
 }
 
 const items = Object.fromEntries(
@@ -57,9 +54,9 @@ describe('locale files', () => {
 });
 
 describe('the instrument', () => {
-  it.each(locales)('%s has six sets of four statements', (locale) => {
+  it.each(locales)('%s has twelve sets of four statements', (locale) => {
     const file = items[locale]!;
-    expect(file.sets).toHaveLength(6);
+    expect(file.sets).toHaveLength(12);
     for (const set of file.sets) {
       expect(Object.keys(set.statements).sort()).toEqual([...PREFERENCES].sort());
       for (const preference of PREFERENCES) {
@@ -68,16 +65,16 @@ describe('the instrument', () => {
     }
   });
 
-  it.each(locales)('%s names all four preferences and their stages of the cycle', (locale) => {
+  it.each(locales)('%s names all four preferences, their step and where they stand', (locale) => {
     const file = items[locale]!;
     expect(Object.keys(file.preferences).sort()).toEqual([...PREFERENCES].sort());
     for (const preference of PREFERENCES) {
       const info = file.preferences[preference]!;
       expect(info.name).toBeTruthy();
-      expect(info.stage).toBeTruthy();
-      expect(info.step).toBeTruthy();
+      expect(info.where).toBeTruthy();
       // Drawn on the circle beside the ring: it has to fit.
-      expect(info.step.length).toBeLessThanOrEqual(14);
+      expect(info.step.length).toBeGreaterThan(0);
+      expect(info.step.length).toBeLessThanOrEqual(16);
       expect(info.name.length).toBeLessThanOrEqual(12);
       expect(info.description.length).toBeGreaterThan(40);
     }
@@ -113,6 +110,18 @@ describe('the instrument', () => {
         for (const preference of PREFERENCES) {
           expect(placeholders(set.statements[preference]), `${locale} ${set.id}`).toEqual([]);
         }
+      }
+    }
+  });
+
+  it('keeps each statement within the length the content review set (9–16 words in English)', () => {
+    // The guide's writing rules (§3B4): long statements read as more
+    // considered, and get ranked higher for it.
+    for (const set of items.en!.sets) {
+      for (const preference of PREFERENCES) {
+        const words = set.statements[preference]!.trim().split(/\s+/).length;
+        expect(words, `${set.id} ${preference}`).toBeGreaterThanOrEqual(9);
+        expect(words, `${set.id} ${preference}`).toBeLessThanOrEqual(16);
       }
     }
   });

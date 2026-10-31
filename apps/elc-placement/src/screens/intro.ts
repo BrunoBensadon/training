@@ -5,6 +5,7 @@ import { richListItem, richParagraph, scoped, section, type ScreenContext } from
 export function introScreen(context: ScreenContext): HTMLElement {
   const s = scoped(context.t, 'intro');
   const aboutHref = context.href(ROUTES.about);
+  const setCount = context.instrument.sets.length;
 
   const privacy = context.t.raw<string[]>('intro.privacy') ?? [];
   const what = context.t.raw<string[]>('intro.what') ?? [];
@@ -15,8 +16,8 @@ export function introScreen(context: ScreenContext): HTMLElement {
     section(
       el('p', { class: 'kicker', text: s('kicker') }),
       el('h1', { text: s('title') }),
-      el('p', { class: 'lead', text: s('lead') }),
-      el('p', { class: 'time-note', text: s('timeNote') }),
+      el('p', { class: 'lead', text: s('lead', { n: setCount }) }),
+      el('p', { class: 'time-note', text: s('timeNote', { n: setCount }) }),
       el(
         'div',
         { class: 'btn-row' },
