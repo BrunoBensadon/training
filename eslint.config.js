@@ -11,6 +11,9 @@ export default tseslint.config(
       '**/coverage/**',
       '**/playwright-report/**',
       '**/test-results/**',
+      // Archived analysis scripts from the independent content review:
+      // kept as written so the numbers in the guide stay reproducible.
+      'docs/reviews/**',
     ],
   },
   js.configs.recommended,

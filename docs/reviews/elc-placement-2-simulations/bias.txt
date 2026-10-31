@@ -1,0 +1,8 @@
+sigma=0.5 shiftA=0: top share A,R,T,P = 0.251, 0.251, 0.249, 0.249
+sigma=0.5 shiftA=-0.1: top share A,R,T,P = 0.206, 0.264, 0.267, 0.264
+sigma=0.5 shiftA=-0.2: top share A,R,T,P = 0.174, 0.28, 0.274, 0.272
+sigma=0.5 shiftA=-0.3: top share A,R,T,P = 0.141, 0.29, 0.286, 0.284
+sigma=0.7 shiftA=0: top share A,R,T,P = 0.25, 0.25, 0.249, 0.251
+sigma=0.7 shiftA=-0.1: top share A,R,T,P = 0.224, 0.259, 0.257, 0.26
+sigma=0.7 shiftA=-0.2: top share A,R,T,P = 0.189, 0.273, 0.268, 0.269
+sigma=0.7 shiftA=-0.3: top share A,R,T,P = 0.163, 0.281, 0.278, 0.278
